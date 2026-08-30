@@ -1,11 +1,9 @@
-
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🎋 おみくじ</title>
+<title>おみくじ＆恋みくじ</title>
 
 <style>
 * {
@@ -19,10 +17,10 @@ body {
   justify-content: center;
   align-items: center;
   background: linear-gradient(135deg, #f7c5c5, #ffe5ac);
-  font-family: "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif;
+  font-family: "Yu Gothic", sans-serif;
 }
 
-/* スマホ本体 */
+/* スマホ */
 .phone {
   position: relative;
   width: 340px;
@@ -34,7 +32,6 @@ body {
   box-shadow: 0 25px 50px rgba(0,0,0,.3);
 }
 
-/* ノッチ */
 .notch {
   position: absolute;
   z-index: 20;
@@ -47,17 +44,13 @@ body {
   background: #111;
 }
 
-/* スマホ画面 */
 .screen {
   position: relative;
   width: 100%;
   height: 100%;
   overflow: hidden;
   border-radius: 35px;
-  background:
-    radial-gradient(circle at 15% 20%, #ffd2d2 0 5%, transparent 6%),
-    radial-gradient(circle at 85% 30%, #ffe3ae 0 5%, transparent 6%),
-    #fff8f5;
+  background: #fff8f5;
 }
 
 /* 桜 */
@@ -72,7 +65,7 @@ body {
 .s3 { bottom: 100px; left: 10px; }
 .s4 { bottom: 150px; right: 15px; }
 
-/* コンテンツ */
+/* メイン */
 .content {
   position: relative;
   z-index: 2;
@@ -83,30 +76,55 @@ body {
 h1 {
   margin: 0;
   color: #b71c1c;
-  font-size: 30px;
+  font-size: 29px;
 }
 
 .subtitle {
-  margin: 7px 0 15px;
+  margin: 6px 0 12px;
   color: #777;
   font-size: 13px;
+}
+
+/* モード切り替え */
+.mode-buttons {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.mode-buttons button {
+  margin: 0;
+  padding: 9px 5px;
+  font-size: 12px;
+  background: #eee;
+  color: #777;
+  box-shadow: none;
+}
+
+.mode-buttons button.active {
+  background: #d32f2f;
+  color: white;
+}
+
+.mode-buttons button.love.active {
+  background: #e91e63;
 }
 
 /* おみくじエリア */
 .omikuji-area {
   position: relative;
   width: 190px;
-  height: 205px;
-  margin: 0 auto;
+  height: 195px;
+  margin: 0 auto 5px;
 }
 
-/* おみくじ箱 */
+/* 箱 */
 .omikuji-box {
   position: absolute;
   left: 5px;
   bottom: 0;
   width: 180px;
-  height: 155px;
+  height: 145px;
   border-radius: 15px 15px 25px 25px;
   background: linear-gradient(
     90deg,
@@ -115,12 +133,19 @@ h1 {
     #ef5350,
     #b71c1c
   );
-  box-shadow:
-    0 10px 20px rgba(120,0,0,.3),
-    inset 5px 0 rgba(255,255,255,.12);
+  box-shadow: 0 10px 20px rgba(120,0,0,.3);
 }
 
-/* 箱の金色模様 */
+.love-mode .omikuji-box {
+  background: linear-gradient(
+    90deg,
+    #c2185b,
+    #e91e63,
+    #f06292,
+    #ad1457
+  );
+}
+
 .omikuji-box::before {
   content: "福";
   position: absolute;
@@ -130,6 +155,10 @@ h1 {
   color: #ffd54f;
   font-size: 65px;
   font-weight: bold;
+}
+
+.love-mode .omikuji-box::before {
+  content: "恋";
 }
 
 /* 箱の口 */
@@ -143,6 +172,11 @@ h1 {
   border-radius: 50%;
   background: #761010;
   border: 3px solid #5d0b0b;
+}
+
+.love-mode .box-top {
+  background: #880e4f;
+  border-color: #6a073d;
 }
 
 /* 棒 */
@@ -162,7 +196,6 @@ h1 {
     #f5c26b,
     #c58b45
   );
-  box-shadow: 2px 2px 5px rgba(0,0,0,.25);
 }
 
 /* シャカシャカ */
@@ -192,39 +225,27 @@ h1 {
   }
 }
 
-/* 紙のおみくじ */
+/* 紙 */
 .paper {
   position: absolute;
   z-index: 2;
   left: 50%;
-  bottom: 65px;
-
+  bottom: 60px;
   width: 115px;
   height: 145px;
-
-  padding: 12px 8px;
-
-  transform:
-    translateX(-50%)
-    translateY(100px);
-
-  background:
-    linear-gradient(
-      90deg,
-      #fffdf2,
-      #fff8dc,
-      #fffdf2
-    );
-
+  padding: 10px;
+  transform: translateX(-50%) translateY(100px);
+  background: #fffbe9;
   border: 2px solid #d8b96a;
-
-  box-shadow:
-    0 5px 12px rgba(0,0,0,.2);
-
+  box-shadow: 0 5px 12px rgba(0,0,0,.2);
   opacity: 0;
 }
 
-/* 紙の模様 */
+.love-mode .paper {
+  background: #fff0f5;
+  border-color: #e57399;
+}
+
 .paper::before {
   content: "御神籤";
   position: absolute;
@@ -236,34 +257,33 @@ h1 {
   writing-mode: vertical-rl;
 }
 
-/* 結果 */
-#paperResult {
-  position: absolute;
-  top: 48px;
-  left: 0;
-  width: 100%;
-
-  color: #b71c1c;
-  font-size: 30px;
-  font-weight: bold;
-  text-align: center;
-
-  writing-mode: vertical-rl;
+.love-mode .paper::before {
+  content: "恋みくじ";
+  color: #c2185b;
 }
 
-/* 紙が飛び出す */
+#paperResult {
+  position: absolute;
+  top: 45px;
+  left: 0;
+  width: 100%;
+  color: #b71c1c;
+  font-size: 25px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.love-mode #paperResult {
+  color: #e91e63;
+}
+
 .paper.show {
   animation: paperOut 1.2s cubic-bezier(.2,.9,.25,1.2) forwards;
 }
 
 @keyframes paperOut {
-
   0% {
-    transform:
-      translateX(-50%)
-      translateY(100px)
-      rotate(0deg);
-
+    transform: translateX(-50%) translateY(100px);
     opacity: 0;
   }
 
@@ -272,96 +292,70 @@ h1 {
   }
 
   70% {
-    transform:
-      translateX(-50%)
-      translateY(-45px)
-      rotate(-4deg);
+    transform: translateX(-50%) translateY(-45px) rotate(-4deg);
   }
 
   100% {
-    transform:
-      translateX(-50%)
-      translateY(-30px)
-      rotate(0deg);
-
+    transform: translateX(-50%) translateY(-30px);
     opacity: 1;
   }
 }
 
-/* 結果メッセージ */
+/* 結果 */
 .result {
-  min-height: 85px;
-  padding: 10px;
+  min-height: 72px;
+  padding: 8px;
   border: 2px solid #d32f2f;
   border-radius: 15px;
-  background: rgba(255,255,255,.92);
+  background: rgba(255,255,255,.94);
+}
+
+.love-mode .result {
+  border-color: #e91e63;
 }
 
 #fortune {
   color: #c62828;
-  font-size: 35px;
+  font-size: 31px;
   font-weight: bold;
+}
+
+.love-mode #fortune {
+  color: #e91e63;
 }
 
 #message {
-  margin-top: 4px;
+  margin-top: 3px;
   color: #555;
-  font-size: 12px;
-  line-height: 1.5;
+  font-size: 11px;
+  line-height: 1.4;
 }
 
-/* ボタン */
-button {
+/* 引くボタン */
+#drawButton {
   width: 100%;
-  margin-top: 15px;
-  padding: 15px;
-
+  margin-top: 10px;
+  padding: 13px;
   border: 0;
   border-radius: 50px;
-
-  background: linear-gradient(
-    135deg,
-    #d32f2f,
-    #a91515
-  );
-
+  background: linear-gradient(135deg,#d32f2f,#a91515);
   color: white;
-  font-size: 17px;
+  font-size: 16px;
   font-weight: bold;
-
   cursor: pointer;
-
-  box-shadow:
-    0 5px 12px rgba(160,0,0,.3);
+  box-shadow: 0 5px 12px rgba(160,0,0,.3);
 }
 
-button:active {
+.love-mode #drawButton {
+  background: linear-gradient(135deg,#ec407a,#c2185b);
+}
+
+#drawButton:active {
   transform: scale(.96);
 }
 
-button:disabled {
+#drawButton:disabled {
   opacity: .6;
-}
-
-/* 結果が出たとき */
-.result.pop {
-  animation: pop .5s ease-out;
-}
-
-@keyframes pop {
-  0% {
-    transform: scale(.7);
-    opacity: 0;
-  }
-
-  70% {
-    transform: scale(1.08);
-  }
-
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
 }
 
 /* ホームバー */
@@ -375,35 +369,6 @@ button:disabled {
   border-radius: 10px;
   background: #333;
 }
-
-/* キラキラ */
-.sparkle {
-  position: absolute;
-  z-index: 10;
-  pointer-events: none;
-  font-size: 25px;
-  opacity: 0;
-}
-
-.sparkle.show {
-  animation: sparkle 1s ease-out forwards;
-}
-
-@keyframes sparkle {
-  0% {
-    transform: scale(.3);
-    opacity: 0;
-  }
-
-  30% {
-    opacity: 1;
-  }
-
-  100% {
-    transform: scale(1.5) translateY(-30px);
-    opacity: 0;
-  }
-}
 </style>
 </head>
 
@@ -413,7 +378,7 @@ button:disabled {
 
   <div class="notch"></div>
 
-  <div class="screen">
+  <div class="screen" id="screen">
 
     <div class="sakura s1">🌸</div>
     <div class="sakura s2">🌸</div>
@@ -422,21 +387,38 @@ button:disabled {
 
     <div class="content">
 
-      <h1>🎋 おみくじ 🎋</h1>
+      <h1 id="title">🎋 おみくじ 🎋</h1>
 
-      <div class="subtitle">
+      <div class="subtitle" id="subtitle">
         今日の運勢を占おう
+      </div>
+
+      <!-- 切り替え -->
+      <div class="mode-buttons">
+
+        <button
+          id="normalButton"
+          class="active"
+          onclick="changeMode('normal')">
+          🎋 おみくじ
+        </button>
+
+        <button
+          id="loveButton"
+          class="love"
+          onclick="changeMode('love')">
+          💕 恋みくじ
+        </button>
+
       </div>
 
       <!-- おみくじ -->
       <div class="omikuji-area" id="area">
 
-        <!-- 飛び出す紙 -->
         <div class="paper" id="paper">
           <div id="paperResult">？？？</div>
         </div>
 
-        <!-- 箱 -->
         <div class="omikuji-box" id="box">
 
           <div class="box-top"></div>
@@ -448,7 +430,7 @@ button:disabled {
       </div>
 
       <!-- 結果 -->
-      <div class="result" id="resultBox">
+      <div class="result">
 
         <div id="fortune">？？？</div>
 
@@ -472,7 +454,11 @@ button:disabled {
 
 <script>
 
-const fortunes = [
+let currentMode = "normal";
+
+
+/* 通常おみくじ */
+const normalFortunes = [
   {
     name: "大吉",
     message: "最高の運勢！✨<br>今日は何をしてもうまくいきそう！"
@@ -500,64 +486,174 @@ const fortunes = [
 ];
 
 
-function drawOmikuji() {
+/* 恋みくじ */
+const loveFortunes = [
+  {
+    name: "💖 大恋愛",
+    message: "運命の恋が動き出す予感！<br>勇気を出して一歩踏み出そう。"
+  },
+  {
+    name: "💕 両思い",
+    message: "二人の心はかなり近いかも。<br>素直な気持ちを伝えてみて。"
+  },
+  {
+    name: "💘 恋愛成就",
+    message: "あなたの恋が実るチャンス！<br>笑顔が最高のお守り。"
+  },
+  {
+    name: "🌸 片思い吉",
+    message: "焦らず少しずつ距離を縮めよう。<br>自然な会話が恋のきっかけに。"
+  },
+  {
+    name: "💌 連絡吉",
+    message: "今日は連絡運が好調！<br>気になる人にメッセージしてみよう。"
+  },
+  {
+    name: "💗 恋の予感",
+    message: "思いがけない出会いがありそう。<br>いつもより少しおしゃれして出かけよう！"
+  },
+  {
+    name: "💔 恋愛注意",
+    message: "今日は焦らないことが大切。<br>相手の気持ちをゆっくり考えてみよう。"
+  }
+];
 
-  const button = document.getElementById("drawButton");
-  const box = document.getElementById("box");
-  const paper = document.getElementById("paper");
-  const resultBox = document.getElementById("resultBox");
 
-  /* ボタン無効 */
-  button.disabled = true;
-  button.textContent = "🎋 シャカシャカ…";
+/* モード変更 */
+function changeMode(mode) {
 
-  /* 紙を一旦戻す */
-  paper.classList.remove("show");
+  currentMode = mode;
 
-  /* 結果をリセット */
+  const screen = document.getElementById("screen");
+
+  const normalButton =
+    document.getElementById("normalButton");
+
+  const loveButton =
+    document.getElementById("loveButton");
+
+  const title =
+    document.getElementById("title");
+
+  const subtitle =
+    document.getElementById("subtitle");
+
+  const drawButton =
+    document.getElementById("drawButton");
+
+  screen.classList.remove("love-mode");
+
+  normalButton.classList.remove("active");
+  loveButton.classList.remove("active");
+
+  if (mode === "love") {
+
+    screen.classList.add("love-mode");
+    loveButton.classList.add("active");
+
+    title.textContent = "💕 恋みくじ 💕";
+    subtitle.textContent = "あなたの恋の運勢は？";
+
+    drawButton.textContent =
+      "💕 恋みくじを引く！";
+
+  } else {
+
+    normalButton.classList.add("active");
+
+    title.textContent = "🎋 おみくじ 🎋";
+    subtitle.textContent = "今日の運勢を占おう";
+
+    drawButton.textContent =
+      "🎋 おみくじを引く！";
+  }
+
   document.getElementById("fortune").textContent = "？？？";
   document.getElementById("message").textContent =
-    "運勢を占っています…";
+    mode === "love"
+      ? "恋みくじを引いてみよう！💕"
+      : "おみくじを引いてみよう！";
 
-  /* シャカシャカ開始 */
+  document.getElementById("paper").classList.remove("show");
+}
+
+
+/* おみくじを引く */
+function drawOmikuji() {
+
+  const button =
+    document.getElementById("drawButton");
+
+  const box =
+    document.getElementById("box");
+
+  const paper =
+    document.getElementById("paper");
+
+  const fortuneText =
+    document.getElementById("fortune");
+
+  const message =
+    document.getElementById("message");
+
+  button.disabled = true;
+
+  button.textContent =
+    currentMode === "love"
+      ? "💕 ドキドキ…"
+      : "🎋 シャカシャカ…";
+
+  paper.classList.remove("show");
+
+  fortuneText.textContent = "？？？";
+
+  message.textContent =
+    currentMode === "love"
+      ? "恋の運勢を占っています…"
+      : "運勢を占っています…";
+
+  /* シャカシャカ */
   box.classList.add("shaking");
+
 
   /* 2秒後 */
   setTimeout(() => {
 
-    /* シャカシャカ停止 */
     box.classList.remove("shaking");
 
-    /* 結果を決める */
-    const random =
-      Math.floor(Math.random() * fortunes.length);
+    const list =
+      currentMode === "love"
+        ? loveFortunes
+        : normalFortunes;
 
-    const fortune = fortunes[random];
+    const random =
+      Math.floor(Math.random() * list.length);
+
+    const fortune = list[random];
 
     /* 紙に結果 */
-    document.getElementById("paperResult").textContent =
-      fortune.name;
+    document.getElementById("paperResult")
+      .textContent = fortune.name;
 
-    /* 紙を飛び出させる */
+    /* 紙が飛び出す */
     paper.classList.add("show");
 
-    /* 少し遅れて結果表示 */
+
+    /* 少し遅れて下にも表示 */
     setTimeout(() => {
 
-      document.getElementById("fortune").textContent =
+      fortuneText.innerHTML =
         fortune.name;
 
-      document.getElementById("message").innerHTML =
+      message.innerHTML =
         fortune.message;
 
-      resultBox.classList.remove("pop");
-
-      void resultBox.offsetWidth;
-
-      resultBox.classList.add("pop");
-
       button.disabled = false;
-      button.textContent = "🔄 もう一度引く！";
+
+      button.textContent =
+        currentMode === "love"
+          ? "💕 もう一度恋みくじ！"
+          : "🔄 もう一度引く！";
 
     }, 700);
 
