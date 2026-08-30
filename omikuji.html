@@ -1,57 +1,2718 @@
-<!DOCTYPE html> <html lang="ja"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>おみくじ＆恋みくじ</title> <style> * { box-sizing: border-box; } body { margin: 0; min-height: 100vh; display: flex; justify-content: center; align-items: center; background: radial-gradient(circle at 20% 20%, #ffd6d6 0 4%, transparent 5%), radial-gradient(circle at 80% 70%, #ffe7b3 0 5%, transparent 6%), linear-gradient(135deg, #f6c5c5, #ffe6ad); font-family: "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif; } .phone { position: relative; width: 350px; height: 700px; padding: 10px; background: #222; border: 7px solid #111; border-radius: 50px; box-shadow: 0 25px 55px rgba(0,0,0,.3); } .notch { position: absolute; z-index: 300; top: 10px; left: 50%; transform: translateX(-50%); width: 105px; height: 25px; border-radius: 20px; background: #111; } .screen { position: relative; width: 100%; height: 100%; overflow: hidden; border-radius: 37px; background: linear-gradient( rgba(255,255,255,.75), rgba(255,248,245,.9) ), #fff0f0; } .content { position: relative; z-index: 2; padding: 55px 17px 25px; text-align: center; } h1 { margin: 0; color: #b71c1c; font-size: 28px; } .subtitle { margin: 5px 0 12px; color: #777; font-size: 12px; } .sakura { position: absolute; font-size: 35px; opacity: .35; } .s1 { top: 65px; left: 10px; } .s2 { top: 135px; right: 10px; } .s3 { bottom: 90px; left: 12px; } .s4 { bottom: 145px; right: 12px; } /* モード */ .mode-buttons { display: flex; gap: 7px; margin-bottom: 13px; } .mode-buttons button { flex: 1; padding: 8px 3px; border: 0; border-radius: 30px; background: #eee; color: #777; font-size: 11px; cursor: pointer; } .mode-buttons button.active { background: #c62828; color: white; } .mode-buttons button.love.active { background: #e91e63; } .mode-buttons button.dark.active { background: #171717; color: #ff5252; } /* カード */ .cards { width: 100%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; perspective: 1000px; } .card { height: 125px; position: relative; cursor: pointer; perspective: 800px; transition: transform .2s; } .card:hover { transform: translateY(-5px); } .card-inner { position: relative; width: 100%; height: 100%; transition: transform .75s cubic-bezier(.2,.7,.2,1); transform-style: preserve-3d; } .card.selected .card-inner { transform: rotateY(180deg); } .card-front, .card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 12px; overflow: hidden; } .card-back { display: flex; justify-content: center; align-items: center; background: repeating-linear-gradient( 45deg, transparent, transparent 5px, rgba(255,255,255,.12) 6px, transparent 7px ), #b71c1c; border: 3px solid #f4c76b; box-shadow: 0 5px 10px rgba(0,0,0,.2); } .card-back::before { content: "🎋"; font-size: 34px; } .love-mode .card-back { background: repeating-linear-gradient( 45deg, transparent, transparent 5px, rgba(255,255,255,.12) 6px, transparent 7px ), #c2185b; border-color: #ffd1df; } .love-mode .card-back::before { content: "💗"; } .dark-mode .card-back { background: repeating-linear-gradient( 45deg, transparent, transparent 5px, rgba(255,0,0,.08) 6px, transparent 7px ), #090909; border-color: #8b0000; } .dark-mode .card-back::before { content: "☠"; color: #d40000; font-size: 35px; } /* カード表 */ .card-front { transform: rotateY(180deg); display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 5px; background: linear-gradient(135deg, #fffdf2, #fff5d8); border: 3px solid #d4aa48; box-shadow: 0 5px 15px rgba(0,0,0,.2); } .card-front::before { content: "御神籤"; color: #9b751b; font-size: 9px; margin-bottom: 5px; } .love-mode .card-front { background: linear-gradient(135deg, #fff8fb, #ffe3ed); border-color: #e57399; } .love-mode .card-front::before { content: "恋みくじ"; color: #c2185b; } .dark-mode .card-front { background: linear-gradient(135deg, #181818, #050505); border-color: #8b0000; } .dark-mode .card-front::before { content: "闇みくじ"; color: #e00000; } .card-result { color: #b71c1c; font-size: 17px; font-weight: bold; text-align: center; } .love-mode .card-result { color: #e91e63; } .dark-mode .card-result { color: #ff3030; } .card-detail { margin-top: 5px; color: #666; font-size: 8px; line-height: 1.3; text-align: center; } .dark-mode .card-detail { color: #bbb; } .card.disabled { pointer-events: none; opacity: .22; } .card.selected { transform: translateY(-8px); } .card.selected .card-front { box-shadow: 0 0 0 3px #ffd54f, 0 8px 20px rgba(255,80,80,.35); } /* 結果 */ .result-box { min-height: 72px; margin-top: 13px; padding: 8px; border: 2px solid #c62828; border-radius: 15px; background: rgba(255,255,255,.94); } .love-mode .result-box { border-color: #e91e63; } .dark-mode .result-box { border-color: #8b0000; background: rgba(20,20,20,.95); } #fortune { color: #c62828; font-size: 27px; font-weight: bold; } .love-mode #fortune { color: #e91e63; } .dark-mode #fortune { color: #ff3030; } #message { margin-top: 3px; color: #555; font-size: 10px; line-height: 1.4; } .dark-mode #message { color: #bbb; } /* ボタン */ #resetButton { width: 100%; margin-top: 10px; padding: 12px; border: 0; border-radius: 50px; background: linear-gradient(135deg, #d32f2f, #a91515); color: white; font-size: 15px; font-weight: bold; cursor: pointer; } .love-mode #resetButton { background: linear-gradient(135deg, #ec407a, #c2185b); } .dark-mode #resetButton { background: linear-gradient(135deg, #333, #080808); color: #ff3030; } /* 製作者ボタン */ .creator-button { position: absolute; z-index: 20; left: 50%; bottom: 42px; transform: translateX(-50%); border: 0; background: rgba(255,255,255,.55); color: #999; padding: 5px 14px; border-radius: 20px; font-size: 9px; cursor: pointer; } .creator-button:hover { color: #555; background: rgba(255,255,255,.8); } /* 全画面結果 */ .result-screen { position: absolute; z-index: 100; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 30px; text-align: center; background: radial-gradient( circle at center, #fff, #ffe8ef 45%, #f8b6c9 ); transform: scale(0); opacity: 0; pointer-events: none; } .result-screen.show { animation: resultBang .65s cubic-bezier(.15,1.5,.3,1) forwards; pointer-events: auto; } @keyframes resultBang { 0% { transform: scale(0); opacity: 0; } 55% { transform: scale(1.08); opacity: 1; } 75% { transform: scale(.97); } 100% { transform: scale(1); opacity: 1; } } .normal-result { background: radial-gradient( circle at center, #fff, #fff5d0 45%, #f2d27a ); } .dark-result { background: radial-gradient( circle at center, #250000, #090909 55%, #000 ); color: white; } .result-icon { font-size: 65px; margin-bottom: 10px; animation: iconPop .7s .2s both; } @keyframes iconPop { 0% { transform: scale(0) rotate(-20deg); } 70% { transform: scale(1.2) rotate(10deg); } 100% { transform: scale(1) rotate(0); } } .result-title { color: #e91e63; font-size: 45px; font-weight: bold; text-shadow: 2px 2px 0 white, 0 0 15px rgba(233,30,99,.3); animation: titlePop .7s .1s both; } .normal-result .result-title { color: #c62828; } .dark-result .result-title { color: #ff3030; text-shadow: 0 0 20px #900; } @keyframes titlePop { 0% { transform: scale(2); opacity: 0; } 100% { transform: scale(1); opacity: 1; } } .result-line { width: 150px; height: 2px; margin: 15px 0; background: #e57399; } .normal-result .result-line { background: #d4aa48; } .dark-result .result-line { background: #900; } .result-message { max-width: 260px; color: #555; font-size: 16px; line-height: 1.8; } .dark-result .result-message { color: #ddd; } .result-screen button { width: 200px; margin-top: 30px; padding: 13px; border: 0; border-radius: 50px; background: #e91e63; color: white; font-size: 15px; font-weight: bold; cursor: pointer; } .normal-result button { background: #c62828; } .dark-result button { background: #8b0000; } /* キラキラ */ .sparkle { position: absolute; z-index: 150; pointer-events: none; font-size: 24px; animation: sparkle 1s ease-out forwards; } @keyframes sparkle { 0% { transform: scale(.2); opacity: 0; } 30% { opacity: 1; } 100% { transform: translateY(-45px) scale(1.4); opacity: 0; } } /* ホームバー */ .home-bar { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 100px; height: 4px; border-radius: 10px; background: #333; } /* ========================= パスコード画面 ========================= */ .lock-screen { position: absolute; z-index: 500; inset: 0; display: flex; flex-direction: column; align-items: center; padding-top: 80px; background: linear-gradient( rgba(15,15,20,.96), rgba(5,5,10,.99) ); color: white; opacity: 0; pointer-events: none; transition: opacity .25s; } .lock-screen.show { opacity: 1; pointer-events: auto; } .lock-title { font-size: 16px; margin-bottom: 8px; } .lock-subtitle { color: #aaa; font-size: 10px; margin-bottom: 20px; } .pass-dots { display: flex; gap: 12px; height: 18px; margin-bottom: 25px; } .pass-dot { width: 10px; height: 10px; border-radius: 50%; border: 1px solid #aaa; } .pass-dot.filled { background: white; } .keypad { display: grid; grid-template-columns: repeat(3, 65px); gap: 13px; } .key { width: 65px; height: 65px; border: 0; border-radius: 50%; background: rgba(255,255,255,.13); color: white; font-size: 22px; cursor: pointer; } .key:active { background: rgba(255,255,255,.35); transform: scale(.94); } .key.empty { background: transparent; cursor: default; } .lock-cancel { margin-top: 18px; border: 0; background: transparent; color: #aaa; font-size: 11px; cursor: pointer; } .lock-error { position: absolute; top: 410px; color: #ff5252; font-size: 10px; opacity: 0; } .lock-error.show { animation: errorShake .35s; opacity: 1; } @keyframes errorShake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } } /* ロック中表示 */ .locked-message { display: none; position: absolute; z-index: 510; inset: 0; align-items: center; justify-content: center; flex-direction: column; text-align: center; background: rgba(5,5,8,.98); color: white; padding: 30px; } .locked-message.show { display: flex; } .locked-icon { font-size: 50px; margin-bottom: 15px; } .locked-title { color: #ff4444; font-size: 18px; font-weight: bold; } .locked-text { margin-top: 10px; color: #aaa; font-size: 11px; line-height: 1.8; } </style> </head> <body> <div class="phone"> <div class="notch"></div> <div class="screen" id="screen"> <div class="sakura s1">🌸</div> <div class="sakura s2">🌸</div> <div class="sakura s3">🌸</div> <div class="sakura s4">🌸</div> <div class="content"> <h1 id="title"> 🎋 おみくじ 🎋 </h1> <div class="subtitle"> 9枚の中から1枚選んでね </div> <div class="mode-buttons">
-<button id="normalButton" class="active" onclick="changeMode('normal')">
-🎋 おみくじ
-</button>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>おみくじ＆恋みくじ</title>
 
-<button id="loveButton" class="love" onclick="changeMode('love')">
-💕 恋みくじ
-</button>
+<style>
+* {
+  box-sizing: border-box;
+}
 
-<button id="darkButton" class="dark" onclick="openLock()" style="display:none;">
-☠ 闇みくじ
-</button>
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background:
+    radial-gradient(circle at 20% 20%, #ffd6d6 0 4%, transparent 5%),
+    radial-gradient(circle at 80% 70%, #ffe7b3 0 5%, transparent 6%),
+    linear-gradient(135deg, #f6c5c5, #ffe6ad);
+  font-family: "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif;
+}
 
-</div> <div class="cards"> <!-- 1 --> <div class="card" onclick="selectCard(event)"> <div class="card-inner"> <div class="card-back"></div> <div class="card-front"> <div class="card-result"></div> <div class="card-detail"></div> </div> </div> </div> <!-- 2 --> <div class="card" onclick="selectCard(event)"> <div class="card-inner"> <div class="card-back"></div> <div class="card-front"> <div class="card-result"></div> <div class="card-detail"></div> </div> </div> </div> <!-- 3 --> <div class="card" onclick="selectCard(event)"> <div class="card-inner"> <div class="card-back"></div> <div class="card-front"> <div class="card-result"></div> <div class="card-detail"></div> </div> </div> </div> <!-- 4 --> <div class="card" onclick="selectCard(event)"> <div class="card-inner"> <div class="card-back"></div> <div class="card-front"> <div class="card-result"></div> <div class="card-detail"></div> </div> </div> </div> <!-- 5 --> <div class="card" onclick="selectCard(event)"> <div class="card-inner"> <div class="card-back"></div> <div class="card-front"> <div class="card-result"></div> <div class="card-detail"></div> </div> </div> </div> <!-- 6 --> <div class="card" onclick="selectCard(event)"> <div class="card-inner"> <div class="card-back"></div> <div class="card-front"> <div class="card-result"></div> <div class="card-detail"></div> </div> </div> </div> <!-- 7 --> <div class="card" onclick="selectCard(event)"> <div class="card-inner"> <div class="card-back"></div> <div class="card-front"> <div class="card-result"></div> <div class="card-detail"></div> </div> </div> </div> <!-- 8 --> <div class="card" onclick="selectCard(event)"> <div class="card-inner"> <div class="card-back"></div> <div class="card-front"> <div class="card-result"></div> <div class="card-detail"></div> </div> </div> </div> <!-- 9 --> <div class="card" onclick="selectCard(event)"> <div class="card-inner"> <div class="card-back"></div> <div class="card-front"> <div class="card-result"></div> <div class="card-detail"></div> </div> </div> </div> </div> <div class="result-box"> <div id="fortune"> ？？？ </div> <div id="message"> カードを1枚選んでください ✨ </div> </div>
-<button id="resetButton" onclick="resetCards()">
-🔄 もう一度占う
-</button>
+.phone {
+  position: relative;
+  width: 350px;
+  height: 700px;
+  padding: 10px;
+  background: #222;
+  border: 7px solid #111;
+  border-radius: 50px;
+  box-shadow: 0 25px 55px rgba(0,0,0,.3);
+}
 
-</div> <!-- 製作者 -->
-<button class="creator-button" onclick="openLock()">
-製作者
-</button>
+.notch {
+  position: absolute;
+  z-index: 300;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 105px;
+  height: 25px;
+  border-radius: 20px;
+  background: #111;
+}
 
-<div class="home-bar"></div> <!-- 全画面結果 --> <div class="result-screen" id="resultScreen"> <div class="result-icon" id="resultIcon"> 💕 </div> <div class="result-title" id="bigResult"> 大恋愛 </div> <div class="result-line"></div> <div class="result-message" id="bigMessage"> 運命の恋が動き出す予感！ </div> <button onclick="closeResult()"> 🔄 もう一度引く </button> </div> <!-- パスコード --> <div class="lock-screen" id="lockScreen"> <div class="lock-title"> 🔒 パスコード </div> <div class="lock-subtitle"> パスコードを入力してください </div> <div class="pass-dots" id="passDots"> <div class="pass-dot"></div> <div class="pass-dot"></div> <div class="pass-dot"></div> <div class="pass-dot"></div> </div> <div class="keypad">
-<button class="key" onclick="pressKey('1')">1</button>
-<button class="key" onclick="pressKey('2')">2</button>
-<button class="key" onclick="pressKey('3')">3</button>
+.screen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 37px;
+  background:
+    linear-gradient(
+      rgba(255,255,255,.75),
+      rgba(255,248,245,.9)
+    ),
+    #fff0f0;
+}
 
-<button class="key" onclick="pressKey('4')">4</button>
-<button class="key" onclick="pressKey('5')">5</button>
-<button class="key" onclick="pressKey('6')">6</button>
+.content {
+  position: relative;
+  z-index: 2;
+  padding: 55px 13px 25px;
+  text-align: center;
+}
 
-<button class="key" onclick="pressKey('7')">7</button>
-<button class="key" onclick="pressKey('8')">8</button>
-<button class="key" onclick="pressKey('9')">9</button>
+h1 {
+  margin: 0;
+  color: #b71c1c;
+  font-size: 28px;
+}
 
-<button class="key empty"></button>
-<button class="key" onclick="pressKey('0')">0</button>
-<button class="key" onclick="deleteKey()">⌫</button>
+.subtitle {
+  margin: 5px 0 12px;
+  color: #777;
+  font-size: 12px;
+}
 
-</div> <div class="lock-error" id="lockError"> パスコードが違います </div>
-<button class="lock-cancel" onclick="closeLock()">
-キャンセル
-</button>
+.sakura {
+  position: absolute;
+  font-size: 35px;
+  opacity: .35;
+}
 
-</div> <!-- 24時間ロック --> <div class="locked-message" id="lockedMessage"> <div class="locked-icon"> 🔒 </div> <div class="locked-title"> パスワードロック中 </div> <div class="locked-text">
-パスコードを何度も間違えたため<br>
-しばらく利用できません。<br><br>
+.s1 {
+  top: 65px;
+  left: 10px;
+}
 
-<span id="remainingTime"></span>
+.s2 {
+  top: 135px;
+  right: 10px;
+}
+
+.s3 {
+  bottom: 90px;
+  left: 12px;
+}
+
+.s4 {
+  bottom: 145px;
+  right: 12px;
+}
+
+/* =========================
+   モード
+========================= */
+
+.mode-buttons {
+  display: flex;
+  gap: 7px;
+  margin-bottom: 13px;
+}
+
+.mode-buttons button {
+  flex: 1;
+  padding: 8px 3px;
+  border: 0;
+  border-radius: 30px;
+  background: #eee;
+  color: #777;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.mode-buttons button.active {
+  background: #c62828;
+  color: white;
+}
+
+.mode-buttons button.love.active {
+  background: #e91e63;
+}
+
+.mode-buttons button.dark.active {
+  background: #171717;
+  color: #ff5252;
+}
+
+/* =========================
+   16枚カード
+========================= */
+
+.cards {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  perspective: 1000px;
+}
+
+.card {
+  height: 88px;
+  position: relative;
+  cursor: pointer;
+  perspective: 800px;
+  transition: transform .2s;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+}
+
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition:
+    transform .75s cubic-bezier(.2,.7,.2,1);
+  transform-style: preserve-3d;
+}
+
+.card.selected .card-inner {
+  transform: rotateY(180deg);
+}
+
+.card-front,
+.card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.card-back {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background:
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 5px,
+      rgba(255,255,255,.12) 6px,
+      transparent 7px
+    ),
+    #b71c1c;
+
+  border: 2px solid #f4c76b;
+  box-shadow: 0 4px 8px rgba(0,0,0,.2);
+}
+
+.card-back::before {
+  content: "🎋";
+  font-size: 25px;
+}
+
+.love-mode .card-back {
+  background:
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 5px,
+      rgba(255,255,255,.12) 6px,
+      transparent 7px
+    ),
+    #c2185b;
+
+  border-color: #ffd1df;
+}
+
+.love-mode .card-back::before {
+  content: "💗";
+}
+
+.dark-mode .card-back {
+  background:
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 5px,
+      rgba(255,0,0,.08) 6px,
+      transparent 7px
+    ),
+    #090909;
+
+  border-color: #8b0000;
+}
+
+.dark-mode .card-back::before {
+  content: "☠";
+  color: #d40000;
+  font-size: 27px;
+}
+
+/* =========================
+   カード表
+========================= */
+
+.card-front {
+  transform: rotateY(180deg);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  padding: 3px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #fffdf2,
+      #fff5d8
+    );
+
+  border: 2px solid #d4aa48;
+  box-shadow: 0 4px 10px rgba(0,0,0,.2);
+}
+
+.card-front::before {
+  content: "御神籤";
+  color: #9b751b;
+  font-size: 7px;
+  margin-bottom: 3px;
+}
+
+.love-mode .card-front {
+  background:
+    linear-gradient(
+      135deg,
+      #fff8fb,
+      #ffe3ed
+    );
+
+  border-color: #e57399;
+}
+
+.love-mode .card-front::before {
+  content: "恋みくじ";
+  color: #c2185b;
+}
+
+.dark-mode .card-front {
+  background:
+    linear-gradient(
+      135deg,
+      #181818,
+      #050505
+    );
+
+  border-color: #8b0000;
+}
+
+.dark-mode .card-front::before {
+  content: "闇みくじ";
+  color: #e00000;
+}
+
+.card-result {
+  color: #b71c1c;
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.love-mode .card-result {
+  color: #e91e63;
+}
+
+.dark-mode .card-result {
+  color: #ff3030;
+}
+
+.card-detail {
+  margin-top: 3px;
+  color: #666;
+  font-size: 6px;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.dark-mode .card-detail {
+  color: #bbb;
+}
+
+.card.disabled {
+  pointer-events: none;
+  opacity: .22;
+}
+
+.card.selected {
+  transform: translateY(-6px);
+}
+
+.card.selected .card-front {
+  box-shadow:
+    0 0 0 3px #ffd54f,
+    0 8px 20px rgba(255,80,80,.35);
+}
+
+/* =========================
+   結果
+========================= */
+
+.result-box {
+  min-height: 65px;
+  margin-top: 10px;
+  padding: 7px;
+
+  border: 2px solid #c62828;
+  border-radius: 15px;
+
+  background: rgba(255,255,255,.94);
+}
+
+.love-mode .result-box {
+  border-color: #e91e63;
+}
+
+.dark-mode .result-box {
+  border-color: #8b0000;
+  background: rgba(20,20,20,.95);
+}
+
+#fortune {
+  color: #c62828;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.love-mode #fortune {
+  color: #e91e63;
+}
+
+.dark-mode #fortune {
+  color: #ff3030;
+}
+
+#message {
+  margin-top: 3px;
+  color: #555;
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+.dark-mode #message {
+  color: #bbb;
+}
+
+/* =========================
+   ボタン
+========================= */
+
+#resetButton {
+  width: 100%;
+  margin-top: 8px;
+  padding: 10px;
+
+  border: 0;
+  border-radius: 50px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #d32f2f,
+      #a91515
+    );
+
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.love-mode #resetButton {
+  background:
+    linear-gradient(
+      135deg,
+      #ec407a,
+      #c2185b
+    );
+}
+
+.dark-mode #resetButton {
+  background:
+    linear-gradient(
+      135deg,
+      #333,
+      #080808
+    );
+
+  color: #ff3030;
+}
+
+/* =========================
+   製作者ボタン
+========================= */
+
+.creator-button {
+  position: absolute;
+  z-index: 20;
+  left: 50%;
+  bottom: 42px;
+  transform: translateX(-50%);
+
+  border: 0;
+  background: rgba(255,255,255,.55);
+  color: #999;
+
+  padding: 5px 14px;
+  border-radius: 20px;
+
+  font-size: 9px;
+  cursor: pointer;
+}
+
+.creator-button:hover {
+  color: #555;
+  background: rgba(255,255,255,.8);
+}
+
+/* =========================
+   全画面結果
+========================= */
+
+.result-screen {
+  position: absolute;
+  z-index: 100;
+  inset: 0;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  padding: 30px;
+  text-align: center;
+
+  background:
+    radial-gradient(
+      circle at center,
+      #fff,
+      #ffe8ef 45%,
+      #f8b6c9
+    );
+
+  transform: scale(0);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.result-screen.show {
+  animation:
+    resultBang
+    .65s
+    cubic-bezier(.15,1.5,.3,1)
+    forwards;
+
+  pointer-events: auto;
+}
+
+@keyframes resultBang {
+
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+
+  55% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+
+  75% {
+    transform: scale(.97);
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.normal-result {
+  background:
+    radial-gradient(
+      circle at center,
+      #fff,
+      #fff5d0 45%,
+      #f2d27a
+    );
+}
+
+.dark-result {
+  background:
+    radial-gradient(
+      circle at center,
+      #250000,
+      #090909 55%,
+      #000
+    );
+
+  color: white;
+}
+
+.result-icon {
+  font-size: 65px;
+  margin-bottom: 10px;
+
+  animation:
+    iconPop
+    .7s
+    .2s
+    both;
+}
+
+@keyframes iconPop {
+
+  0% {
+    transform: scale(0) rotate(-20deg);
+  }
+
+  70% {
+    transform: scale(1.2) rotate(10deg);
+  }
+
+  100% {
+    transform: scale(1) rotate(0);
+  }
+}
+
+.result-title {
+  color: #e91e63;
+  font-size: 45px;
+  font-weight: bold;
+
+  text-shadow:
+    2px 2px 0 white,
+    0 0 15px rgba(233,30,99,.3);
+
+  animation:
+    titlePop
+    .7s
+    .1s
+    both;
+}
+
+.normal-result .result-title {
+  color: #c62828;
+}
+
+.dark-result .result-title {
+  color: #ff3030;
+
+  text-shadow:
+    0 0 20px #900;
+}
+
+@keyframes titlePop {
+
+  0% {
+    transform: scale(2);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.result-line {
+  width: 150px;
+  height: 2px;
+  margin: 15px 0;
+  background: #e57399;
+}
+
+.normal-result .result-line {
+  background: #d4aa48;
+}
+
+.dark-result .result-line {
+  background: #900;
+}
+
+.result-message {
+  max-width: 260px;
+  color: #555;
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.dark-result .result-message {
+  color: #ddd;
+}
+
+.result-screen button {
+  width: 200px;
+  margin-top: 30px;
+  padding: 13px;
+
+  border: 0;
+  border-radius: 50px;
+
+  background: #e91e63;
+  color: white;
+
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.normal-result button {
+  background: #c62828;
+}
+
+.dark-result button {
+  background: #8b0000;
+}
+
+/* =========================
+   キラキラ
+========================= */
+
+.sparkle {
+  position: absolute;
+  z-index: 150;
+  pointer-events: none;
+
+  font-size: 24px;
+
+  animation:
+    sparkle
+    1s
+    ease-out
+    forwards;
+}
+
+@keyframes sparkle {
+
+  0% {
+    transform: scale(.2);
+    opacity: 0;
+  }
+
+  30% {
+    opacity: 1;
+  }
+
+  100% {
+    transform:
+      translateY(-45px)
+      scale(1.4);
+
+    opacity: 0;
+  }
+}
+
+/* =========================
+   ホームバー
+========================= */
+
+.home-bar {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: 100px;
+  height: 4px;
+
+  border-radius: 10px;
+  background: #333;
+}
+
+/* =========================
+   パスコード画面
+========================= */
+
+.lock-screen {
+  position: absolute;
+  z-index: 500;
+  inset: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding-top: 80px;
+
+  background:
+    linear-gradient(
+      rgba(15,15,20,.96),
+      rgba(5,5,10,.99)
+    );
+
+  color: white;
+
+  opacity: 0;
+  pointer-events: none;
+
+  transition: opacity .25s;
+}
+
+.lock-screen.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.lock-title {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.lock-subtitle {
+  color: #aaa;
+  font-size: 10px;
+  margin-bottom: 20px;
+}
+
+.pass-dots {
+  display: flex;
+  gap: 12px;
+
+  height: 18px;
+  margin-bottom: 25px;
+}
+
+.pass-dot {
+  width: 10px;
+  height: 10px;
+
+  border-radius: 50%;
+  border: 1px solid #aaa;
+}
+
+.pass-dot.filled {
+  background: white;
+}
+
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(3, 65px);
+  gap: 13px;
+}
+
+.key {
+  width: 65px;
+  height: 65px;
+
+  border: 0;
+  border-radius: 50%;
+
+  background: rgba(255,255,255,.13);
+  color: white;
+
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.key:active {
+  background: rgba(255,255,255,.35);
+  transform: scale(.94);
+}
+
+.key.empty {
+  background: transparent;
+  cursor: default;
+}
+
+.lock-cancel {
+  margin-top: 18px;
+
+  border: 0;
+  background: transparent;
+  color: #aaa;
+
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.lock-error {
+  position: absolute;
+  top: 410px;
+
+  color: #ff5252;
+  font-size: 10px;
+
+  opacity: 0;
+}
+
+.lock-error.show {
+  animation: errorShake .35s;
+  opacity: 1;
+}
+
+@keyframes errorShake {
+
+  0%,100% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-8px);
+  }
+
+  75% {
+    transform: translateX(8px);
+  }
+}
+
+/* =========================
+   ロック中表示
+========================= */
+
+.locked-message {
+  display: none;
+
+  position: absolute;
+  z-index: 510;
+  inset: 0;
+
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  text-align: center;
+
+  background: rgba(5,5,8,.98);
+  color: white;
+
+  padding: 30px;
+}
+
+.locked-message.show {
+  display: flex;
+}
+
+.locked-icon {
+  font-size: 50px;
+  margin-bottom: 15px;
+}
+
+.locked-title {
+  color: #ff4444;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.locked-text {
+  margin-top: 10px;
+
+  color: #aaa;
+  font-size: 11px;
+  line-height: 1.8;
+}
+</style>
+</head>
+
+<body>
+
+<div class="phone">
+
+  <div class="notch"></div>
+
+  <div class="screen" id="screen">
+
+    <div class="sakura s1">🌸</div>
+    <div class="sakura s2">🌸</div>
+    <div class="sakura s3">🌸</div>
+    <div class="sakura s4">🌸</div>
+
+    <div class="content">
+
+      <h1 id="title">
+        🎋 おみくじ 🎋
+      </h1>
+
+      <div class="subtitle">
+        16枚の中から1枚選んでね
+      </div>
+
+      <!-- モード -->
+
+      <div class="mode-buttons">
+
+        <button
+          id="normalButton"
+          class="active"
+          onclick="changeMode('normal')"
+        >
+          🎋 おみくじ
+        </button>
+
+        <button
+          id="loveButton"
+          class="love"
+          onclick="changeMode('love')"
+        >
+          💕 恋みくじ
+        </button>
+
+        <button
+          id="darkButton"
+          class="dark"
+          onclick="openLock()"
+          style="display:none;"
+        >
+          ☠ 闇みくじ
+        </button>
+
+      </div>
+
+      <!-- 16枚 -->
+
+      <div class="cards">
+
+        <!-- 1 -->
+        <div class="card" onclick="selectCard(event)">
+          <div class="card-inner">
+            <div class="card-back"></div>
+            <div class="card-front">
+              <div class="card-result"></div>
+              <div class="card-detail"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2 -->
+        <div class="card" onclick="selectCard(event)">
+          <div class="card-inner">
+            <div class="card-back"></div>
+            <div class="card-front">
+              <div class="card-result"></div>
+              <div class="card-detail"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3 -->
+        <div class="card" onclick="selectCard(event)">
+          <div class="card-inner">
+            <div class="card-back"></div>
+            <div class="card-front">
+              <div class="card-result"></div>
+              <div class="card-detail"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 -->
+        <div class="card" onclick="selectCard(event)">
+          <div class="card-inner">
+            <div class="card-back"></div>
+            <div class="card-front">
+              <div class="card-result"></div>
+              <div class="card-detail"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5 -->
+        <div class="card" onclick="selectCard(event)">
+          <div class="card-inner">
+            <div class="card-back"></div>
+            <div class="card-front">
+              <div class="card-result"></div>
+              <div class="card-detail"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6 -->
+        <div class="card" onclick="selectCard(event)">
+          <div class="card-inner">
+            <div class="card-back"></div>
+            <div class="card-front">
+              <div class="card-result"></div>
+              <div class="card-detail"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 7 -->
+        <div class="card" onclick="selectCard(event)">
+          <div class="card-inner">
+            <div class="card-back"></div>
+            <div class="card-front">
+              <div class="card-result"></div>
+              <div class="card-detail"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 8 -->
+        <div class="card" onclick="selectCard(event)">
+          <div class="card-inner">
+            <div class="card-back"></div>
+            <div class="card-front">
+              <div class="card-result"></div>
+              <div class="card-detail"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 9 -->
+        <div class="card" onclick="selectCard(event)">
+          <div class="card-inner">
+            <div class="card-back"></div>
+            <div class="card-front">
+              <div class="card-result"></div>
+              <div class="card-detail"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 10 -->
+        <div class="card" onclick="selectCard(event)">
+          <div class="card-inner">
+            <div class="card-back"></div>
+            <div class="card-front">
+              <div class="card-result"></div>
+              <div class="card-detail"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 11 -->
+        <div class="card" onclick="selectCard(event)">
+          <div class="card-inner">
+            <div class="card-back"></div>
+            <div class="card-front">
+              <div class="card-result"></div>
+              <div class="card-detail"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 12 -->
+        <div class="card" onclick="selectCard(event)">
+          <div class="card-inner">
+            <div class="card-back"></div>
+            <div class="card-front">
+              <div class="card-result"></div>
+              <div class="card-detail"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 13 -->
+        <div class="card" onclick="selectCard(event)">
+          <div class="card-inner">
+            <div class="card-back"></div>
+            <div class="card-front">
+              <div class="card-result"></div>
+              <div class="card-detail"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 14 -->
+        <div class="card" onclick="selectCard(event)">
+          <div class="card-inner">
+            <div class="card-back"></div>
+            <div class="card-front">
+              <div class="card-result"></div>
+              <div class="card-detail"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 15 -->
+        <div class="card" onclick="selectCard(event)">
+          <div class="card-inner">
+            <div class="card-back"></div>
+            <div class="card-front">
+              <div class="card-result"></div>
+              <div class="card-detail"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 16 -->
+        <div class="card" onclick="selectCard(event)">
+          <div class="card-inner">
+            <div class="card-back"></div>
+            <div class="card-front">
+              <div class="card-result"></div>
+              <div class="card-detail"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 結果 -->
+
+      <div class="result-box">
+
+        <div id="fortune">
+          ？？？
+        </div>
+
+        <div id="message">
+          カードを1枚選んでください ✨
+        </div>
+
+      </div>
+
+      <button
+        id="resetButton"
+        onclick="resetCards()"
+      >
+        🔄 もう一度占う
+      </button>
+
+    </div>
+
+    <!-- 製作者 -->
+
+    <button
+      class="creator-button"
+      onclick="openLock()"
+    >
+      製作者
+    </button>
+
+    <div class="home-bar"></div>
+
+    <!-- 全画面結果 -->
+
+    <div
+      class="result-screen"
+      id="resultScreen"
+    >
+
+      <div
+        class="result-icon"
+        id="resultIcon"
+      >
+        💕
+      </div>
+
+      <div
+        class="result-title"
+        id="bigResult"
+      >
+        大恋愛
+      </div>
+
+      <div class="result-line"></div>
+
+      <div
+        class="result-message"
+        id="bigMessage"
+      >
+        運命の恋が動き出す予感！
+      </div>
+
+      <button onclick="closeResult()">
+        🔄 もう一度引く
+      </button>
+
+    </div>
+
+    <!-- パスコード -->
+
+    <div
+      class="lock-screen"
+      id="lockScreen"
+    >
+
+      <div class="lock-title">
+        🔒 パスコード
+      </div>
+
+      <div class="lock-subtitle">
+        パスコードを入力してください
+      </div>
+
+      <div
+        class="pass-dots"
+        id="passDots"
+      >
+
+        <div class="pass-dot"></div>
+        <div class="pass-dot"></div>
+        <div class="pass-dot"></div>
+        <div class="pass-dot"></div>
+
+      </div>
+
+      <div class="keypad">
+
+        <button
+          class="key"
+          onclick="pressKey('1')"
+        >
+          1
+        </button>
+
+        <button
+          class="key"
+          onclick="pressKey('2')"
+        >
+          2
+        </button>
+
+        <button
+          class="key"
+          onclick="pressKey('3')"
+        >
+          3
+        </button>
+
+        <button
+          class="key"
+          onclick="pressKey('4')"
+        >
+          4
+        </button>
+
+        <button
+          class="key"
+          onclick="pressKey('5')"
+        >
+          5
+        </button>
+
+        <button
+          class="key"
+          onclick="pressKey('6')"
+        >
+          6
+        </button>
+
+        <button
+          class="key"
+          onclick="pressKey('7')"
+        >
+          7
+        </button>
+
+        <button
+          class="key"
+          onclick="pressKey('8')"
+        >
+          8
+        </button>
+
+        <button
+          class="key"
+          onclick="pressKey('9')"
+        >
+          9
+        </button>
+
+        <button class="key empty"></button>
+
+        <button
+          class="key"
+          onclick="pressKey('0')"
+        >
+          0
+        </button>
+
+        <button
+          class="key"
+          onclick="deleteKey()"
+        >
+          ⌫
+        </button>
+
+      </div>
+
+      <div
+        class="lock-error"
+        id="lockError"
+      >
+        パスコードが違います
+      </div>
+
+      <button
+        class="lock-cancel"
+        onclick="closeLock()"
+      >
+        キャンセル
+      </button>
+
+    </div>
+
+    <!-- 24時間ロック -->
+
+    <div
+      class="locked-message"
+      id="lockedMessage"
+    >
+
+      <div class="locked-icon">
+        🔒
+      </div>
+
+      <div class="locked-title">
+        パスワードロック中
+      </div>
+
+      <div class="locked-text">
+
+        パスコードを何度も間違えたため<br>
+        しばらく利用できません。<br><br>
+
+        <span id="remainingTime"></span>
+
+      </div>
+
+      <button
+        class="lock-cancel"
+        onclick="closeLockedMessage()"
+      >
+        閉じる
+      </button>
+
+    </div>
+
+  </div>
 
 </div>
-<button class="lock-cancel" onclick="closeLockedMessage()">
-閉じる
-</button>
 
-</div> </div> </div> <script> /* ========================= おみくじデータ ========================= */ const normalFortunes = [ ["大吉", "最高の運勢！何事にも積極的に。"], ["中吉", "いいことが起こりそう。笑顔を大切に。"], ["小吉", "小さな幸せを見つけられる日。"], ["吉", "落ち着いて行動すれば良い結果に。"], ["末吉", "これから運気が上がっていく予感。"], ["吉", "周りの人を大切にすると運気アップ。"], ["小吉", "焦らず自分のペースで進もう。"], ["中吉", "新しいことを始めるのに良い日。"], ["大吉", "今日は何をしても絶好調！✨"] ]; const loveFortunes = [ ["💖 大恋愛", "運命の恋が動き出す予感！"], ["💕 両思い", "二人の心はかなり近いかも。"], ["💘 恋愛成就", "あなたの恋が実るチャンス！"], ["🌸 片思い吉", "少しずつ距離を縮めてみよう。"], ["💌 連絡吉", "今日は連絡運が絶好調！"], ["💗 恋の予感", "思いがけない出会いがありそう。"], ["💞 相性◎", "二人の相性はとても良さそう。"], ["💓 告白吉", "勇気を出すと恋が動くかも。"], ["💔 恋愛注意", "焦らず相手の気持ちを考えてみよう。"] ]; const darkFortunes = [ ["凶", "今日は無理をしないほうがよさそう。"], ["大凶", "何かが起こる前触れかもしれない。"], ["闇", "あなたの知らないところで運命が動いている。"], ["警告", "その選択、本当に間違っていない？"], ["呪", "今日は慎重に。軽い気持ちの行動は禁物。"], ["絶望", "今は耐える時。夜明けはまだ遠い。"], ["秘密", "知らないほうが幸せなこともある。"], ["破滅", "欲張りすぎると全てを失うかも。"], ["？？？", "この結果の意味を知るのは、あなた自身。"] ]; let currentMode = "normal"; let selected = false; /* ========================= パスコード ========================= */ const creatorPassword = "0831"; let enteredPassword = ""; const MAX_MISTAKES = 4; const LOCK_TIME = 24 * 60 * 60 * 1000; let wrongCount = Number( localStorage.getItem("omikujiWrongCount") ) || 0; let lockUntil = Number( localStorage.getItem("omikujiLockUntil") ) || 0; /* ========================= カードシャッフル ========================= */ function shuffleCards() { const cardsContainer = document.querySelector(".cards"); const cards = Array.from( cardsContainer.querySelectorAll(".card") ); /* Fisher-Yatesシャッフル */ for ( let i = cards.length - 1; i > 0; i-- ) { const j = Math.floor( Math.random() * (i + 1) ); [ cards[i], cards[j] ] = [ cards[j], cards[i] ]; } /* シャッフルした順番で HTML上の位置を入れ替える */ cards.forEach(card => { cardsContainer.appendChild(card); }); } /* ========================= モード変更 ========================= */ function changeMode(mode) { currentMode = mode; const screen = document.getElementById("screen"); document .getElementById("normalButton") .classList.remove("active"); document .getElementById("loveButton") .classList.remove("active"); document .getElementById("darkButton") .classList.remove("active"); screen.classList.remove( "love-mode", "dark-mode" ); if (mode === "love") { screen.classList.add("love-mode"); document .getElementById("loveButton") .classList.add("active"); document.getElementById("title") .textContent = "💕 恋みくじ 💕"; } else if (mode === "dark") { screen.classList.add("dark-mode"); document .getElementById("darkButton") .classList.add("active"); document.getElementById("title") .textContent = "☠ 闇みくじ ☠"; } else { document .getElementById("normalButton") .classList.add("active"); document.getElementById("title") .textContent = "🎋 おみくじ 🎋"; } resetCards(); } /* ========================= カード選択 ========================= */ function selectCard(event) { if (selected) return; selected = true; const cards = document.querySelectorAll(".card"); let list; if (currentMode === "love") { list = loveFortunes; } else if (currentMode === "dark") { list = darkFortunes; } else { list = normalFortunes; } let fortune; /* Shiftキーの裏技 */ if (event && event.shiftKey) { if (currentMode === "love") { fortune = [ "💖 大恋愛", "運命の恋が動き出す予感！" ]; } else if (currentMode === "dark") { fortune = [ "☠ 真・闇", "あなたは禁断の領域に足を踏み入れた。" ]; } else { fortune = [ "大吉", "最高の運勢！今日は何をしてもうまくいきそう！" ]; } } else { /* ここがポイント！ 選んだカードの位置ではなく、 9種類の中からランダムに結果を選ぶ */ const randomIndex = Math.floor( Math.random() * list.length ); fortune = list[randomIndex]; } /* クリックされたカードを取得 */ const selectedCard = event.currentTarget; /* 選んだカードだけ表にする */ selectedCard .classList.add("selected"); /* 残りのカードを暗くする */ cards.forEach(card => { if (card !== selectedCard) { card.classList.add("disabled"); } }); /* カードに結果を表示 */ selectedCard .querySelector(".card-result") .textContent = fortune[0]; selectedCard .querySelector(".card-detail") .textContent = fortune[1]; /* 結果画面 */ setTimeout(() => { showBigResult(fortune); }, 700); } /* ========================= 結果表示 ========================= */ function showBigResult(fortune) { const resultScreen = document.getElementById( "resultScreen" ); document.getElementById( "bigResult" ).textContent = fortune[0]; document.getElementById( "bigMessage" ).textContent = fortune[1]; resultScreen.classList.remove( "normal-result", "dark-result" ); if (currentMode === "normal") { resultScreen.classList.add( "normal-result" ); document.getElementById( "resultIcon" ).textContent = "🎋"; } else if (currentMode === "love") { document.getElementById( "resultIcon" ).textContent = "💕"; } else { resultScreen.classList.add( "dark-result" ); document.getElementById( "resultIcon" ).textContent = "☠"; } resultScreen.classList.add("show"); createSparkles(); } /* ========================= 結果を閉じる ========================= */ function closeResult() { document .getElementById("resultScreen") .classList.remove("show"); setTimeout(() => { if (currentMode === "dark") { lockDarkFortune(); } resetCards(); }, 300); } /* ========================= 闇みくじ終了 ========================= */ function lockDarkFortune() { document .getElementById("darkButton") .style.display = "none"; changeMode("normal"); } /* ========================= リセット ========================= */ function resetCards() { selected = false; /* カードの位置を毎回シャッフル */ shuffleCards(); /* カードの状態をリセット */ document .querySelectorAll(".card") .forEach(card => { card.classList.remove( "selected", "disabled" ); card.querySelector( ".card-result" ).textContent = ""; card.querySelector( ".card-detail" ).textContent = ""; }); /* 結果欄をリセット */ document.getElementById( "fortune" ).textContent = "？？？"; document.getElementById( "message" ).textContent = currentMode === "love" ? "カードを1枚選んでください 💕" : currentMode === "dark" ? "闇に触れるカードを1枚選んでください ☠" : "カードを1枚選んでください ✨"; } /* ========================= キラキラ ========================= */ function createSparkles() { const screen = document.getElementById("screen"); let symbols; if (currentMode === "love") { symbols = [ "💕", "💗", "✨", "💖", "💘" ]; } else if (currentMode === "dark") { symbols = [ "☠", "🩸", "⚫", "🔻" ]; } else { symbols = [ "✨", "🌸", "🎋", "⭐" ]; } for ( let i = 0; i < 14; i++ ) { const sparkle = document.createElement("div"); sparkle.className = "sparkle"; sparkle.textContent = symbols[ Math.floor( Math.random() * symbols.length ) ]; sparkle.style.left = ( 10 + Math.random() * 80 ) + "%"; sparkle.style.top = ( 15 + Math.random() * 70 ) + "%"; sparkle.style.animationDelay = ( Math.random() * .5 ) + "s"; screen.appendChild( sparkle ); setTimeout( () => sparkle.remove(), 1600 ); } } /* ========================= 製作者ボタン ========================= */ function openLock() { if (isLocked()) { showLockedMessage(); return; } enteredPassword = ""; updateDots(); document .getElementById("lockError") .classList.remove("show"); document .getElementById("lockScreen") .classList.add("show"); } /* ========================= 数字入力 ========================= */ function pressKey(number) { if ( enteredPassword.length >= creatorPassword.length ) { return; } enteredPassword += number; updateDots(); if ( enteredPassword.length === creatorPassword.length ) { setTimeout( checkPassword, 180 ); } } /* ========================= 削除 ========================= */ function deleteKey() { enteredPassword = enteredPassword.slice(0, -1); updateDots(); } /* ========================= ●表示 ========================= */ function updateDots() { const dots = document.querySelectorAll( ".pass-dot" ); dots.forEach( (dot, index) => { dot.classList.toggle( "filled", index < enteredPassword.length ); } ); } /* ========================= パスワード確認 ========================= */ function checkPassword() { if ( enteredPassword === creatorPassword ) { wrongCount = 0; localStorage.setItem( "omikujiWrongCount", "0" ); unlockDarkFortune(); } else { wrongCount++; localStorage.setItem( "omikujiWrongCount", String(wrongCount) ); const error = document.getElementById( "lockError" ); error.classList.remove("show"); void error.offsetWidth; error.classList.add("show"); enteredPassword = ""; updateDots(); if ( wrongCount >= MAX_MISTAKES ) { start24HourLock(); } } } /* ========================= 闇みくじ解放 ========================= */ function unlockDarkFortune() { document .getElementById("lockScreen") .classList.remove("show"); document .getElementById("darkButton") .style.display = "block"; changeMode("dark"); } /* ========================= パスコード画面を閉じる ========================= */ function closeLock() { document .getElementById("lockScreen") .classList.remove("show"); } /* ========================= 24時間ロック開始 ========================= */ function start24HourLock() { lockUntil = Date.now() + LOCK_TIME; localStorage.setItem( "omikujiLockUntil", String(lockUntil) ); enteredPassword = ""; updateDots(); document .getElementById("lockScreen") .classList.remove("show"); setTimeout(() => { showLockedMessage(); }, 250); } /* ========================= ロック確認 ========================= */ function isLocked() { const now = Date.now(); if ( lockUntil && now < lockUntil ) { return true; } if ( lockUntil && now >= lockUntil ) { lockUntil = 0; wrongCount = 0; localStorage.removeItem( "omikujiLockUntil" ); localStorage.setItem( "omikujiWrongCount", "0" ); } return false; } /* ========================= ロック画面 ========================= */ function showLockedMessage() { updateRemainingTime(); document .getElementById("lockedMessage") .classList.add("show"); } /* ========================= 残り時間 ========================= */ function updateRemainingTime() { if (!isLocked()) { closeLockedMessage(); return; } const remaining = lockUntil - Date.now(); const hours = Math.floor( remaining / (1000 * 60 * 60) ); const minutes = Math.floor( ( remaining % (1000 * 60 * 60) ) / (1000 * 60) ); const seconds = Math.floor( ( remaining % (1000 * 60) ) / 1000 ); document.getElementById( "remainingTime" ).textContent = "解除まで " + hours + "時間 " + minutes + "分 " + seconds + "秒"; setTimeout( updateRemainingTime, 1000 ); } /* ========================= ロック画面を閉じる ========================= */ function closeLockedMessage() { document .getElementById("lockedMessage") .classList.remove("show"); } /* ========================= 最初の読み込み ========================= */ window.addEventListener( "load", () => { /* 最初に表示したときも カードをシャッフル */ resetCards(); }); </script> </body> </html>
+<script>
+
+/* =========================
+   おみくじデータ
+========================= */
+
+/*
+   大吉の確率を下げるため、
+   通常のおみくじは重み付き抽選にしています。
+
+   大吉：約5%
+   中吉：約20%
+   小吉：約25%
+   吉：約30%
+   末吉：約20%
+
+   ※スペースキーを押しながら引けば
+     確実に大吉になります。
+*/
+
+const normalFortunes = [
+
+  {
+    result: "大吉",
+    message: "最高の運勢！何事にも積極的に。",
+    weight: 5
+  },
+
+  {
+    result: "中吉",
+    message: "いいことが起こりそう。笑顔を大切に。",
+    weight: 20
+  },
+
+  {
+    result: "小吉",
+    message: "小さな幸せを見つけられる日。",
+    weight: 25
+  },
+
+  {
+    result: "吉",
+    message: "落ち着いて行動すれば良い結果に。",
+    weight: 30
+  },
+
+  {
+    result: "末吉",
+    message: "これから運気が上がっていく予感。",
+    weight: 20
+  }
+
+];
+
+const loveFortunes = [
+
+  [
+    "💖 大恋愛",
+    "運命の恋が動き出す予感！"
+  ],
+
+  [
+    "💕 両思い",
+    "二人の心はかなり近いかも。"
+  ],
+
+  [
+    "💘 恋愛成就",
+    "あなたの恋が実るチャンス！"
+  ],
+
+  [
+    "🌸 片思い吉",
+    "少しずつ距離を縮めてみよう。"
+  ],
+
+  [
+    "💌 連絡吉",
+    "今日は連絡運が絶好調！"
+  ],
+
+  [
+    "💗 恋の予感",
+    "思いがけない出会いがありそう。"
+  ],
+
+  [
+    "💞 相性◎",
+    "二人の相性はとても良さそう。"
+  ],
+
+  [
+    "💓 告白吉",
+    "勇気を出すと恋が動くかも。"
+  ],
+
+  [
+    "💔 恋愛注意",
+    "焦らず相手の気持ちを考えてみよう。"
+  ]
+
+];
+
+const darkFortunes = [
+
+  [
+    "凶",
+    "今日は無理をしないほうがよさそう。"
+  ],
+
+  [
+    "大凶",
+    "何かが起こる前触れかもしれない。"
+  ],
+
+  [
+    "闇",
+    "あなたの知らないところで運命が動いている。"
+  ],
+
+  [
+    "警告",
+    "その選択、本当に間違っていない？"
+  ],
+
+  [
+    "呪",
+    "今日は慎重に。軽い気持ちの行動は禁物。"
+  ],
+
+  [
+    "絶望",
+    "今は耐える時。夜明けはまだ遠い。"
+  ],
+
+  [
+    "秘密",
+    "知らないほうが幸せなこともある。"
+  ],
+
+  [
+    "破滅",
+    "欲張りすぎると全てを失うかも。"
+  ],
+
+  [
+    "？？？",
+    "この結果の意味を知るのは、あなた自身。"
+  ]
+
+];
+
+let currentMode = "normal";
+let selected = false;
+
+
+/* =========================
+   パスコード
+========================= */
+
+const creatorPassword = "0831";
+
+let enteredPassword = "";
+
+const MAX_MISTAKES = 4;
+
+const LOCK_TIME =
+  24 * 60 * 60 * 1000;
+
+let wrongCount =
+  Number(
+    localStorage.getItem(
+      "omikujiWrongCount"
+    )
+  ) || 0;
+
+let lockUntil =
+  Number(
+    localStorage.getItem(
+      "omikujiLockUntil"
+    )
+  ) || 0;
+
+
+/* =========================
+   通常おみくじ重み付き抽選
+========================= */
+
+function getNormalFortune() {
+
+  const totalWeight =
+    normalFortunes.reduce(
+      (sum, fortune) =>
+        sum + fortune.weight,
+      0
+    );
+
+  let random =
+    Math.random() * totalWeight;
+
+  for (
+    const fortune of normalFortunes
+  ) {
+
+    random -= fortune.weight;
+
+    if (random < 0) {
+
+      return [
+        fortune.result,
+        fortune.message
+      ];
+
+    }
+
+  }
+
+  return [
+    "末吉",
+    "これから運気が上がっていく予感。"
+  ];
+
+}
+
+
+/* =========================
+   カードシャッフル
+========================= */
+
+function shuffleCards() {
+
+  const cardsContainer =
+    document.querySelector(".cards");
+
+  const cards =
+    Array.from(
+      cardsContainer.querySelectorAll(".card")
+    );
+
+  /* Fisher-Yatesシャッフル */
+
+  for (
+    let i = cards.length - 1;
+    i > 0;
+    i--
+  ) {
+
+    const j =
+      Math.floor(
+        Math.random() * (i + 1)
+      );
+
+    [
+      cards[i],
+      cards[j]
+    ] = [
+      cards[j],
+      cards[i]
+    ];
+
+  }
+
+  cards.forEach(card => {
+
+    cardsContainer.appendChild(card);
+
+  });
+
+}
+
+
+/* =========================
+   モード変更
+========================= */
+
+function changeMode(mode) {
+
+  currentMode = mode;
+
+  const screen =
+    document.getElementById("screen");
+
+  document
+    .getElementById("normalButton")
+    .classList.remove("active");
+
+  document
+    .getElementById("loveButton")
+    .classList.remove("active");
+
+  document
+    .getElementById("darkButton")
+    .classList.remove("active");
+
+  screen.classList.remove(
+    "love-mode",
+    "dark-mode"
+  );
+
+
+  if (mode === "love") {
+
+    screen.classList.add(
+      "love-mode"
+    );
+
+    document
+      .getElementById("loveButton")
+      .classList.add("active");
+
+    document.getElementById("title")
+      .textContent =
+      "💕 恋みくじ 💕";
+
+  }
+
+  else if (mode === "dark") {
+
+    screen.classList.add(
+      "dark-mode"
+    );
+
+    document
+      .getElementById("darkButton")
+      .classList.add("active");
+
+    document.getElementById("title")
+      .textContent =
+      "☠ 闇みくじ ☠";
+
+  }
+
+  else {
+
+    document
+      .getElementById("normalButton")
+      .classList.add("active");
+
+    document.getElementById("title")
+      .textContent =
+      "🎋 おみくじ 🎋";
+
+  }
+
+  resetCards();
+
+}
+
+
+/* =========================
+   カード選択
+========================= */
+
+function selectCard(event) {
+
+  if (selected) {
+    return;
+  }
+
+  selected = true;
+
+  const cards =
+    document.querySelectorAll(
+      ".card"
+    );
+
+  let fortune;
+
+
+  /*
+     スペースキーの裏技
+
+     カードをクリックする瞬間に
+     スペースキーを押していると
+     強制的に大吉。
+
+     ShiftキーではなくSpaceキー。
+  */
+
+  if (
+    event &&
+    event.spaceKey
+  ) {
+
+    if (currentMode === "love") {
+
+      fortune = [
+        "💖 大恋愛",
+        "運命の恋が動き出す予感！"
+      ];
+
+    }
+
+    else if (currentMode === "dark") {
+
+      fortune = [
+        "☠ 真・闇",
+        "あなたは禁断の領域に足を踏み入れた。"
+      ];
+
+    }
+
+    else {
+
+      fortune = [
+        "大吉",
+        "最高の運勢！今日は何をしてもうまくいきそう！"
+      ];
+
+    }
+
+  }
+
+  else {
+
+    /*
+       通常モードだけは
+       大吉の確率を低くした
+       重み付き抽選を使用。
+    */
+
+    if (currentMode === "normal") {
+
+      fortune =
+        getNormalFortune();
+
+    }
+
+    else {
+
+      let list;
+
+      if (currentMode === "love") {
+
+        list =
+          loveFortunes;
+
+      }
+
+      else {
+
+        list =
+          darkFortunes;
+
+      }
+
+      const randomIndex =
+        Math.floor(
+          Math.random() *
+          list.length
+        );
+
+      fortune =
+        list[randomIndex];
+
+    }
+
+  }
+
+
+  /* クリックされたカード */
+
+  const selectedCard =
+    event.currentTarget;
+
+
+  /* 選んだカードだけ表にする */
+
+  selectedCard
+    .classList.add(
+      "selected"
+    );
+
+
+  /* 残りのカードを暗くする */
+
+  cards.forEach(card => {
+
+    if (card !== selectedCard) {
+
+      card.classList.add(
+        "disabled"
+      );
+
+    }
+
+  });
+
+
+  /* カードに結果を表示 */
+
+  selectedCard
+    .querySelector(
+      ".card-result"
+    )
+    .textContent =
+    fortune[0];
+
+  selectedCard
+    .querySelector(
+      ".card-detail"
+    )
+    .textContent =
+    fortune[1];
+
+
+  /* 結果画面 */
+
+  setTimeout(() => {
+
+    showBigResult(
+      fortune
+    );
+
+  }, 700);
+
+}
+
+
+/* =========================
+   スペースキー状態
+========================= */
+
+let spacePressed = false;
+
+
+/*
+   Spaceキーを押している間だけ
+   spacePressed = true
+*/
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if (
+      event.code === "Space"
+    ) {
+
+      spacePressed = true;
+
+      /*
+         ページスクロール防止
+      */
+
+      event.preventDefault();
+
+    }
+
+  }
+);
+
+
+document.addEventListener(
+  "keyup",
+  event => {
+
+    if (
+      event.code === "Space"
+    ) {
+
+      spacePressed = false;
+
+    }
+
+  }
+);
+
+
+/*
+   selectCard() に渡す event に
+   Spaceキー状態を追加
+*/
+
+document.addEventListener(
+  "click",
+  event => {
+
+    if (
+      !event.target.closest(".card")
+    ) {
+      return;
+    }
+
+    event.spaceKey =
+      spacePressed;
+
+  },
+  true
+);
+
+
+/* =========================
+   結果表示
+========================= */
+
+function showBigResult(
+  fortune
+) {
+
+  const resultScreen =
+    document.getElementById(
+      "resultScreen"
+    );
+
+  document.getElementById(
+    "bigResult"
+  ).textContent =
+    fortune[0];
+
+  document.getElementById(
+    "bigMessage"
+  ).textContent =
+    fortune[1];
+
+  resultScreen.classList.remove(
+    "normal-result",
+    "dark-result"
+  );
+
+
+  if (
+    currentMode === "normal"
+  ) {
+
+    resultScreen.classList.add(
+      "normal-result"
+    );
+
+    document.getElementById(
+      "resultIcon"
+    ).textContent =
+      "🎋";
+
+  }
+
+  else if (
+    currentMode === "love"
+  ) {
+
+    document.getElementById(
+      "resultIcon"
+    ).textContent =
+      "💕";
+
+  }
+
+  else {
+
+    resultScreen.classList.add(
+      "dark-result"
+    );
+
+    document.getElementById(
+      "resultIcon"
+    ).textContent =
+      "☠";
+
+  }
+
+
+  resultScreen.classList.add(
+    "show"
+  );
+
+  createSparkles();
+
+}
+
+
+/* =========================
+   結果を閉じる
+========================= */
+
+function closeResult() {
+
+  document
+    .getElementById(
+      "resultScreen"
+    )
+    .classList.remove(
+      "show"
+    );
+
+  setTimeout(() => {
+
+    if (
+      currentMode === "dark"
+    ) {
+
+      lockDarkFortune();
+
+    }
+
+    resetCards();
+
+  }, 300);
+
+}
+
+
+/* =========================
+   闇みくじ終了
+========================= */
+
+function lockDarkFortune() {
+
+  document.getElementById(
+    "darkButton"
+  ).style.display =
+    "none";
+
+  changeMode("normal");
+
+}
+
+
+/* =========================
+   リセット
+========================= */
+
+function resetCards() {
+
+  selected = false;
+
+  /*
+     毎回カード位置をシャッフル
+  */
+
+  shuffleCards();
+
+
+  /*
+     カード状態をリセット
+  */
+
+  document
+    .querySelectorAll(
+      ".card"
+    )
+    .forEach(card => {
+
+      card.classList.remove(
+        "selected",
+        "disabled"
+      );
+
+      card.querySelector(
+        ".card-result"
+      ).textContent =
+        "";
+
+      card.querySelector(
+        ".card-detail"
+      ).textContent =
+        "";
+
+    });
+
+
+  /*
+     結果欄
+  */
+
+  document.getElementById(
+    "fortune"
+  ).textContent =
+    "？？？";
+
+
+  document.getElementById(
+    "message"
+  ).textContent =
+
+    currentMode === "love"
+
+      ? "カードを1枚選んでください 💕"
+
+      : currentMode === "dark"
+
+      ? "闇に触れるカードを1枚選んでください ☠"
+
+      : "カードを1枚選んでください ✨";
+
+}
+
+
+/* =========================
+   キラキラ
+========================= */
+
+function createSparkles() {
+
+  const screen =
+    document.getElementById(
+      "screen"
+    );
+
+  let symbols;
+
+
+  if (
+    currentMode === "love"
+  ) {
+
+    symbols = [
+      "💕",
+      "💗",
+      "✨",
+      "💖",
+      "💘"
+    ];
+
+  }
+
+  else if (
+    currentMode === "dark"
+  ) {
+
+    symbols = [
+      "☠",
+      "🩸",
+      "⚫",
+      "🔻"
+    ];
+
+  }
+
+  else {
+
+    symbols = [
+      "✨",
+      "🌸",
+      "🎋",
+      "⭐"
+    ];
+
+  }
+
+
+  for (
+    let i = 0;
+    i < 14;
+    i++
+  ) {
+
+    const sparkle =
+      document.createElement(
+        "div"
+      );
+
+    sparkle.className =
+      "sparkle";
+
+    sparkle.textContent =
+      symbols[
+        Math.floor(
+          Math.random() *
+          symbols.length
+        )
+      ];
+
+    sparkle.style.left =
+      (
+        10 +
+        Math.random() * 80
+      ) + "%";
+
+    sparkle.style.top =
+      (
+        15 +
+        Math.random() * 70
+      ) + "%";
+
+    sparkle.style.animationDelay =
+      (
+        Math.random() * .5
+      ) + "s";
+
+
+    screen.appendChild(
+      sparkle
+    );
+
+
+    setTimeout(
+      () => sparkle.remove(),
+      1600
+    );
+
+  }
+
+}
+
+
+/* =========================
+   製作者ボタン
+========================= */
+
+function openLock() {
+
+  if (
+    isLocked()
+  ) {
+
+    showLockedMessage();
+
+    return;
+
+  }
+
+
+  enteredPassword = "";
+
+  updateDots();
+
+  document
+    .getElementById(
+      "lockError"
+    )
+    .classList.remove(
+      "show"
+    );
+
+  document
+    .getElementById(
+      "lockScreen"
+    )
+    .classList.add(
+      "show"
+    );
+
+}
+
+
+/* =========================
+   数字入力
+========================= */
+
+function pressKey(
+  number
+) {
+
+  if (
+    enteredPassword.length >=
+    creatorPassword.length
+  ) {
+
+    return;
+
+  }
+
+  enteredPassword +=
+    number;
+
+  updateDots();
+
+
+  if (
+    enteredPassword.length ===
+    creatorPassword.length
+  ) {
+
+    setTimeout(
+      checkPassword,
+      180
+    );
+
+  }
+
+}
+
+
+/* =========================
+   削除
+========================= */
+
+function deleteKey() {
+
+  enteredPassword =
+    enteredPassword.slice(
+      0,
+      -1
+    );
+
+  updateDots();
+
+}
+
+
+/* =========================
+   ●表示
+========================= */
+
+function updateDots() {
+
+  const dots =
+    document.querySelectorAll(
+      ".pass-dot"
+    );
+
+  dots.forEach(
+    (dot, index) => {
+
+      dot.classList.toggle(
+        "filled",
+        index <
+        enteredPassword.length
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================
+   パスワード確認
+========================= */
+
+function checkPassword() {
+
+  if (
+    enteredPassword ===
+    creatorPassword
+  ) {
+
+    wrongCount = 0;
+
+    localStorage.setItem(
+      "omikujiWrongCount",
+      "0"
+    );
+
+    unlockDarkFortune();
+
+  }
+
+  else {
+
+    wrongCount++;
+
+    localStorage.setItem(
+      "omikujiWrongCount",
+      String(wrongCount)
+    );
+
+
+    const error =
+      document.getElementById(
+        "lockError"
+      );
+
+    error.classList.remove(
+      "show"
+    );
+
+    void error.offsetWidth;
+
+    error.classList.add(
+      "show"
+    );
+
+
+    enteredPassword = "";
+
+    updateDots();
+
+
+    if (
+      wrongCount >=
+      MAX_MISTAKES
+    ) {
+
+      start24HourLock();
+
+    }
+
+  }
+
+}
+
+
+/* =========================
+   闇みくじ解放
+========================= */
+
+function unlockDarkFortune() {
+
+  document
+    .getElementById(
+      "lockScreen"
+    )
+    .classList.remove(
+      "show"
+    );
+
+  document
+    .getElementById(
+      "darkButton"
+    )
+    .style.display =
+    "block";
+
+  changeMode("dark");
+
+}
+
+
+/* =========================
+   パスコード画面を閉じる
+========================= */
+
+function closeLock() {
+
+  document
+    .getElementById(
+      "lockScreen"
+    )
+    .classList.remove(
+      "show"
+    );
+
+}
+
+
+/* =========================
+   24時間ロック開始
+========================= */
+
+function start24HourLock() {
+
+  lockUntil =
+    Date.now() +
+    LOCK_TIME;
+
+  localStorage.setItem(
+    "omikujiLockUntil",
+    String(lockUntil)
+  );
+
+  enteredPassword = "";
+
+  updateDots();
+
+  document
+    .getElementById(
+      "lockScreen"
+    )
+    .classList.remove(
+      "show"
+    );
+
+
+  setTimeout(() => {
+
+    showLockedMessage();
+
+  }, 250);
+
+}
+
+
+/* =========================
+   ロック確認
+========================= */
+
+function isLocked() {
+
+  const now =
+    Date.now();
+
+
+  if (
+    lockUntil &&
+    now < lockUntil
+  ) {
+
+    return true;
+
+  }
+
+
+  if (
+    lockUntil &&
+    now >= lockUntil
+  ) {
+
+    lockUntil = 0;
+
+    wrongCount = 0;
+
+    localStorage.removeItem(
+      "omikujiLockUntil"
+    );
+
+    localStorage.setItem(
+      "omikujiWrongCount",
+      "0"
+    );
+
+  }
+
+
+  return false;
+
+}
+
+
+/* =========================
+   ロック画面
+========================= */
+
+function showLockedMessage() {
+
+  updateRemainingTime();
+
+  document
+    .getElementById(
+      "lockedMessage"
+    )
+    .classList.add(
+      "show"
+    );
+
+}
+
+
+/* =========================
+   残り時間
+========================= */
+
+function updateRemainingTime() {
+
+  if (
+    !isLocked()
+  ) {
+
+    closeLockedMessage();
+
+    return;
+
+  }
+
+
+  const remaining =
+    lockUntil -
+    Date.now();
+
+
+  const hours =
+    Math.floor(
+      remaining /
+      (1000 * 60 * 60)
+    );
+
+
+  const minutes =
+    Math.floor(
+      (
+        remaining %
+        (1000 * 60 * 60)
+      ) /
+      (1000 * 60)
+    );
+
+
+  const seconds =
+    Math.floor(
+      (
+        remaining %
+        (1000 * 60)
+      ) /
+      1000
+    );
+
+
+  document.getElementById(
+    "remainingTime"
+  ).textContent =
+
+    "解除まで " +
+    hours +
+    "時間 " +
+    minutes +
+    "分 " +
+    seconds +
+    "秒";
+
+
+  setTimeout(
+    updateRemainingTime,
+    1000
+  );
+
+}
+
+
+/* =========================
+   ロック画面を閉じる
+========================= */
+
+function closeLockedMessage() {
+
+  document
+    .getElementById(
+      "lockedMessage"
+    )
+    .classList.remove(
+      "show"
+    );
+
+}
+
+
+/* =========================
+   最初の読み込み
+========================= */
+
+window.addEventListener(
+  "load",
+  () => {
+
+    resetCards();
+
+  }
+);
+
+</script>
+
+</body>
+</html>
