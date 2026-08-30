@@ -1,3 +1,9 @@
+ChatGPT:
+もちろん！🎋
+箱をシャカシャカ振ったあと、紙のおみくじがスッと箱から飛び出して、そこに「大吉」などの結果が表示される演出にしてみました。
+
+前のHTMLをこれに丸ごと置き換えてください。
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -16,11 +22,11 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #f8c8c8, #ffe5ad);
+  background: linear-gradient(135deg, #f7c5c5, #ffe5ac);
   font-family: "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif;
 }
 
-/* スマホ */
+/* スマホ本体 */
 .phone {
   position: relative;
   width: 340px;
@@ -32,9 +38,10 @@ body {
   box-shadow: 0 25px 50px rgba(0,0,0,.3);
 }
 
+/* ノッチ */
 .notch {
   position: absolute;
-  z-index: 10;
+  z-index: 20;
   top: 10px;
   left: 50%;
   transform: translateX(-50%);
@@ -44,6 +51,7 @@ body {
   background: #111;
 }
 
+/* スマホ画面 */
 .screen {
   position: relative;
   width: 100%;
@@ -51,9 +59,9 @@ body {
   overflow: hidden;
   border-radius: 35px;
   background:
-    radial-gradient(circle at 15% 20%, #ffd4d4 0 5%, transparent 6%),
-    radial-gradient(circle at 85% 30%, #ffe5b5 0 5%, transparent 6%),
-    #fff7f4;
+    radial-gradient(circle at 15% 20%, #ffd2d2 0 5%, transparent 6%),
+    radial-gradient(circle at 85% 30%, #ffe3ae 0 5%, transparent 6%),
+    #fff8f5;
 }
 
 /* 桜 */
@@ -68,7 +76,7 @@ body {
 .s3 { bottom: 100px; left: 10px; }
 .s4 { bottom: 150px; right: 15px; }
 
-/* メイン */
+/* コンテンツ */
 .content {
   position: relative;
   z-index: 2;
@@ -88,28 +96,57 @@ h1 {
   font-size: 13px;
 }
 
-/* おみくじ箱 */
-.omikuji-box {
+/* おみくじエリア */
+.omikuji-area {
   position: relative;
-  width: 180px;
-  height: 180px;
-  margin: 10px auto 20px;
-  border-radius: 15px 15px 25px 25px;
-  background: linear-gradient(90deg, #b71c1c, #d32f2f, #b71c1c);
-  box-shadow: 0 10px 20px rgba(120,0,0,.25);
+  width: 190px;
+  height: 205px;
+  margin: 0 auto;
 }
 
-/* 金色の模様 */
+/* おみくじ箱 */
+.omikuji-box {
+  position: absolute;
+  left: 5px;
+  bottom: 0;
+  width: 180px;
+  height: 155px;
+  border-radius: 15px 15px 25px 25px;
+  background: linear-gradient(
+    90deg,
+    #9e1515,
+    #d32f2f,
+    #ef5350,
+    #b71c1c
+  );
+  box-shadow:
+    0 10px 20px rgba(120,0,0,.3),
+    inset 5px 0 rgba(255,255,255,.12);
+}
+
+/* 箱の金色模様 */
 .omikuji-box::before {
   content: "福";
   position: absolute;
   left: 50%;
-  top: 55%;
+  top: 58%;
   transform: translate(-50%, -50%);
   color: #ffd54f;
   font-size: 65px;
   font-weight: bold;
-  opacity: .8;
+}
+
+/* 箱の口 */
+.box-top {
+  position: absolute;
+  z-index: 4;
+  left: 20px;
+  top: -5px;
+  width: 140px;
+  height: 18px;
+  border-radius: 50%;
+  background: #761010;
+  border: 3px solid #5d0b0b;
 }
 
 /* 棒 */
@@ -117,59 +154,161 @@ h1 {
   position: absolute;
   z-index: 3;
   left: 50%;
-  top: -85px;
-  width: 14px;
-  height: 125px;
+  top: -95px;
+  width: 13px;
+  height: 130px;
   transform: translateX(-50%);
   transform-origin: bottom center;
   border-radius: 8px 8px 2px 2px;
-  background: linear-gradient(90deg, #c58b45, #f5c26b, #a96f32);
+  background: linear-gradient(
+    90deg,
+    #a96f32,
+    #f5c26b,
+    #c58b45
+  );
   box-shadow: 2px 2px 5px rgba(0,0,0,.25);
-  transition: transform .15s;
 }
 
-.stick::after {
-  content: "一";
-  position: absolute;
-  top: 8px;
-  left: 2px;
-  color: #7b3f00;
-  font-size: 11px;
-  font-weight: bold;
-}
-
-/* 振るアニメーション */
+/* シャカシャカ */
 .shaking .stick {
-  animation: shake 0.12s infinite alternate;
+  animation: shake .11s infinite alternate;
+}
+
+.shaking .omikuji-box {
+  animation: boxShake .11s infinite alternate;
 }
 
 @keyframes shake {
   from {
     transform: translateX(-50%) rotate(-18deg);
   }
-
   to {
     transform: translateX(-50%) rotate(18deg);
   }
 }
 
+@keyframes boxShake {
+  from {
+    transform: translateX(-5px) rotate(-2deg);
+  }
+  to {
+    transform: translateX(5px) rotate(2deg);
+  }
+}
+
+/* 紙のおみくじ */
+.paper {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  bottom: 65px;
+
+  width: 115px;
+  height: 145px;
+
+  padding: 12px 8px;
+
+  transform:
+    translateX(-50%)
+    translateY(100px);
+
+  background:
+    linear-gradient(
+      90deg,
+      #fffdf2,
+      #fff8dc,
+      #fffdf2
+    );
+
+  border: 2px solid #d8b96a;
+
+  box-shadow:
+    0 5px 12px rgba(0,0,0,.2);
+
+  opacity: 0;
+}
+
+/* 紙の模様 */
+.paper::before {
+  content: "御神籤";
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #a67c00;
+  font-size: 12px;
+  writing-mode: vertical-rl;
+}
+
 /* 結果 */
+#paperResult {
+  position: absolute;
+  top: 48px;
+  left: 0;
+  width: 100%;
+
+  color: #b71c1c;
+  font-size: 30px;
+  font-weight: bold;
+  text-align: center;
+
+  writing-mode: vertical-rl;
+}
+
+/* 紙が飛び出す */
+.paper.show {
+  animation: paperOut 1.2s cubic-bezier(.2,.9,.25,1.2) forwards;
+}
+
+@keyframes paperOut {
+
+  0% {
+    transform:
+      translateX(-50%)
+      translateY(100px)
+      rotate(0deg);
+
+    opacity: 0;
+  }
+
+  30% {
+    opacity: 1;
+  }
+
+  70% {
+    transform:
+      translateX(-50%)
+      translateY(-45px)
+      rotate(-4deg);
+  }
+
+  100% {
+    transform:
+      translateX(-50%)
+      translateY(-30px)
+      rotate(0deg);
+
+    opacity: 1;
+  }
+}
+
+/* 結果メッセージ */
 .result {
-  min-height: 90px;
-  padding: 12px;
+  min-height: 85px;
+  padding: 10px;
   border: 2px solid #d32f2f;
   border-radius: 15px;
-  background: rgba(255,255,255,.9);
+  background: rgba(255,255,255,.92);
 }
 
 #fortune {
   color: #c62828;
-  font-size: 38px;
+  font-size: 35px;
   font-weight: bold;
 }
 
 #message {
-  margin-top: 5px;
+  margin-top: 4px;
   color: #555;
   font-size: 12px;
   line-height: 1.5;
@@ -180,14 +319,24 @@ button {
   width: 100%;
   margin-top: 15px;
   padding: 15px;
+
   border: 0;
   border-radius: 50px;
-  background: linear-gradient(135deg, #d32f2f, #a91515);
+
+  background: linear-gradient(
+    135deg,
+    #d32f2f,
+    #a91515
+  );
+
   color: white;
   font-size: 17px;
   font-weight: bold;
+
   cursor: pointer;
-  box-shadow: 0 5px 12px rgba(160,0,0,.3);
+
+  box-shadow:
+    0 5px 12px rgba(160,0,0,.3);
 }
 
 button:active {
@@ -196,27 +345,26 @@ button:active {
 
 button:disabled {
   opacity: .6;
-  cursor: default;
 }
 
-/* 結果登場 */
-.show-result {
-  animation: resultPop .5s ease-out;
+/* 結果が出たとき */
+.result.pop {
+  animation: pop .5s ease-out;
 }
 
-@keyframes resultPop {
+@keyframes pop {
   0% {
-    transform: scale(.3) rotate(-10deg);
+    transform: scale(.7);
     opacity: 0;
   }
 
   70% {
-    transform: scale(1.15) rotate(3deg);
-    opacity: 1;
+    transform: scale(1.08);
   }
 
   100% {
-    transform: scale(1) rotate(0);
+    transform: scale(1);
+    opacity: 1;
   }
 }
 
@@ -230,6 +378,35 @@ button:disabled {
   height: 4px;
   border-radius: 10px;
   background: #333;
+}
+
+/* キラキラ */
+.sparkle {
+  position: absolute;
+  z-index: 10;
+  pointer-events: none;
+  font-size: 25px;
+  opacity: 0;
+}
+
+.sparkle.show {
+  animation: sparkle 1s ease-out forwards;
+}
+
+@keyframes sparkle {
+  0% {
+    transform: scale(.3);
+    opacity: 0;
+  }
+
+  30% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1.5) translateY(-30px);
+    opacity: 0;
+  }
 }
 </style>
 </head>
@@ -255,17 +432,34 @@ button:disabled {
         今日の運勢を占おう
       </div>
 
-      <!-- おみくじ箱 -->
-      <div class="omikuji-box" id="box">
-        <div class="stick"></div>
+      <!-- おみくじ -->
+      <div class="omikuji-area" id="area">
+
+        <!-- 飛び出す紙 -->
+        <div class="paper" id="paper">
+          <div id="paperResult">？？？</div>
+        </div>
+
+        <!-- 箱 -->
+        <div class="omikuji-box" id="box">
+
+          <div class="box-top"></div>
+
+          <div class="stick"></div>
+
+        </div>
+
       </div>
 
       <!-- 結果 -->
       <div class="result" id="resultBox">
+
         <div id="fortune">？？？</div>
+
         <div id="message">
           おみくじを引いてみよう！
         </div>
+
       </div>
 
       <button id="drawButton" onclick="drawOmikuji()">
@@ -314,46 +508,62 @@ function drawOmikuji() {
 
   const button = document.getElementById("drawButton");
   const box = document.getElementById("box");
+  const paper = document.getElementById("paper");
   const resultBox = document.getElementById("resultBox");
 
-  // ボタンを無効化
+  /* ボタン無効 */
   button.disabled = true;
   button.textContent = "🎋 シャカシャカ…";
 
-  // 結果を隠す
+  /* 紙を一旦戻す */
+  paper.classList.remove("show");
+
+  /* 結果をリセット */
   document.getElementById("fortune").textContent = "？？？";
   document.getElementById("message").textContent =
     "運勢を占っています…";
 
-  // 箱を振る
+  /* シャカシャカ開始 */
   box.classList.add("shaking");
 
-  // 2秒後に結果
+  /* 2秒後 */
   setTimeout(() => {
 
+    /* シャカシャカ停止 */
     box.classList.remove("shaking");
 
+    /* 結果を決める */
     const random =
       Math.floor(Math.random() * fortunes.length);
 
     const fortune = fortunes[random];
 
-    document.getElementById("fortune").textContent =
+    /* 紙に結果 */
+    document.getElementById("paperResult").textContent =
       fortune.name;
 
-    document.getElementById("message").innerHTML =
-      fortune.message;
+    /* 紙を飛び出させる */
+    paper.classList.add("show");
 
-    // 結果アニメーション
-    resultBox.classList.remove("show-result");
+    /* 少し遅れて結果表示 */
+    setTimeout(() => {
 
-    // 再アニメーション用
-    void resultBox.offsetWidth;
+      document.getElementById("fortune").textContent =
+        fortune.name;
 
-    resultBox.classList.add("show-result");
+      document.getElementById("message").innerHTML =
+        fortune.message;
 
-    button.disabled = false;
-    button.textContent = "🔄 もう一度引く！";
+      resultBox.classList.remove("pop");
+
+      void resultBox.offsetWidth;
+
+      resultBox.classList.add("pop");
+
+      button.disabled = false;
+      button.textContent = "🔄 もう一度引く！";
+
+    }, 700);
 
   }, 2000);
 }
