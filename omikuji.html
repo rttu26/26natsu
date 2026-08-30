@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>おみくじ</title>
+
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background: #fff8e7;
+      padding: 50px 20px;
+    }
+
+    h1 {
+      color: #c0392b;
+    }
+
+    #result {
+      font-size: 48px;
+      font-weight: bold;
+      color: #d35400;
+      margin: 40px 0;
+      min-height: 60px;
+    }
+
+    button {
+      font-size: 20px;
+      padding: 15px 40px;
+      border: none;
+      border-radius: 10px;
+      background: #e74c3c;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #c0392b;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>🎍 おみくじ 🎍</h1>
+
+  <div id="result">？？？</div>
+
+  <button onclick="drawOmikuji()">おみくじを引く</button>
+
+  <script>
+    function drawOmikuji() {
+      const fortunes = [
+        "大吉",
+        "中吉",
+        "小吉",
+        "吉",
+        "凶"
+      ];
+
+      const randomIndex = Math.floor(Math.random() * fortunes.length);
+
+      document.getElementById("result").textContent =
+        fortunes[randomIndex];
+    }
+  </script>
+
+</body>
+</html>
