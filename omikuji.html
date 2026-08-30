@@ -459,7 +459,167 @@ h1 {
     opacity: 0;
   }
 }
+/* =========================
+   全画面結果
+========================= */
 
+.result-screen {
+  position: absolute;
+  z-index: 100;
+  inset: 0;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  padding: 30px;
+
+  text-align: center;
+
+  background:
+    radial-gradient(
+      circle at center,
+      #fff,
+      #ffe8ef 45%,
+      #f8b6c9
+    );
+
+  transform: scale(0);
+  opacity: 0;
+
+  pointer-events: none;
+}
+
+.result-screen.show {
+  animation: resultBang .65s cubic-bezier(.15,1.5,.3,1) forwards;
+  pointer-events: auto;
+}
+
+@keyframes resultBang {
+
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+
+  55% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+
+  75% {
+    transform: scale(.97);
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.result-icon {
+  font-size: 65px;
+  margin-bottom: 10px;
+
+  animation: iconPop .7s .2s both;
+}
+
+@keyframes iconPop {
+
+  0% {
+    transform: scale(0) rotate(-20deg);
+  }
+
+  70% {
+    transform: scale(1.2) rotate(10deg);
+  }
+
+  100% {
+    transform: scale(1) rotate(0);
+  }
+}
+
+.result-title {
+  color: #e91e63;
+  font-size: 45px;
+  font-weight: bold;
+
+  text-shadow:
+    2px 2px 0 white,
+    0 0 15px rgba(233,30,99,.3);
+
+  animation: titlePop .7s .1s both;
+}
+
+@keyframes titlePop {
+
+  0% {
+    transform: scale(2);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.result-line {
+  width: 150px;
+  height: 2px;
+  margin: 15px 0;
+
+  background: #e57399;
+}
+
+.result-message {
+  max-width: 260px;
+
+  color: #555;
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.result-screen button {
+  width: 200px;
+  margin-top: 30px;
+  padding: 13px;
+
+  border: 0;
+  border-radius: 50px;
+
+  background: #e91e63;
+  color: white;
+
+  font-size: 15px;
+  font-weight: bold;
+
+  cursor: pointer;
+}
+
+/* 通常おみくじ */
+.normal-result {
+  background:
+    radial-gradient(
+      circle at center,
+      #fff,
+      #fff5d0 45%,
+      #f2d27a
+    );
+}
+
+.normal-result .result-title {
+  color: #c62828;
+}
+
+.normal-result .result-line {
+  background: #d4aa48;
+}
+
+.normal-result button {
+  background: #c62828;
+}
 </style>
 </head>
 
@@ -887,8 +1047,40 @@ function createSparkles() {
     }, 1500);
   }
 }
+function closeResult() {
 
+  const resultScreen =
+    document.getElementById("resultScreen");
+
+  resultScreen.classList.remove("show");
+
+  setTimeout(() => {
+    resetCards();
+  }, 300);
+}
 </script>
+<div class="result-screen" id="resultScreen">
 
+  <div class="result-decoration">✨</div>
+
+  <div class="result-icon" id="resultIcon">
+    💕
+  </div>
+
+  <div class="result-title" id="bigResult">
+    大恋愛
+  </div>
+
+  <div class="result-line"></div>
+
+  <div class="result-message" id="bigMessage">
+    運命の恋が動き出す予感！
+  </div>
+
+  <button onclick="closeResult()">
+    もう一度引く
+  </button>
+
+</div>
 </body>
 </html>
