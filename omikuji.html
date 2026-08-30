@@ -994,7 +994,96 @@ line-height: 1.8;
 
   <button
     id="resetButton"
-    onclick="resetCards()">
+    function resetCards() {
+
+selected = false;
+
+const cardsContainer =
+document.querySelector(".cards");
+
+const cards =
+Array.from(
+  cardsContainer.querySelectorAll(".card")
+);
+
+/*
+カードの位置をシャッフル
+Fisher-Yates方式
+*/
+for (
+let i = cards.length - 1;
+i > 0;
+i--
+) {
+
+const j =
+Math.floor(
+  Math.random() * (i + 1)
+);
+
+[
+  cards[i],
+  cards[j]
+] = [
+  cards[j],
+  cards[i]
+];
+
+}
+
+/*
+シャッフルした順番で
+.cardsの中に戻す
+*/
+cards.forEach(card => {
+
+cardsContainer.appendChild(card);
+
+});
+
+/*
+カード状態をリセット
+*/
+cards.forEach(card => {
+
+card.classList.remove(
+  "selected",
+  "disabled"
+);
+
+card.querySelector(
+  ".card-result"
+).textContent = "";
+
+card.querySelector(
+  ".card-detail"
+).textContent = "";
+
+});
+
+/*
+結果表示をリセット
+*/
+document.getElementById(
+"fortune"
+).textContent =
+"？？？";
+
+document.getElementById(
+"message"
+).textContent =
+
+currentMode === "love"
+
+  ? "カードを1枚選んでください 💕"
+
+  : currentMode === "dark"
+
+  ? "闇に触れるカードを1枚選んでください ☠"
+
+  : "カードを1枚選んでください ✨";
+
+}
     🔄 もう一度占う
   </button>
 
