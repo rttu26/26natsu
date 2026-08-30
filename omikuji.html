@@ -1,10 +1,13 @@
+ChatGPT:
+もちろん♡ まるごと置き換えられる形で書くね。
+※「製作者ページ」は今までのパスコード 0831 で開き、そこから各占いの12時間制限をリセットできます。
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>おみくじ＆恋みくじ</title>
+<title>おみくじ＆恋みくじ＆ラッキーカラー</title>
 
 <style>
 * {
@@ -17,60 +20,42 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-
   background:
     radial-gradient(circle at 20% 20%, #ffd6d6 0 4%, transparent 5%),
     radial-gradient(circle at 80% 70%, #ffe7b3 0 5%, transparent 6%),
     linear-gradient(135deg, #f6c5c5, #ffe6ad);
-
-  font-family:
-    "Yu Gothic",
-    "Hiragino Kaku Gothic ProN",
-    sans-serif;
+  font-family: "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif;
 }
-
-/* =========================
-   スマホ本体
-========================= */
 
 .phone {
   position: relative;
   width: 350px;
   height: 700px;
   padding: 10px;
-
   background: #222;
   border: 7px solid #111;
   border-radius: 50px;
-
   box-shadow: 0 25px 55px rgba(0,0,0,.3);
 }
 
 .notch {
   position: absolute;
   z-index: 300;
-
   top: 10px;
   left: 50%;
   transform: translateX(-50%);
-
   width: 105px;
   height: 25px;
-
   border-radius: 20px;
   background: #111;
 }
 
 .screen {
   position: relative;
-
   width: 100%;
   height: 100%;
-
   overflow: hidden;
-
   border-radius: 37px;
-
   background:
     linear-gradient(
       rgba(255,255,255,.75),
@@ -79,36 +64,29 @@ body {
     #fff0f0;
 }
 
-/* =========================
-   背景
-========================= */
-
 .content {
   position: relative;
   z-index: 2;
-
-  padding: 55px 14px 25px;
-
+  padding: 55px 17px 25px;
   text-align: center;
 }
 
 h1 {
   margin: 0;
-
   color: #b71c1c;
-  font-size: 28px;
+  font-size: 27px;
 }
 
 .subtitle {
   margin: 5px 0 12px;
-
   color: #777;
-  font-size: 12px;
+  font-size: 11px;
 }
+
+/* 桜 */
 
 .sakura {
   position: absolute;
-
   font-size: 35px;
   opacity: .35;
 }
@@ -133,30 +111,28 @@ h1 {
   right: 12px;
 }
 
-/* =========================
-   モードボタン
-========================= */
+/* モード */
 
 .mode-buttons {
   display: flex;
   gap: 6px;
-
-  margin-bottom: 13px;
+  margin-bottom: 12px;
 }
 
 .mode-buttons button {
   flex: 1;
-
   padding: 8px 2px;
-
   border: 0;
   border-radius: 30px;
-
   background: #eee;
   color: #777;
-
   font-size: 10px;
   cursor: pointer;
+  transition: .2s;
+}
+
+.mode-buttons button:hover {
+  transform: translateY(-2px);
 }
 
 .mode-buttons button.active {
@@ -168,94 +144,25 @@ h1 {
   background: #e91e63;
 }
 
-.mode-buttons button.creator {
-  background: #333;
-  color: white;
+.mode-buttons button.color.active {
+  background: #7b1fa2;
 }
 
-/* =========================
-   闇みくじボタン
-========================= */
-
-.dark-button-area {
-  position: relative;
-
-  margin: 5px auto 12px;
-
-  width: 92%;
-}
-
-#darkButton {
-  display: none;
-
-  width: 100%;
-
-  padding: 10px 8px;
-
-  border: 2px solid #a00000;
-  border-radius: 25px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #191919,
-      #050505
-    );
-
-  color: #ff3030;
-
-  font-size: 12px;
-  font-weight: bold;
-
-  cursor: pointer;
-
-  box-shadow:
-    0 0 10px rgba(180,0,0,.45),
-    inset 0 0 10px rgba(255,0,0,.08);
-
-  animation: darkButtonGlow 2s infinite alternate;
-}
-
-@keyframes darkButtonGlow {
-  from {
-    box-shadow:
-      0 0 7px rgba(180,0,0,.3),
-      inset 0 0 8px rgba(255,0,0,.05);
-  }
-
-  to {
-    box-shadow:
-      0 0 18px rgba(220,0,0,.7),
-      inset 0 0 12px rgba(255,0,0,.12);
-  }
-}
-
-/* =========================
-   カード
-========================= */
+/* カード */
 
 .cards {
   width: 100%;
-
   display: grid;
-
-  grid-template-columns:
-    repeat(4, 1fr);
-
-  gap: 6px;
-
+  grid-template-columns: repeat(4, 1fr);
+  gap: 7px;
   perspective: 1000px;
 }
 
 .card {
-  height: 92px;
-
+  height: 100px;
   position: relative;
-
   cursor: pointer;
-
   perspective: 800px;
-
   transition: transform .2s;
 }
 
@@ -265,14 +172,9 @@ h1 {
 
 .card-inner {
   position: relative;
-
   width: 100%;
   height: 100%;
-
-  transition:
-    transform .75s
-    cubic-bezier(.2,.7,.2,1);
-
+  transition: transform .75s cubic-bezier(.2,.7,.2,1);
   transform-style: preserve-3d;
 }
 
@@ -283,20 +185,15 @@ h1 {
 .card-front,
 .card-back {
   position: absolute;
-
   width: 100%;
   height: 100%;
-
   backface-visibility: hidden;
-
   border-radius: 10px;
-
   overflow: hidden;
 }
 
 .card-back {
   display: flex;
-
   justify-content: center;
   align-items: center;
 
@@ -310,16 +207,13 @@ h1 {
     ),
     #b71c1c;
 
-  border: 2px solid #f4c76b;
-
-  box-shadow:
-    0 4px 8px rgba(0,0,0,.2);
+  border: 3px solid #f4c76b;
+  box-shadow: 0 5px 10px rgba(0,0,0,.2);
 }
 
 .card-back::before {
   content: "🎋";
-
-  font-size: 24px;
+  font-size: 27px;
 }
 
 .love-mode .card-back {
@@ -340,105 +234,76 @@ h1 {
   content: "💗";
 }
 
-.dark-mode .card-back {
+.color-mode .card-back {
   background:
     repeating-linear-gradient(
       45deg,
       transparent,
       transparent 5px,
-      rgba(255,0,0,.08) 6px,
+      rgba(255,255,255,.12) 6px,
       transparent 7px
     ),
-    #090909;
+    #7b1fa2;
 
-  border-color: #8b0000;
+  border-color: #e1bee7;
 }
 
-.dark-mode .card-back::before {
-  content: "☠";
-
-  color: #d40000;
+.color-mode .card-back::before {
+  content: "🎨";
 }
 
-/* =========================
-   カード表
-========================= */
+/* 表 */
 
 .card-front {
   transform: rotateY(180deg);
 
   display: flex;
-
   flex-direction: column;
-
   justify-content: center;
   align-items: center;
 
-  padding: 3px;
+  padding: 4px;
 
   background:
-    linear-gradient(
-      135deg,
-      #fffdf2,
-      #fff5d8
-    );
+    linear-gradient(135deg,#fffdf2,#fff5d8);
 
-  border: 2px solid #d4aa48;
-
-  box-shadow:
-    0 4px 10px rgba(0,0,0,.2);
+  border: 3px solid #d4aa48;
+  box-shadow: 0 5px 15px rgba(0,0,0,.2);
 }
 
 .card-front::before {
   content: "御神籤";
-
   color: #9b751b;
-
   font-size: 7px;
-
   margin-bottom: 3px;
 }
 
 .love-mode .card-front {
   background:
-    linear-gradient(
-      135deg,
-      #fff8fb,
-      #ffe3ed
-    );
-
+    linear-gradient(135deg,#fff8fb,#ffe3ed);
   border-color: #e57399;
 }
 
 .love-mode .card-front::before {
   content: "恋みくじ";
-
   color: #c2185b;
 }
 
-.dark-mode .card-front {
+.color-mode .card-front {
   background:
-    linear-gradient(
-      135deg,
-      #181818,
-      #050505
-    );
-
-  border-color: #8b0000;
+    linear-gradient(135deg,#fbf5ff,#eee0ff);
+  border-color: #9c6ade;
 }
 
-.dark-mode .card-front::before {
-  content: "闇みくじ";
-
-  color: #e00000;
+.color-mode .card-front::before {
+  content: "ラッキーカラー";
+  color: #7b1fa2;
 }
 
 .card-result {
   color: #b71c1c;
-
-  font-size: 12px;
+  font-size: 13px;
   font-weight: bold;
-
   text-align: center;
 }
 
@@ -446,29 +311,20 @@ h1 {
   color: #e91e63;
 }
 
-.dark-mode .card-result {
-  color: #ff3030;
+.color-mode .card-result {
+  color: #7b1fa2;
 }
 
 .card-detail {
   margin-top: 3px;
-
   color: #666;
-
-  font-size: 6px;
-
-  line-height: 1.25;
-
+  font-size: 7px;
+  line-height: 1.3;
   text-align: center;
-}
-
-.dark-mode .card-detail {
-  color: #bbb;
 }
 
 .card.disabled {
   pointer-events: none;
-
   opacity: .22;
 }
 
@@ -478,23 +334,18 @@ h1 {
 
 .card.selected .card-front {
   box-shadow:
-    0 0 0 2px #ffd54f,
-    0 7px 15px rgba(255,80,80,.35);
+    0 0 0 3px #ffd54f,
+    0 8px 20px rgba(255,80,80,.35);
 }
 
-/* =========================
-   結果欄
-========================= */
+/* 結果欄 */
 
 .result-box {
-  min-height: 68px;
-
-  margin-top: 11px;
-
-  padding: 7px;
+  min-height: 72px;
+  margin-top: 12px;
+  padding: 8px;
 
   border: 2px solid #c62828;
-
   border-radius: 15px;
 
   background: rgba(255,255,255,.94);
@@ -504,17 +355,13 @@ h1 {
   border-color: #e91e63;
 }
 
-.dark-mode .result-box {
-  border-color: #8b0000;
-
-  background: rgba(20,20,20,.95);
+.color-mode .result-box {
+  border-color: #7b1fa2;
 }
 
 #fortune {
   color: #c62828;
-
-  font-size: 24px;
-
+  font-size: 23px;
   font-weight: bold;
 }
 
@@ -522,125 +369,100 @@ h1 {
   color: #e91e63;
 }
 
-.dark-mode #fortune {
-  color: #ff3030;
+.color-mode #fortune {
+  color: #7b1fa2;
 }
 
 #message {
   margin-top: 3px;
-
   color: #555;
-
   font-size: 9px;
-
   line-height: 1.4;
 }
 
-.dark-mode #message {
-  color: #bbb;
+/* 12時間制限 */
+
+.cooldown {
+  margin-top: 5px;
+  color: #999;
+  font-size: 8px;
 }
 
-/* =========================
-   リセット
-========================= */
+/* ボタン */
 
 #resetButton {
   width: 100%;
-
-  margin-top: 8px;
-
-  padding: 10px;
+  margin-top: 9px;
+  padding: 11px;
 
   border: 0;
-
   border-radius: 50px;
 
   background:
-    linear-gradient(
-      135deg,
-      #d32f2f,
-      #a91515
-    );
+    linear-gradient(135deg,#d32f2f,#a91515);
 
   color: white;
-
   font-size: 14px;
   font-weight: bold;
-
   cursor: pointer;
 }
 
 .love-mode #resetButton {
   background:
-    linear-gradient(
-      135deg,
-      #ec407a,
-      #c2185b
-    );
+    linear-gradient(135deg,#ec407a,#c2185b);
 }
 
-.dark-mode #resetButton {
+.color-mode #resetButton {
   background:
-    linear-gradient(
-      135deg,
-      #333,
-      #080808
-    );
-
-  color: #ff3030;
+    linear-gradient(135deg,#9c27b0,#6a1b9a);
 }
 
-/* =========================
-   製作者ページボタン
-========================= */
+/* 製作者ページボタン */
 
 .creator-button {
   position: absolute;
-
   z-index: 20;
 
-  left: 50%;
-  bottom: 42px;
-
-  transform: translateX(-50%);
+  right: 15px;
+  bottom: 38px;
 
   border: 0;
 
-  background: rgba(255,255,255,.55);
+  background:
+    linear-gradient(135deg,#222,#000);
 
-  color: #888;
+  color: #ff5252;
 
-  padding: 5px 14px;
-
+  padding: 7px 12px;
   border-radius: 20px;
 
   font-size: 9px;
+  font-weight: bold;
 
   cursor: pointer;
+
+  box-shadow:
+    0 0 12px rgba(255,0,0,.35);
+
+  transition: .2s;
 }
 
 .creator-button:hover {
-  color: #555;
-
-  background:
-    rgba(255,255,255,.8);
+  transform: scale(1.08);
+  box-shadow:
+    0 0 18px rgba(255,0,0,.65);
 }
 
-/* =========================
-   全画面結果
-========================= */
+/* 全画面結果 */
 
 .result-screen {
   position: absolute;
-
   z-index: 100;
 
   inset: 0;
 
   display: flex;
-
   flex-direction: column;
-
   justify-content: center;
   align-items: center;
 
@@ -657,23 +479,20 @@ h1 {
     );
 
   transform: scale(0);
-
   opacity: 0;
-
   pointer-events: none;
 }
 
 .result-screen.show {
   animation:
-    resultBang
-    .65s
-    cubic-bezier(.15,1.5,.3,1)
+    resultBang .65s cubic-bezier(.15,1.5,.3,1)
     forwards;
 
   pointer-events: auto;
 }
 
 @keyframes resultBang {
+
   0% {
     transform: scale(0);
     opacity: 0;
@@ -704,55 +523,43 @@ h1 {
     );
 }
 
-.dark-result {
+.color-result {
   background:
     radial-gradient(
       circle at center,
-      #250000,
-      #090909 55%,
-      #000
+      #fff,
+      #f1e0ff 45%,
+      #cda4ed
     );
-
-  color: white;
 }
 
 .result-icon {
   font-size: 65px;
-
   margin-bottom: 10px;
 
   animation:
-    iconPop
-    .7s
-    .2s
-    both;
+    iconPop .7s .2s both;
 }
 
 @keyframes iconPop {
+
   0% {
-    transform:
-      scale(0)
-      rotate(-20deg);
+    transform: scale(0) rotate(-20deg);
   }
 
   70% {
-    transform:
-      scale(1.2)
-      rotate(10deg);
+    transform: scale(1.2) rotate(10deg);
   }
 
   100% {
-    transform:
-      scale(1)
-      rotate(0);
+    transform: scale(1) rotate(0);
   }
 }
 
 .result-title {
   color: #e91e63;
 
-  font-size: 40px;
-
+  font-size: 43px;
   font-weight: bold;
 
   text-shadow:
@@ -760,40 +567,32 @@ h1 {
     0 0 15px rgba(233,30,99,.3);
 
   animation:
-    titlePop
-    .7s
-    .1s
-    both;
+    titlePop .7s .1s both;
 }
 
 .normal-result .result-title {
   color: #c62828;
 }
 
-.dark-result .result-title {
-  color: #ff3030;
-
-  text-shadow:
-    0 0 20px #900;
+.color-result .result-title {
+  color: #7b1fa2;
 }
 
 @keyframes titlePop {
+
   0% {
     transform: scale(2);
-
     opacity: 0;
   }
 
   100% {
     transform: scale(1);
-
     opacity: 1;
   }
 }
 
 .result-line {
   width: 150px;
-
   height: 2px;
 
   margin: 15px 0;
@@ -805,8 +604,8 @@ h1 {
   background: #d4aa48;
 }
 
-.dark-result .result-line {
-  background: #900;
+.color-result .result-line {
+  background: #9c6ade;
 }
 
 .result-message {
@@ -815,12 +614,7 @@ h1 {
   color: #555;
 
   font-size: 16px;
-
   line-height: 1.8;
-}
-
-.dark-result .result-message {
-  color: #ddd;
 }
 
 .result-screen button {
@@ -831,7 +625,6 @@ h1 {
   padding: 13px;
 
   border: 0;
-
   border-radius: 50px;
 
   background: #e91e63;
@@ -839,7 +632,6 @@ h1 {
   color: white;
 
   font-size: 15px;
-
   font-weight: bold;
 
   cursor: pointer;
@@ -849,13 +641,11 @@ h1 {
   background: #c62828;
 }
 
-.dark-result button {
-  background: #8b0000;
+.color-result button {
+  background: #7b1fa2;
 }
 
-/* =========================
-   キラキラ
-========================= */
+/* キラキラ */
 
 .sparkle {
   position: absolute;
@@ -867,17 +657,13 @@ h1 {
   font-size: 24px;
 
   animation:
-    sparkle
-    1s
-    ease-out
-    forwards;
+    sparkle 1s ease-out forwards;
 }
 
 @keyframes sparkle {
-  0% {
-    transform:
-      scale(.2);
 
+  0% {
+    transform: scale(.2);
     opacity: 0;
   }
 
@@ -894,9 +680,7 @@ h1 {
   }
 }
 
-/* =========================
-   ホームバー
-========================= */
+/* ホームバー */
 
 .home-bar {
   position: absolute;
@@ -914,9 +698,7 @@ h1 {
   background: #333;
 }
 
-/* =========================
-   パスコード画面
-========================= */
+/* パスコード */
 
 .lock-screen {
   position: absolute;
@@ -926,23 +708,20 @@ h1 {
   inset: 0;
 
   display: flex;
-
   flex-direction: column;
-
   align-items: center;
 
-  padding-top: 80px;
+  padding-top: 65px;
 
   background:
     linear-gradient(
-      rgba(15,15,20,.96),
+      rgba(15,15,20,.97),
       rgba(5,5,10,.99)
     );
 
   color: white;
 
   opacity: 0;
-
   pointer-events: none;
 
   transition: opacity .25s;
@@ -950,21 +729,17 @@ h1 {
 
 .lock-screen.show {
   opacity: 1;
-
   pointer-events: auto;
 }
 
 .lock-title {
   font-size: 16px;
-
   margin-bottom: 8px;
 }
 
 .lock-subtitle {
   color: #aaa;
-
   font-size: 10px;
-
   margin-bottom: 20px;
 }
 
@@ -995,7 +770,7 @@ h1 {
   display: grid;
 
   grid-template-columns:
-    repeat(3, 65px);
+    repeat(3,65px);
 
   gap: 13px;
 }
@@ -1005,7 +780,6 @@ h1 {
   height: 65px;
 
   border: 0;
-
   border-radius: 50%;
 
   background:
@@ -1027,7 +801,6 @@ h1 {
 
 .key.empty {
   background: transparent;
-
   cursor: default;
 }
 
@@ -1048,7 +821,7 @@ h1 {
 .lock-error {
   position: absolute;
 
-  top: 410px;
+  top: 405px;
 
   color: #ff5252;
 
@@ -1059,13 +832,13 @@ h1 {
 
 .lock-error.show {
   animation:
-    errorShake
-    .35s;
+    errorShake .35s;
 
   opacity: 1;
 }
 
 @keyframes errorShake {
+
   0%,100% {
     transform: translateX(0);
   }
@@ -1079,60 +852,207 @@ h1 {
   }
 }
 
-/* =========================
-   24時間ロック
-========================= */
+/* 製作者ページ */
 
-.locked-message {
-  display: none;
-
+.creator-page {
   position: absolute;
 
-  z-index: 510;
+  z-index: 600;
 
   inset: 0;
 
-  align-items: center;
-  justify-content: center;
-
+  display: flex;
   flex-direction: column;
+
+  align-items: center;
+
+  padding: 55px 20px 20px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #161616,
+      #050505
+    );
+
+  color: white;
+
+  opacity: 0;
+  pointer-events: none;
+
+  transition: opacity .3s;
+
+  overflow-y: auto;
+}
+
+.creator-page.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.creator-title {
+  color: #ff4444;
+
+  font-size: 24px;
+  font-weight: bold;
+
+  margin-bottom: 4px;
+}
+
+.creator-subtitle {
+  color: #999;
+
+  font-size: 9px;
+
+  margin-bottom: 20px;
+}
+
+.creator-card {
+  width: 100%;
+
+  padding: 13px;
+
+  margin-bottom: 10px;
+
+  border-radius: 15px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #222,
+      #101010
+    );
+
+  border: 1px solid #444;
+
+  box-shadow:
+    0 5px 15px rgba(0,0,0,.4);
+}
+
+.creator-card-title {
+  font-size: 13px;
+  font-weight: bold;
+
+  margin-bottom: 5px;
+}
+
+.creator-status {
+  color: #aaa;
+
+  font-size: 9px;
+
+  margin-bottom: 9px;
+}
+
+.creator-reset {
+  width: 100%;
+
+  padding: 8px;
+
+  border: 0;
+
+  border-radius: 30px;
+
+  background: #8b0000;
+
+  color: white;
+
+  font-size: 10px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+}
+
+.creator-reset:hover {
+  background: #b71c1c;
+}
+
+.creator-close {
+  margin-top: 8px;
+
+  padding: 9px 25px;
+
+  border: 1px solid #555;
+
+  border-radius: 30px;
+
+  background: transparent;
+
+  color: #aaa;
+
+  cursor: pointer;
+}
+
+/* 12時間ロック中 */
+
+.cooldown-screen {
+  position: absolute;
+
+  z-index: 400;
+
+  inset: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+  align-items: center;
+
+  padding: 30px;
 
   text-align: center;
 
   background:
-    rgba(5,5,8,.98);
+    rgba(255,255,255,.97);
 
-  color: white;
+  opacity: 0;
+  pointer-events: none;
 
-  padding: 30px;
+  transition: .25s;
 }
 
-.locked-message.show {
-  display: flex;
+.cooldown-screen.show {
+  opacity: 1;
+  pointer-events: auto;
 }
 
-.locked-icon {
-  font-size: 50px;
-
-  margin-bottom: 15px;
+.cooldown-icon {
+  font-size: 55px;
+  margin-bottom: 12px;
 }
 
-.locked-title {
-  color: #ff4444;
+.cooldown-title {
+  color: #b71c1c;
 
-  font-size: 18px;
-
+  font-size: 20px;
   font-weight: bold;
 }
 
-.locked-text {
+.cooldown-text {
   margin-top: 10px;
 
-  color: #aaa;
+  color: #666;
 
   font-size: 11px;
 
   line-height: 1.8;
+}
+
+.cooldown-close {
+  margin-top: 25px;
+
+  padding: 10px 30px;
+
+  border: 0;
+
+  border-radius: 30px;
+
+  background: #333;
+
+  color: white;
+
+  cursor: pointer;
 }
 </style>
 </head>
@@ -1141,1701 +1061,1645 @@ h1 {
 
 <div class="phone">
 
-  <div class="notch"></div>
-
-  <div class="screen" id="screen">
-
-    <div class="sakura s1">🌸</div>
-    <div class="sakura s2">🌸</div>
-    <div class="sakura s3">🌸</div>
-    <div class="sakura s4">🌸</div>
-
-    <div class="content">
-
-      <h1 id="title">
-        🎋 おみくじ 🎋
-      </h1>
-
-      <div class="subtitle">
-        16枚の中から1枚選んでね
-      </div>
-
-      <!-- =========================
-           モード
-      ========================= -->
-
-      <div class="mode-buttons">
-
-        <button
-          id="normalButton"
-          class="active"
-          onclick="changeMode('normal')">
-          🎋 おみくじ
-        </button>
-
-        <button
-          id="loveButton"
-          class="love"
-          onclick="changeMode('love')">
-          💕 恋みくじ
-        </button>
-
-        <button
-          class="creator"
-          onclick="openLock()">
-          🔒 製作者ページ
-        </button>
-
-      </div>
-
-      <!-- =========================
-           闇みくじボタン
-           解放後だけ表示
-      ========================= -->
-
-      <div class="dark-button-area">
-
-        <button
-          id="darkButton"
-          onclick="changeMode('dark')">
-          ☠ 闇みくじを開く ☠
-        </button>
-
-      </div>
-
-      <!-- =========================
-           16枚のカード
-      ========================= -->
-
-      <div class="cards">
-
-        <!-- 1 -->
-        <div class="card" onclick="selectCard(event)">
-          <div class="card-inner">
-            <div class="card-back"></div>
-            <div class="card-front">
-              <div class="card-result"></div>
-              <div class="card-detail"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 2 -->
-        <div class="card" onclick="selectCard(event)">
-          <div class="card-inner">
-            <div class="card-back"></div>
-            <div class="card-front">
-              <div class="card-result"></div>
-              <div class="card-detail"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 3 -->
-        <div class="card" onclick="selectCard(event)">
-          <div class="card-inner">
-            <div class="card-back"></div>
-            <div class="card-front">
-              <div class="card-result"></div>
-              <div class="card-detail"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 4 -->
-        <div class="card" onclick="selectCard(event)">
-          <div class="card-inner">
-            <div class="card-back"></div>
-            <div class="card-front">
-              <div class="card-result"></div>
-              <div class="card-detail"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 5 -->
-        <div class="card" onclick="selectCard(event)">
-          <div class="card-inner">
-            <div class="card-back"></div>
-            <div class="card-front">
-              <div class="card-result"></div>
-              <div class="card-detail"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 6 -->
-        <div class="card" onclick="selectCard(event)">
-          <div class="card-inner">
-            <div class="card-back"></div>
-            <div class="card-front">
-              <div class="card-result"></div>
-              <div class="card-detail"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 7 -->
-        <div class="card" onclick="selectCard(event)">
-          <div class="card-inner">
-            <div class="card-back"></div>
-            <div class="card-front">
-              <div class="card-result"></div>
-              <div class="card-detail"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 8 -->
-        <div class="card" onclick="selectCard(event)">
-          <div class="card-inner">
-            <div class="card-back"></div>
-            <div class="card-front">
-              <div class="card-result"></div>
-              <div class="card-detail"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 9 -->
-        <div class="card" onclick="selectCard(event)">
-          <div class="card-inner">
-            <div class="card-back"></div>
-            <div class="card-front">
-              <div class="card-result"></div>
-              <div class="card-detail"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 10 -->
-        <div class="card" onclick="selectCard(event)">
-          <div class="card-inner">
-            <div class="card-back"></div>
-            <div class="card-front">
-              <div class="card-result"></div>
-              <div class="card-detail"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 11 -->
-        <div class="card" onclick="selectCard(event)">
-          <div class="card-inner">
-            <div class="card-back"></div>
-            <div class="card-front">
-              <div class="card-result"></div>
-              <div class="card-detail"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 12 -->
-        <div class="card" onclick="selectCard(event)">
-          <div class="card-inner">
-            <div class="card-back"></div>
-            <div class="card-front">
-              <div class="card-result"></div>
-              <div class="card-detail"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 13 -->
-        <div class="card" onclick="selectCard(event)">
-          <div class="card-inner">
-            <div class="card-back"></div>
-            <div class="card-front">
-              <div class="card-result"></div>
-              <div class="card-detail"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 14 -->
-        <div class="card" onclick="selectCard(event)">
-          <div class="card-inner">
-            <div class="card-back"></div>
-            <div class="card-front">
-              <div class="card-result"></div>
-              <div class="card-detail"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 15 -->
-        <div class="card" onclick="selectCard(event)">
-          <div class="card-inner">
-            <div class="card-back"></div>
-            <div class="card-front">
-              <div class="card-result"></div>
-              <div class="card-detail"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 16 -->
-        <div class="card" onclick="selectCard(event)">
-          <div class="card-inner">
-            <div class="card-back"></div>
-            <div class="card-front">
-              <div class="card-result"></div>
-              <div class="card-detail"></div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- =========================
-           結果
-      ========================= -->
-
-      <div class="result-box">
-
-        <div id="fortune">
-          ？？？
-        </div>
-
-        <div id="message">
-          カードを1枚選んでください ✨
-        </div>
-
-      </div>
-
-      <button
-        id="resetButton"
-        onclick="resetCards()">
-        🔄 もう一度占う
-      </button>
-
-    </div>
-
-    <!-- =========================
-         製作者ページ
-    ========================= -->
-
-    <button
-      class="creator-button"
-      onclick="openLock()">
-      製作者ページ
-    </button>
-
-    <div class="home-bar"></div>
-
-    <!-- =========================
-         全画面結果
-    ========================= -->
-
-    <div
-      class="result-screen"
-      id="resultScreen">
-
-      <div
-        class="result-icon"
-        id="resultIcon">
-        💕
-      </div>
-
-      <div
-        class="result-title"
-        id="bigResult">
-        大恋愛
-      </div>
-
-      <div class="result-line"></div>
-
-      <div
-        class="result-message"
-        id="bigMessage">
-        運命の恋が動き出す予感！
-      </div>
-
-      <button onclick="closeResult()">
-        🔄 もう一度引く
-      </button>
-
-    </div>
-
-    <!-- =========================
-         パスコード
-    ========================= -->
-
-    <div
-      class="lock-screen"
-      id="lockScreen">
-
-      <div class="lock-title">
-        🔒 製作者ページ
-      </div>
-
-      <div class="lock-subtitle">
-        パスコードを入力してください
-      </div>
-
-      <div
-        class="pass-dots"
-        id="passDots">
-
-        <div class="pass-dot"></div>
-        <div class="pass-dot"></div>
-        <div class="pass-dot"></div>
-        <div class="pass-dot"></div>
-
-      </div>
-
-      <div class="keypad">
-
-        <button class="key" onclick="pressKey('1')">1</button>
-        <button class="key" onclick="pressKey('2')">2</button>
-        <button class="key" onclick="pressKey('3')">3</button>
-
-        <button class="key" onclick="pressKey('4')">4</button>
-        <button class="key" onclick="pressKey('5')">5</button>
-        <button class="key" onclick="pressKey('6')">6</button>
-
-        <button class="key" onclick="pressKey('7')">7</button>
-        <button class="key" onclick="pressKey('8')">8</button>
-        <button class="key" onclick="pressKey('9')">9</button>
-
-        <button class="key empty"></button>
-
-        <button class="key" onclick="pressKey('0')">
-          0
-        </button>
-
-        <button class="key" onclick="deleteKey()">
-          ⌫
-        </button>
-
-      </div>
-
-      <div
-        class="lock-error"
-        id="lockError">
-        パスコードが違います
-      </div>
-
-      <button
-        class="lock-cancel"
-        onclick="closeLock()">
-        キャンセル
-      </button>
-
-    </div>
-
-    <!-- =========================
-         24時間ロック
-    ========================= -->
-
-    <div
-      class="locked-message"
-      id="lockedMessage">
-
-      <div class="locked-icon">
-        🔒
-      </div>
-
-      <div class="locked-title">
-        パスワードロック中
-      </div>
-
-      <div class="locked-text">
-
-        パスコードを何度も間違えたため<br>
-        しばらく利用できません。<br><br>
-
-        <span id="remainingTime"></span>
-
-      </div>
-
-      <button
-        class="lock-cancel"
-        onclick="closeLockedMessage()">
-        閉じる
-      </button>
-
-    </div>
-
-  </div>
+<div class="notch"></div>
+
+<div class="screen" id="screen">
+
+<div class="sakura s1">🌸</div>
+<div class="sakura s2">🌸</div>
+<div class="sakura s3">🌸</div>
+<div class="sakura s4">🌸</div>
+
+<div class="content">
+
+<h1 id="title">🎋 おみくじ 🎋</h1>
+
+<div class="subtitle">
+16枚の中から1枚選んでね
+</div>
+
+<div class="mode-buttons">
+
+<button
+id="normalButton"
+class="active"
+onclick="changeMode('normal')">
+🎋 おみくじ
+</button>
+
+<button
+id="loveButton"
+class="love"
+onclick="changeMode('love')">
+💕 恋みくじ
+</button>
+
+<button
+id="colorButton"
+class="color"
+onclick="changeMode('color')">
+🎨 ラッキーカラー
+</button>
+
+</div>
+
+<div class="cards">
+
+<!-- 16枚 -->
+
+<div class="card" onclick="selectCard(event)">
+<div class="card-inner">
+<div class="card-back"></div>
+<div class="card-front">
+<div class="card-result"></div>
+<div class="card-detail"></div>
+</div>
+</div>
+</div>
+
+<div class="card" onclick="selectCard(event)">
+<div class="card-inner">
+<div class="card-back"></div>
+<div class="card-front">
+<div class="card-result"></div>
+<div class="card-detail"></div>
+</div>
+</div>
+</div>
+
+<div class="card" onclick="selectCard(event)">
+<div class="card-inner">
+<div class="card-back"></div>
+<div class="card-front">
+<div class="card-result"></div>
+<div class="card-detail"></div>
+</div>
+</div>
+</div>
+
+<div class="card" onclick="selectCard(event)">
+<div class="card-inner">
+<div class="card-back"></div>
+<div class="card-front">
+<div class="card-result"></div>
+<div class="card-detail"></div>
+</div>
+</div>
+</div>
+
+<div class="card" onclick="selectCard(event)">
+<div class="card-inner">
+<div class="card-back"></div>
+<div class="card-front">
+<div class="card-result"></div>
+<div class="card-detail"></div>
+</div>
+</div>
+</div>
+
+<div class="card" onclick="selectCard(event)">
+<div class="card-inner">
+<div class="card-back"></div>
+<div class="card-front">
+<div class="card-result"></div>
+<div class="card-detail"></div>
+</div>
+</div>
+</div>
+
+<div class="card" onclick="selectCard(event)">
+<div class="card-inner">
+<div class="card-back"></div>
+<div class="card-front">
+<div class="card-result"></div>
+<div class="card-detail"></div>
+</div>
+</div>
+</div>
+
+<div class="card" onclick="selectCard(event)">
+<div class="card-inner">
+<div class="card-back"></div>
+<div class="card-front">
+<div class="card-result"></div>
+<div class="card-detail"></div>
+</div>
+</div>
+</div>
+
+<div class="card" onclick="selectCard(event)">
+<div class="card-inner">
+<div class="card-back"></div>
+<div class="card-front">
+<div class="card-result"></div>
+<div class="card-detail"></div>
+</div>
+</div>
+</div>
+
+<div class="card" onclick="selectCard(event)">
+<div class="card-inner">
+<div class="card-back"></div>
+<div class="card-front">
+<div class="card-result"></div>
+<div class="card-detail"></div>
+</div>
+</div>
+</div>
+
+<div class="card" onclick="selectCard(event)">
+<div class="card-inner">
+<div class="card-back"></div>
+<div class="card-front">
+<div class="card-result"></div>
+<div class="card-detail"></div>
+</div>
+</div>
+</div>
+
+<div class="card" onclick="selectCard(event)">
+<div class="card-inner">
+<div class="card-back"></div>
+<div class="card-front">
+<div class="card-result"></div>
+<div class="card-detail"></div>
+</div>
+</div>
+</div>
+
+<div class="card" onclick="selectCard(event)">
+<div class="card-inner">
+<div class="card-back"></div>
+<div class="card-front">
+<div class="card-result"></div>
+<div class="card-detail"></div>
+</div>
+</div>
+</div>
+
+<div class="card" onclick="selectCard(event)">
+<div class="card-inner">
+<div class="card-back"></div>
+<div class="card-front">
+<div class="card-result"></div>
+<div class="card-detail"></div>
+</div>
+</div>
+</div>
+
+<div class="card" onclick="selectCard(event)">
+<div class="card-inner">
+<div class="card-back"></div>
+<div class="card-front">
+<div class="card-result"></div>
+<div class="card-detail"></div>
+</div>
+</div>
+</div>
+
+<div class="card" onclick="selectCard(event)">
+<div class="card-inner">
+<div class="card-back"></div>
+<div class="card-front">
+<div class="card-result"></div>
+<div class="card-detail"></div>
+</div>
+</div>
+</div>
+
+</div>
+
+<div class="result-box">
+
+<div id="fortune">
+？？？
+</div>
+
+<div id="message">
+カードを1枚選んでください ✨
+</div>
+
+<div
+id="cooldownText"
+class="cooldown">
+</div>
+
+</div>
+
+<button
+id="resetButton"
+onclick="resetCards()">
+🔄 もう一度占う
+</button>
+
+</div>
+
+<!-- 製作者ページボタン -->
+
+<button
+class="creator-button"
+onclick="openLock()">
+⚙ 製作者ページ
+</button>
+
+<div class="home-bar"></div>
+
+
+<!-- 結果画面 -->
+
+<div
+class="result-screen"
+id="resultScreen">
+
+<div
+class="result-icon"
+id="resultIcon">
+💕
+</div>
+
+<div
+class="result-title"
+id="bigResult">
+大恋愛
+</div>
+
+<div class="result-line"></div>
+
+<div
+class="result-message"
+id="bigMessage">
+運命の恋が動き出す予感！
+</div>
+
+<button onclick="closeResult()">
+🔄 もう一度引く
+</button>
+
+</div>
+
+
+<!-- 12時間制限画面 -->
+
+<div
+class="cooldown-screen"
+id="cooldownScreen">
+
+<div class="cooldown-icon">
+⏳
+</div>
+
+<div class="cooldown-title">
+また12時間後に♡
+</div>
+
+<div
+class="cooldown-text"
+id="cooldownBigText">
+</div>
+
+<button
+class="cooldown-close"
+onclick="closeCooldown()">
+閉じる
+</button>
+
+</div>
+
+
+<!-- パスコード -->
+
+<div
+class="lock-screen"
+id="lockScreen">
+
+<div class="lock-title">
+🔒 製作者ページ
+</div>
+
+<div class="lock-subtitle">
+パスコードを入力してください
+</div>
+
+<div
+class="pass-dots"
+id="passDots">
+
+<div class="pass-dot"></div>
+<div class="pass-dot"></div>
+<div class="pass-dot"></div>
+<div class="pass-dot"></div>
+
+</div>
+
+<div class="keypad">
+
+<button class="key" onclick="pressKey('1')">1</button>
+<button class="key" onclick="pressKey('2')">2</button>
+<button class="key" onclick="pressKey('3')">3</button>
+
+<button class="key" onclick="pressKey('4')">4</button>
+<button class="key" onclick="pressKey('5')">5</button>
+<button class="key" onclick="pressKey('6')">6</button>
+
+<button class="key" onclick="pressKey('7')">7</button>
+<button class="key" onclick="pressKey('8')">8</button>
+<button class="key" onclick="pressKey('9')">9</button>
+
+<button class="key empty"></button>
+<button class="key" onclick="pressKey('0')">0</button>
+<button class="key" onclick="deleteKey()">⌫</button>
+
+</div>
+
+<div
+class="lock-error"
+id="lockError">
+パスコードが違います
+</div>
+
+<button
+class="lock-cancel"
+onclick="closeLock()">
+キャンセル
+</button>
+
+</div>
+
+
+<!-- 製作者ページ -->
+
+<div
+class="creator-page"
+id="creatorPage">
+
+<div class="creator-title">
+⚙ 製作者ページ
+</div>
+
+<div class="creator-subtitle">
+おみくじ設定管理
+</div>
+
+
+<div class="creator-card">
+
+<div class="creator-card-title">
+🎋 おみくじ
+</div>
+
+<div
+class="creator-status"
+id="normalStatus">
+確認中...
+</div>
+
+<button
+class="creator-reset"
+onclick="adminReset('normal')">
+🎋 おみくじの時間をリセット
+</button>
+
+</div>
+
+
+<div class="creator-card">
+
+<div class="creator-card-title">
+💕 恋みくじ
+</div>
+
+<div
+class="creator-status"
+id="loveStatus">
+確認中...
+</div>
+
+<button
+class="creator-reset"
+onclick="adminReset('love')">
+💕 恋みくじの時間をリセット
+</button>
+
+</div>
+
+
+<div class="creator-card">
+
+<div class="creator-card-title">
+🎨 ラッキーカラー占い
+</div>
+
+<div
+class="creator-status"
+id="colorStatus">
+確認中...
+</div>
+
+<button
+class="creator-reset"
+onclick="adminReset('color')">
+🎨 ラッキーカラーの時間をリセット
+</button>
+
+</div>
+
+
+<button
+class="creator-reset"
+onclick="adminResetAll()"
+style="margin-top:5px;background:#5a0000;">
+🔥 全部の12時間制限をリセット
+</button>
+
+<button
+class="creator-close"
+onclick="closeCreatorPage()">
+閉じる
+</button>
+
+</div>
 
 </div>
 
 
 <script>
 
-/* =====================================================
-   おみくじデータ
-===================================================== */
+/* =========================================================
+   占いデータ
+========================================================= */
 
 /*
-  大吉を意図的に少なくしています。
+ 大吉の確率を低くするため、
+ 通常の結果とは別に「大吉」を抽選しています。
 
-  通常おみくじ16個中
-  大吉は2個だけ。
+ 通常時：
+ 大吉 約5%
+ その他 約95%
 
-  約12.5%です。
+ スペースキーを押しながら引く：
+ 大吉確定
 */
 
 const normalFortunes = [
 
-  ["大吉", "最高の運勢！何事にも積極的に。"],
-  ["中吉", "いいことが起こりそう。笑顔を大切に。"],
-  ["小吉", "小さな幸せを見つけられる日。"],
-  ["吉", "落ち着いて行動すれば良い結果に。"],
-  ["末吉", "これから運気が上がっていく予感。"],
-  ["吉", "周りの人を大切にすると運気アップ。"],
-  ["小吉", "焦らず自分のペースで進もう。"],
-  ["中吉", "新しいことを始めるのに良い日。"],
-  ["吉", "努力が少しずつ実を結びそう。"],
-  ["小吉", "身近な人との時間を大切に。"],
-  ["吉", "今日は穏やかに過ごせそう。"],
-  ["末吉", "焦らず進めば道が開ける。"],
-  ["中吉", "新しい発見がありそう。"],
-  ["吉", "笑顔が幸運を呼び込みます。"],
-  ["小吉", "小さな挑戦が未来につながる。"],
-  ["大吉", "今日は絶好調！幸運があなたを待っています！✨"]
+["中吉","いいことが起こりそう。笑顔を大切に。"],
+["小吉","小さな幸せを見つけられる日。"],
+["吉","落ち着いて行動すれば良い結果に。"],
+["末吉","これから運気が上がっていく予感。"],
+["吉","周りの人を大切にすると運気アップ。"],
+["小吉","焦らず自分のペースで進もう。"],
+["中吉","新しいことを始めるのに良い日。"],
+["吉","思わぬところに幸運がありそう。"],
+["小吉","今日はゆっくり過ごすのも吉。"],
+["中吉","あなたの努力が実を結びそう。"],
+["吉","人との縁を大切にすると運気アップ。"],
+["末吉","今は準備の時。焦らなくて大丈夫。"],
+["小吉","小さな一歩が大きな未来につながる。"],
+["吉","前向きな気持ちが幸運を呼びそう。"],
+["中吉","新しい発見がありそうな一日。"]
 
 ];
-
 
 const loveFortunes = [
 
-  ["💖 大恋愛", "運命の恋が動き出す予感！"],
-  ["💕 両思い", "二人の心はかなり近いかも。"],
-  ["💘 恋愛成就", "あなたの恋が実るチャンス！"],
-  ["🌸 片思い吉", "少しずつ距離を縮めてみよう。"],
-  ["💌 連絡吉", "今日は連絡運が絶好調！"],
-  ["💗 恋の予感", "思いがけない出会いがありそう。"],
-  ["💞 相性◎", "二人の相性はとても良さそう。"],
-  ["💓 告白吉", "勇気を出すと恋が動くかも。"],
-  ["💔 恋愛注意", "焦らず相手の気持ちを考えてみよう。"],
-  ["💕 ときめき吉", "今日はドキドキする出来事がありそう。"],
-  ["💗 距離縮小", "自然な会話が二人を近づけます。"],
-  ["💌 待ち人吉", "嬉しい連絡が届くかも。"],
-  ["🌷 恋愛中吉", "焦らずゆっくり育てる恋が吉。"],
-  ["💘 チャンス", "思い切った行動が恋を変えるかも。"],
-  ["💞 縁あり", "あなたと相性のいい人が近くに。"],
-  ["💓 恋愛吉", "優しさを見せると好印象です。"]
+["💕 両思い","二人の心はかなり近いかも。"],
+["💘 恋愛成就","あなたの恋が実るチャンス！"],
+["🌸 片思い吉","少しずつ距離を縮めてみよう。"],
+["💌 連絡吉","今日は連絡運が絶好調！"],
+["💗 恋の予感","思いがけない出会いがありそう。"],
+["💞 相性◎","二人の相性はとても良さそう。"],
+["💓 告白吉","勇気を出すと恋が動くかも。"],
+["💖 ときめき","今日は恋のアンテナを張ってみて。"],
+["💕 接近中","気になる人との距離が縮まりそう。"],
+["🌷 恋愛吉","優しさが恋を引き寄せる日。"],
+["💌 想い届く","素直な気持ちを大切にして。"],
+["💗 恋愛運UP","笑顔があなたの最大の武器。"],
+["🌸 出会い吉","新しいご縁がありそう。"],
+["💞 相思相愛","相手もあなたを意識しているかも。"],
+["💓 勇気吉","一歩踏み出す勇気が恋を変える。"],
+["💘 運命の予感","偶然を大切にすると何か起こるかも。"]
+
+];
+
+const colorFortunes = [
+
+["❤️ 赤","行動力と情熱を高めてくれる色。"],
+["🩷 ピンク","恋愛運と対人運をアップしてくれる色。"],
+["💛 黄色","明るい気持ちと幸運を呼び込む色。"],
+["💚 緑","心を落ち着かせてくれる癒しの色。"],
+["💙 青","集中力と冷静さを高めてくれる色。"],
+["💜 紫","直感力を高めてくれる神秘的な色。"],
+["🧡 オレンジ","元気とコミュニケーションの色。"],
+["🩵 水色","穏やかな運気を呼び込む色。"],
+["🤍 白","新しいスタートを応援してくれる色。"],
+["🖤 黒","自分らしさと強さを引き出す色。"],
+["🤎 茶色","安定感と安心を与えてくれる色。"],
+["💖 ローズ","恋のチャンスを引き寄せる色。"],
+["💎 ゴールド","成功運を高めてくれるラッキーカラー。"],
+["🩶 シルバー","直感と判断力をサポートする色。"],
+["🌈 虹色","いろいろな幸運を呼び込む色。"],
+["✨ 白金","特別な一歩を後押ししてくれる色。"]
 
 ];
 
 
-const darkFortunes = [
+/* =========================================================
+   設定
+========================================================= */
 
-  ["凶", "今日は無理をしないほうがよさそう。"],
-  ["大凶", "何かが起こる前触れかもしれない。"],
-  ["闇", "あなたの知らないところで運命が動いている。"],
-  ["警告", "その選択、本当に間違っていない？"],
-  ["呪", "今日は慎重に。軽い気持ちの行動は禁物。"],
-  ["絶望", "今は耐える時。夜明けはまだ遠い。"],
-  ["秘密", "知らないほうが幸せなこともある。"],
-  ["破滅", "欲張りすぎると全てを失うかも。"],
-  ["？？？", "この結果の意味を知るのは、あなた自身。"],
-  ["不吉", "背後に気配を感じたら振り返らないで。"],
-  ["黒星", "今日は何事も慎重に。"],
-  ["終焉", "ひとつの運命が終わりを迎えるかも。"],
-  ["影", "見えないところで何かが動いている。"],
-  ["禁忌", "踏み込んではいけない場所があります。"],
-  ["血印", "その約束、簡単には消えないかもしれない。"],
-  ["深淵", "覗き込むほど、深い闇に引き込まれる。"]
+const creatorPassword = "0831";
 
-];
-
-
-/* =====================================================
-   状態
-===================================================== */
+const COOLDOWN_TIME =
+12 * 60 * 60 * 1000;
 
 let currentMode = "normal";
 
 let selected = false;
 
-
-/* =====================================================
-   パスコード
-===================================================== */
-
-const creatorPassword = "0831";
-
 let enteredPassword = "";
 
-const MAX_MISTAKES = 4;
 
-const LOCK_TIME =
-  24 * 60 * 60 * 1000;
+/* =========================================================
+   12時間制限
+========================================================= */
 
+const cooldownKeys = {
 
-let wrongCount =
-  Number(
-    localStorage.getItem(
-      "omikujiWrongCount"
-    )
-  ) || 0;
+normal: "omikujiCooldown_normal",
 
+love: "omikujiCooldown_love",
 
-let lockUntil =
-  Number(
-    localStorage.getItem(
-      "omikujiLockUntil"
-    )
-  ) || 0;
+color: "omikujiCooldown_color"
+
+};
 
 
-/* =====================================================
-   カードシャッフル
-===================================================== */
-
-function shuffleCards() {
-
-  const cardsContainer =
-    document.querySelector(".cards");
-
-  const cards =
-    Array.from(
-      cardsContainer.querySelectorAll(".card")
-    );
-
-  for (
-    let i = cards.length - 1;
-    i > 0;
-    i--
-  ) {
-
-    const j =
-      Math.floor(
-        Math.random() * (i + 1)
-      );
-
-    [
-      cards[i],
-      cards[j]
-    ] =
-    [
-      cards[j],
-      cards[i]
-    ];
-  }
-
-  cards.forEach(card => {
-
-    cardsContainer.appendChild(card);
-
-  });
-
-}
-
-
-/* =====================================================
+/* =========================================================
    モード変更
-===================================================== */
+========================================================= */
 
 function changeMode(mode) {
 
-  currentMode = mode;
+currentMode = mode;
 
-  const screen =
-    document.getElementById("screen");
+const screen =
+document.getElementById("screen");
 
+document
+.getElementById("normalButton")
+.classList.remove("active");
 
-  document
-    .getElementById("normalButton")
-    .classList.remove("active");
+document
+.getElementById("loveButton")
+.classList.remove("active");
 
+document
+.getElementById("colorButton")
+.classList.remove("active");
 
-  document
-    .getElementById("loveButton")
-    .classList.remove("active");
+screen.classList.remove(
+"love-mode",
+"color-mode"
+);
 
+if(mode === "love") {
 
-  screen.classList.remove(
-    "love-mode",
-    "dark-mode"
-  );
+screen.classList.add("love-mode");
 
+document
+.getElementById("loveButton")
+.classList.add("active");
 
-  if (mode === "love") {
+document
+.getElementById("title")
+.textContent =
+"💕 恋みくじ 💕";
 
-    screen.classList.add(
-      "love-mode"
-    );
+}
 
-    document
-      .getElementById("loveButton")
-      .classList.add("active");
+else if(mode === "color") {
 
-    document
-      .getElementById("title")
-      .textContent =
-      "💕 恋みくじ 💕";
+screen.classList.add("color-mode");
 
-  }
+document
+.getElementById("colorButton")
+.classList.add("active");
 
-  else if (mode === "dark") {
+document
+.getElementById("title")
+.textContent =
+"🎨 ラッキーカラー 🎨";
 
-    screen.classList.add(
-      "dark-mode"
-    );
+}
 
-    document
-      .getElementById("title")
-      .textContent =
-      "☠ 闇みくじ ☠";
+else {
 
-  }
+document
+.getElementById("normalButton")
+.classList.add("active");
 
-  else {
+document
+.getElementById("title")
+.textContent =
+"🎋 おみくじ 🎋";
 
-    document
-      .getElementById("normalButton")
-      .classList.add("active");
+}
 
-    document
-      .getElementById("title")
-      .textContent =
-      "🎋 おみくじ 🎋";
-
-  }
-
-
-  resetCards();
+resetCards();
 
 }
 
 
-/* =====================================================
+/* =========================================================
+   16枚シャッフル
+========================================================= */
+
+function shuffleCards() {
+
+const container =
+document.querySelector(".cards");
+
+const cards =
+Array.from(
+container.querySelectorAll(".card")
+);
+
+for(
+let i = cards.length - 1;
+i > 0;
+i--
+){
+
+const j =
+Math.floor(
+Math.random() * (i + 1)
+);
+
+[
+cards[i],
+cards[j]
+] =
+[
+cards[j],
+cards[i]
+];
+
+}
+
+cards.forEach(card => {
+
+container.appendChild(card);
+
+});
+
+}
+
+
+/* =========================================================
+   12時間制限チェック
+========================================================= */
+
+function getCooldownEnd(mode) {
+
+return Number(
+localStorage.getItem(
+cooldownKeys[mode]
+)
+) || 0;
+
+}
+
+
+function isCooldown(mode) {
+
+const end =
+getCooldownEnd(mode);
+
+return end > Date.now();
+
+}
+
+
+function startCooldown(mode) {
+
+const end =
+Date.now() + COOLDOWN_TIME;
+
+localStorage.setItem(
+cooldownKeys[mode],
+String(end)
+);
+
+}
+
+
+/* =========================================================
+   残り時間
+========================================================= */
+
+function getRemainingText(mode) {
+
+const end =
+getCooldownEnd(mode);
+
+if(end <= Date.now()) {
+
+return "いつでも占えます♡";
+
+}
+
+const remaining =
+end - Date.now();
+
+const hours =
+Math.floor(
+remaining /
+(1000 * 60 * 60)
+);
+
+const minutes =
+Math.floor(
+(remaining %
+(1000 * 60 * 60)) /
+(1000 * 60)
+);
+
+const seconds =
+Math.floor(
+(remaining %
+(1000 * 60)) /
+1000
+);
+
+return (
+"あと " +
+hours +
+"時間 " +
+minutes +
+"分 " +
+seconds +
+"秒"
+);
+
+}
+
+
+/* =========================================================
    カード選択
-===================================================== */
+========================================================= */
 
 function selectCard(event) {
 
-  if (selected) {
-    return;
-  }
-
-  selected = true;
-
-
-  const cards =
-    document.querySelectorAll(".card");
-
-
-  let list;
-
-
-  if (currentMode === "love") {
-
-    list = loveFortunes;
-
-  }
-
-  else if (currentMode === "dark") {
-
-    list = darkFortunes;
-
-  }
-
-  else {
-
-    list = normalFortunes;
-
-  }
-
-
-  let fortune;
-
-
-  /* =================================================
-     スペースキー裏技
-
-     カードをクリックした瞬間に
-     スペースキーが押されていたら
-     大吉を確定。
-
-     Shiftキーでは発動しません。
-  ================================================= */
-
-  if (
-    event &&
-    event.spaceKeyActive
-  ) {
-
-    if (currentMode === "normal") {
-
-      fortune = [
-        "大吉",
-        "最高の運勢！今日は何をしてもうまくいきそう！✨"
-      ];
-
-    }
-
-    else if (currentMode === "love") {
-
-      fortune = [
-        "💖 大恋愛",
-        "スペシャル恋愛運！運命の恋が動き出す予感！"
-      ];
-
-    }
-
-    else {
-
-      fortune = [
-        "☠ 真・闇",
-        "あなたは禁断の領域に足を踏み入れた。"
-      ];
-
-    }
-
-  }
-
-  else {
-
-    /*
-      通常時はランダム。
-
-      大吉は16個中2個なので
-      出現率は約12.5%。
-    */
-
-    const randomIndex =
-      Math.floor(
-        Math.random() * list.length
-      );
-
-    fortune =
-      list[randomIndex];
-
-  }
-
-
-  const selectedCard =
-    event.currentTarget;
-
-
-  selectedCard
-    .classList
-    .add("selected");
-
-
-  cards.forEach(card => {
-
-    if (card !== selectedCard) {
-
-      card.classList.add(
-        "disabled"
-      );
-
-    }
-
-  });
-
-
-  selectedCard
-    .querySelector(
-      ".card-result"
-    )
-    .textContent =
-    fortune[0];
-
-
-  selectedCard
-    .querySelector(
-      ".card-detail"
-    )
-    .textContent =
-    fortune[1];
-
-
-  document
-    .getElementById("fortune")
-    .textContent =
-    fortune[0];
-
-
-  document
-    .getElementById("message")
-    .textContent =
-    fortune[1];
-
-
-  setTimeout(() => {
-
-    showBigResult(
-      fortune
-    );
-
-  }, 700);
-
-}
-
-
-/* =====================================================
-   スペースキー検知
-===================================================== */
-
-let spaceKeyPressed = false;
-
-
-window.addEventListener(
-  "keydown",
-  function(event) {
-
-    if (
-      event.code === "Space"
-    ) {
-
-      spaceKeyPressed = true;
-
-      event.preventDefault();
-
-    }
-
-  }
-);
-
-
-window.addEventListener(
-  "keyup",
-  function(event) {
-
-    if (
-      event.code === "Space"
-    ) {
-
-      spaceKeyPressed = false;
-
-    }
-
-  }
-);
+if(selected) return;
 
 
 /*
-  元のクリックイベントでは
-  event.currentTarget が必要なので、
-  スペースキー状態をイベントに追加。
+ すでに12時間制限中なら引けない
+*/
+
+if(isCooldown(currentMode)) {
+
+showCooldown();
+
+return;
+
+}
+
+
+selected = true;
+
+const cards =
+document.querySelectorAll(".card");
+
+
+let list;
+
+if(currentMode === "love") {
+
+list = loveFortunes;
+
+}
+
+else if(currentMode === "color") {
+
+list = colorFortunes;
+
+}
+
+else {
+
+list = normalFortunes;
+
+}
+
+
+/* =========================================================
+   スペースキー裏技
+========================================================= */
+
+let fortune;
+
+
+/*
+ スペースキーを押しながらクリック
+ → おみくじなら大吉確定
+ → 恋みくじなら大恋愛確定
+*/
+
+if(window.spacePressed) {
+
+if(currentMode === "normal") {
+
+fortune = [
+"大吉",
+"最高の運勢！今日は何をしてもうまくいきそう！✨"
+];
+
+}
+
+else if(currentMode === "love") {
+
+fortune = [
+"💖 大恋愛",
+"運命の恋が動き出す予感！"
+];
+
+}
+
+else {
+
+fortune =
+colorFortunes[
+Math.floor(
+Math.random() *
+colorFortunes.length
+)
+];
+
+}
+
+}
+
+
+/* =========================================================
+   通常抽選
+========================================================= */
+
+else {
+
+if(currentMode === "normal") {
+
+/*
+ 大吉 約5%
+*/
+
+if(Math.random() < 0.05) {
+
+fortune = [
+"大吉",
+"最高の運勢！何事にも積極的に。✨"
+];
+
+}
+
+else {
+
+fortune =
+list[
+Math.floor(
+Math.random() *
+list.length
+)
+];
+
+}
+
+}
+
+else {
+
+fortune =
+list[
+Math.floor(
+Math.random() *
+list.length
+)
+];
+
+}
+
+}
+
+
+/* =========================================================
+   カード演出
+========================================================= */
+
+const selectedCard =
+event.currentTarget;
+
+selectedCard
+.classList
+.add("selected");
+
+cards.forEach(card => {
+
+if(card !== selectedCard) {
+
+card.classList.add("disabled");
+
+}
+
+});
+
+
+selectedCard
+.querySelector(".card-result")
+.textContent =
+fortune[0];
+
+selectedCard
+.querySelector(".card-detail")
+.textContent =
+fortune[1];
+
+
+/*
+ 結果を保存
 */
 
 document
-  .querySelectorAll(".card")
-  .forEach(card => {
+.getElementById("fortune")
+.textContent =
+fortune[0];
 
-    card.onclick = function(event) {
-
-      event.spaceKeyActive =
-        spaceKeyPressed;
-
-      selectCard(event);
-
-    };
-
-  });
+document
+.getElementById("message")
+.textContent =
+fortune[1];
 
 
-/* =====================================================
-   結果表示
-===================================================== */
+/*
+ 12時間スタート
+*/
+
+startCooldown(currentMode);
+
+
+/*
+ 結果画面
+*/
+
+setTimeout(() => {
+
+showBigResult(fortune);
+
+},700);
+
+}
+
+
+/* =========================================================
+   結果画面
+========================================================= */
 
 function showBigResult(fortune) {
 
-  const resultScreen =
-    document.getElementById(
-      "resultScreen"
-    );
+const resultScreen =
+document.getElementById(
+"resultScreen"
+);
+
+document
+.getElementById("bigResult")
+.textContent =
+fortune[0];
+
+document
+.getElementById("bigMessage")
+.textContent =
+fortune[1];
+
+resultScreen.classList.remove(
+"normal-result",
+"color-result"
+);
 
 
-  document
-    .getElementById(
-      "bigResult"
-    )
-    .textContent =
-    fortune[0];
+if(currentMode === "normal") {
 
+resultScreen.classList.add(
+"normal-result"
+);
 
-  document
-    .getElementById(
-      "bigMessage"
-    )
-    .textContent =
-    fortune[1];
+document
+.getElementById("resultIcon")
+.textContent =
+"🎋";
 
+}
 
-  resultScreen.classList.remove(
-    "normal-result",
-    "dark-result"
-  );
+else if(currentMode === "love") {
 
+document
+.getElementById("resultIcon")
+.textContent =
+"💕";
 
-  if (currentMode === "normal") {
+}
 
-    resultScreen.classList.add(
-      "normal-result"
-    );
+else {
 
-    document
-      .getElementById(
-        "resultIcon"
-      )
-      .textContent =
-      "🎋";
+resultScreen.classList.add(
+"color-result"
+);
 
-  }
-
-  else if (currentMode === "love") {
-
-    document
-      .getElementById(
-        "resultIcon"
-      )
-      .textContent =
-      "💕";
-
-  }
-
-  else {
-
-    resultScreen.classList.add(
-      "dark-result"
-    );
-
-    document
-      .getElementById(
-        "resultIcon"
-      )
-      .textContent =
-      "☠";
-
-  }
-
-
-  resultScreen.classList.add(
-    "show"
-  );
-
-
-  createSparkles();
+document
+.getElementById("resultIcon")
+.textContent =
+"🎨";
 
 }
 
 
-/* =====================================================
-   結果を閉じる
-===================================================== */
+resultScreen.classList.add(
+"show"
+);
+
+createSparkles();
+
+}
+
+
+/* =========================================================
+   結果画面を閉じる
+========================================================= */
 
 function closeResult() {
 
-  document
-    .getElementById(
-      "resultScreen"
-    )
-    .classList.remove(
-      "show"
-    );
+document
+.getElementById("resultScreen")
+.classList.remove("show");
 
+setTimeout(() => {
 
-  setTimeout(() => {
+resetCards();
 
-    /*
-      闇みくじは一回引いたら終了。
-    */
-
-    if (
-      currentMode === "dark"
-    ) {
-
-      lockDarkFortune();
-
-    }
-
-
-    resetCards();
-
-  }, 300);
+},300);
 
 }
 
 
-/* =====================================================
-   闇みくじ終了
-===================================================== */
-
-function lockDarkFortune() {
-
-  document
-    .getElementById(
-      "darkButton"
-    )
-    .style.display =
-    "none";
-
-
-  changeMode(
-    "normal"
-  );
-
-}
-
-
-/* =====================================================
+/* =========================================================
    リセット
-===================================================== */
+========================================================= */
 
 function resetCards() {
 
-  selected = false;
+selected = false;
+
+shuffleCards();
+
+document
+.querySelectorAll(".card")
+.forEach(card => {
+
+card.classList.remove(
+"selected",
+"disabled"
+);
+
+card.querySelector(
+".card-result"
+).textContent = "";
+
+card.querySelector(
+".card-detail"
+).textContent = "";
+
+});
 
 
-  shuffleCards();
+document
+.getElementById("fortune")
+.textContent =
+"？？？";
 
 
-  document
-    .querySelectorAll(".card")
-    .forEach(card => {
+if(currentMode === "love") {
 
-      card.classList.remove(
-        "selected",
-        "disabled"
-      );
+document
+.getElementById("message")
+.textContent =
+"カードを1枚選んでください 💕";
 
+}
 
-      card
-        .querySelector(
-          ".card-result"
-        )
-        .textContent =
-        "";
+else if(currentMode === "color") {
 
+document
+.getElementById("message")
+.textContent =
+"今日のラッキーカラーを占おう 🎨";
 
-      card
-        .querySelector(
-          ".card-detail"
-        )
-        .textContent =
-        "";
+}
 
-    });
+else {
 
+document
+.getElementById("message")
+.textContent =
+"カードを1枚選んでください ✨";
 
-  document
-    .getElementById(
-      "fortune"
-    )
-    .textContent =
-    "？？？";
+}
 
-
-  if (
-    currentMode === "love"
-  ) {
-
-    document
-      .getElementById(
-        "message"
-      )
-      .textContent =
-      "カードを1枚選んでください 💕";
-
-  }
-
-  else if (
-    currentMode === "dark"
-  ) {
-
-    document
-      .getElementById(
-        "message"
-      )
-      .textContent =
-      "闇に触れるカードを1枚選んでください ☠";
-
-  }
-
-  else {
-
-    document
-      .getElementById(
-        "message"
-      )
-      .textContent =
-      "カードを1枚選んでください ✨";
-
-  }
+updateCooldownText();
 
 }
 
 
-/* =====================================================
+/* =========================================================
+   制限時間表示
+========================================================= */
+
+function updateCooldownText() {
+
+const text =
+getRemainingText(currentMode);
+
+document
+.getElementById("cooldownText")
+.textContent =
+isCooldown(currentMode)
+? "次に引けるまで " + text
+: text;
+
+}
+
+
+/* =========================================================
+   制限画面
+========================================================= */
+
+function showCooldown() {
+
+const screen =
+document.getElementById(
+"cooldownScreen"
+);
+
+const text =
+document.getElementById(
+"cooldownBigText"
+);
+
+let name;
+
+if(currentMode === "normal") {
+
+name = "🎋 おみくじ";
+
+}
+
+else if(currentMode === "love") {
+
+name = "💕 恋みくじ";
+
+}
+
+else {
+
+name = "🎨 ラッキーカラー占い";
+
+}
+
+text.innerHTML =
+name +
+"は本日もう占いました♡<br><br>" +
+getRemainingText(currentMode) +
+"<br><br>また時間が経ったら遊んでね✨";
+
+screen.classList.add("show");
+
+}
+
+
+function closeCooldown() {
+
+document
+.getElementById("cooldownScreen")
+.classList.remove("show");
+
+}
+
+
+/* =========================================================
    キラキラ
-===================================================== */
+========================================================= */
 
 function createSparkles() {
 
-  const screen =
-    document.getElementById(
-      "screen"
-    );
+const screen =
+document.getElementById("screen");
 
+let symbols;
 
-  let symbols;
+if(currentMode === "love") {
 
+symbols = [
+"💕",
+"💗",
+"✨",
+"💖",
+"💘"
+];
 
-  if (
-    currentMode === "love"
-  ) {
+}
 
-    symbols = [
-      "💕",
-      "💗",
-      "✨",
-      "💖",
-      "💘"
-    ];
+else if(currentMode === "color") {
 
-  }
+symbols = [
+"🎨",
+"🌈",
+"✨",
+"💜",
+"💎"
+];
 
-  else if (
-    currentMode === "dark"
-  ) {
+}
 
-    symbols = [
-      "☠",
-      "🩸",
-      "⚫",
-      "🔻"
-    ];
+else {
 
-  }
-
-  else {
-
-    symbols = [
-      "✨",
-      "🌸",
-      "🎋",
-      "⭐"
-    ];
-
-  }
-
-
-  for (
-    let i = 0;
-    i < 14;
-    i++
-  ) {
-
-    const sparkle =
-      document.createElement(
-        "div"
-      );
-
-
-    sparkle.className =
-      "sparkle";
-
-
-    sparkle.textContent =
-      symbols[
-        Math.floor(
-          Math.random() *
-          symbols.length
-        )
-      ];
-
-
-    sparkle.style.left =
-      (
-        10 +
-        Math.random() * 80
-      ) + "%";
-
-
-    sparkle.style.top =
-      (
-        15 +
-        Math.random() * 70
-      ) + "%";
-
-
-    sparkle.style.animationDelay =
-      (
-        Math.random() * .5
-      ) + "s";
-
-
-    screen.appendChild(
-      sparkle
-    );
-
-
-    setTimeout(
-      () => sparkle.remove(),
-      1600
-    );
-
-  }
+symbols = [
+"✨",
+"🌸",
+"🎋",
+"⭐"
+];
 
 }
 
 
-/* =====================================================
-   製作者ページ
-===================================================== */
+for(
+let i = 0;
+i < 14;
+i++
+){
+
+const sparkle =
+document.createElement("div");
+
+sparkle.className =
+"sparkle";
+
+sparkle.textContent =
+symbols[
+Math.floor(
+Math.random() *
+symbols.length
+)
+];
+
+sparkle.style.left =
+(10 + Math.random() * 80)
++ "%";
+
+sparkle.style.top =
+(15 + Math.random() * 70)
++ "%";
+
+sparkle.style.animationDelay =
+(Math.random() * .5)
++ "s";
+
+screen.appendChild(
+sparkle
+);
+
+setTimeout(() => {
+
+sparkle.remove();
+
+},1600);
+
+}
+
+}
+
+
+/* =========================================================
+   スペースキー裏技
+========================================================= */
+
+window.spacePressed = false;
+
+document.addEventListener(
+"keydown",
+function(event){
+
+if(event.code === "Space") {
+
+event.preventDefault();
+
+window.spacePressed = true;
+
+}
+
+}
+);
+
+
+document.addEventListener(
+"keyup",
+function(event){
+
+if(event.code === "Space") {
+
+window.spacePressed = false;
+
+}
+
+}
+);
+
+
+/* =========================================================
+   パスコード
+========================================================= */
 
 function openLock() {
 
-  if (isLocked()) {
+enteredPassword = "";
 
-    showLockedMessage();
+updateDots();
 
-    return;
+document
+.getElementById("lockError")
+.classList.remove("show");
 
-  }
-
-
-  enteredPassword = "";
-
-
-  updateDots();
-
-
-  document
-    .getElementById(
-      "lockError"
-    )
-    .classList.remove(
-      "show"
-    );
-
-
-  document
-    .getElementById(
-      "lockScreen"
-    )
-    .classList.add(
-      "show"
-    );
+document
+.getElementById("lockScreen")
+.classList.add("show");
 
 }
 
-
-/* =====================================================
-   数字入力
-===================================================== */
 
 function pressKey(number) {
 
-  if (
-    enteredPassword.length >=
-    creatorPassword.length
-  ) {
+if(
+enteredPassword.length >=
+creatorPassword.length
+){
 
-    return;
-
-  }
-
-
-  enteredPassword +=
-    number;
-
-
-  updateDots();
-
-
-  if (
-    enteredPassword.length ===
-    creatorPassword.length
-  ) {
-
-    setTimeout(
-      checkPassword,
-      180
-    );
-
-  }
+return;
 
 }
 
+enteredPassword += number;
 
-/* =====================================================
-   削除
-===================================================== */
+updateDots();
+
+if(
+enteredPassword.length ===
+creatorPassword.length
+){
+
+setTimeout(
+checkPassword,
+180
+);
+
+}
+
+}
+
 
 function deleteKey() {
 
-  enteredPassword =
-    enteredPassword.slice(
-      0,
-      -1
-    );
+enteredPassword =
+enteredPassword.slice(0,-1);
 
-
-  updateDots();
+updateDots();
 
 }
 
-
-/* =====================================================
-   ●表示
-===================================================== */
 
 function updateDots() {
 
-  const dots =
-    document.querySelectorAll(
-      ".pass-dot"
-    );
+const dots =
+document.querySelectorAll(
+".pass-dot"
+);
 
+dots.forEach(
+(dot,index) => {
 
-  dots.forEach(
-    (dot, index) => {
+dot.classList.toggle(
+"filled",
+index <
+enteredPassword.length
+);
 
-      dot.classList.toggle(
-        "filled",
-        index <
-        enteredPassword.length
-      );
-
-    }
-  );
+});
 
 }
 
-
-/* =====================================================
-   パスワード確認
-===================================================== */
 
 function checkPassword() {
 
-  if (
-    enteredPassword ===
-    creatorPassword
-  ) {
+if(
+enteredPassword ===
+creatorPassword
+){
 
-    wrongCount = 0;
+document
+.getElementById("lockScreen")
+.classList.remove("show");
 
-    localStorage.setItem(
-      "omikujiWrongCount",
-      "0"
-    );
+enteredPassword = "";
 
+updateDots();
 
-    unlockDarkFortune();
-
-  }
-
-  else {
-
-    wrongCount++;
-
-
-    localStorage.setItem(
-      "omikujiWrongCount",
-      String(
-        wrongCount
-      )
-    );
-
-
-    const error =
-      document.getElementById(
-        "lockError"
-      );
-
-
-    error.classList.remove(
-      "show"
-    );
-
-
-    void error.offsetWidth;
-
-
-    error.classList.add(
-      "show"
-    );
-
-
-    enteredPassword = "";
-
-
-    updateDots();
-
-
-    if (
-      wrongCount >=
-      MAX_MISTAKES
-    ) {
-
-      start24HourLock();
-
-    }
-
-  }
+openCreatorPage();
 
 }
 
+else {
 
-/* =====================================================
-   闇みくじ解放
-===================================================== */
+const error =
+document.getElementById(
+"lockError"
+);
 
-function unlockDarkFortune() {
+error.classList.remove("show");
 
-  document
-    .getElementById(
-      "lockScreen"
-    )
-    .classList.remove(
-      "show"
-    );
+void error.offsetWidth;
 
+error.classList.add("show");
 
-  document
-    .getElementById(
-      "darkButton"
-    )
-    .style.display =
-    "block";
+enteredPassword = "";
 
-
-  changeMode(
-    "dark"
-  );
+updateDots();
 
 }
 
+}
 
-/* =====================================================
-   パスコード画面を閉じる
-===================================================== */
 
 function closeLock() {
 
-  document
-    .getElementById(
-      "lockScreen"
-    )
-    .classList.remove(
-      "show"
-    );
+document
+.getElementById("lockScreen")
+.classList.remove("show");
 
 }
 
 
-/* =====================================================
-   24時間ロック開始
-===================================================== */
+/* =========================================================
+   製作者ページ
+========================================================= */
 
-function start24HourLock() {
+function openCreatorPage() {
 
-  lockUntil =
-    Date.now() +
-    LOCK_TIME;
+document
+.getElementById("creatorPage")
+.classList.add("show");
 
-
-  localStorage.setItem(
-    "omikujiLockUntil",
-    String(
-      lockUntil
-    )
-  );
-
-
-  enteredPassword = "";
-
-
-  updateDots();
-
-
-  document
-    .getElementById(
-      "lockScreen"
-    )
-    .classList.remove(
-      "show"
-    );
-
-
-  setTimeout(
-    () => {
-
-      showLockedMessage();
-
-    },
-    250
-  );
+updateCreatorStatus();
 
 }
 
 
-/* =====================================================
-   ロック確認
-===================================================== */
+function closeCreatorPage() {
 
-function isLocked() {
-
-  const now =
-    Date.now();
-
-
-  if (
-    lockUntil &&
-    now < lockUntil
-  ) {
-
-    return true;
-
-  }
-
-
-  if (
-    lockUntil &&
-    now >= lockUntil
-  ) {
-
-    lockUntil = 0;
-
-    wrongCount = 0;
-
-
-    localStorage.removeItem(
-      "omikujiLockUntil"
-    );
-
-
-    localStorage.setItem(
-      "omikujiWrongCount",
-      "0"
-    );
-
-  }
-
-
-  return false;
+document
+.getElementById("creatorPage")
+.classList.remove("show");
 
 }
 
 
-/* =====================================================
-   ロック画面
-===================================================== */
+function updateCreatorStatus() {
 
-function showLockedMessage() {
+document
+.getElementById("normalStatus")
+.textContent =
+getAdminStatus("normal");
 
-  updateRemainingTime();
+document
+.getElementById("loveStatus")
+.textContent =
+getAdminStatus("love");
 
-
-  document
-    .getElementById(
-      "lockedMessage"
-    )
-    .classList.add(
-      "show"
-    );
-
-}
-
-
-/* =====================================================
-   残り時間
-===================================================== */
-
-function updateRemainingTime() {
-
-  if (!isLocked()) {
-
-    closeLockedMessage();
-
-    return;
-
-  }
-
-
-  const remaining =
-    lockUntil -
-    Date.now();
-
-
-  const hours =
-    Math.floor(
-      remaining /
-      (1000 * 60 * 60)
-    );
-
-
-  const minutes =
-    Math.floor(
-      (
-        remaining %
-        (1000 * 60 * 60)
-      ) /
-      (1000 * 60)
-    );
-
-
-  const seconds =
-    Math.floor(
-      (
-        remaining %
-        (1000 * 60)
-      ) /
-      1000
-    );
-
-
-  document
-    .getElementById(
-      "remainingTime"
-    )
-    .textContent =
-    "解除まで " +
-    hours +
-    "時間 " +
-    minutes +
-    "分 " +
-    seconds +
-    "秒";
-
-
-  setTimeout(
-    updateRemainingTime,
-    1000
-  );
+document
+.getElementById("colorStatus")
+.textContent =
+getAdminStatus("color");
 
 }
 
 
-/* =====================================================
-   ロック画面を閉じる
-===================================================== */
+function getAdminStatus(mode) {
 
-function closeLockedMessage() {
+if(!isCooldown(mode)) {
 
-  document
-    .getElementById(
-      "lockedMessage"
-    )
-    .classList.remove(
-      "show"
-    );
+return "✅ 現在、いつでも引けます";
+
+}
+
+return "⏳ " +
+getRemainingText(mode) +
+" 利用可能";
 
 }
 
 
-/* =====================================================
-   最初の読み込み
-===================================================== */
+/* =========================================================
+   製作者ページから個別リセット
+========================================================= */
+
+function adminReset(mode) {
+
+localStorage.removeItem(
+cooldownKeys[mode]
+);
+
+updateCreatorStatus();
+
+if(mode === currentMode) {
+
+updateCooldownText();
+
+}
+
+alert(
+"12時間制限をリセットしました♡"
+);
+
+}
+
+
+/* =========================================================
+   全部リセット
+========================================================= */
+
+function adminResetAll() {
+
+localStorage.removeItem(
+cooldownKeys.normal
+);
+
+localStorage.removeItem(
+cooldownKeys.love
+);
+
+localStorage.removeItem(
+cooldownKeys.color
+);
+
+updateCreatorStatus();
+
+updateCooldownText();
+
+alert(
+"すべての12時間制限をリセットしました♡"
+);
+
+}
+
+
+/* =========================================================
+   初期化
+========================================================= */
 
 window.addEventListener(
-  "load",
-  () => {
+"load",
+function(){
 
-    resetCards();
+resetCards();
 
-  }
+setInterval(
+function(){
+
+updateCooldownText();
+
+if(
+document
+.getElementById(
+"creatorPage"
+)
+.classList.contains("show")
+){
+
+updateCreatorStatus();
+
+}
+
+},
+1000
+);
+
+}
 );
 
 </script>
