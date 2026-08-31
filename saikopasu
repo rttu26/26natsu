@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>サイコパス診断♡</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background:
+        radial-gradient(circle at 50% 20%, #39132e 0%, transparent 35%),
+        linear-gradient(135deg, #09070d, #160b17 55%, #050509);
+      font-family:
+        -apple-system, BlinkMacSystemFont,
+        "Noto Sans JP", sans-serif;
+      color: #fff;
+    }
+
+    /* スマホ本体 */
+    .phone {
+      width: 350px;
+      height: 720px;
+      padding: 10px;
+      border-radius: 48px;
+      background: linear-gradient(145deg, #444, #080808 35%, #222);
+      box-shadow:
+        0 0 0 2px #555,
+        0 30px 80px rgba(0,0,0,.7),
+        0 0 60px rgba(255, 35, 130, .15);
+      position: relative;
+    }
+
+    /* スマホ画面 */
+    .screen {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      border-radius: 40px;
+      background:
+        radial-gradient(circle at 50% 0%, #42152f, transparent 40%),
+        #0d0a10;
+      position: relative;
+    }
+
+    /* ノッチ */
+    .notch {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 27px;
+      border-radius: 20px;
+      background: #000;
+      z-index: 10;
+    }
+
+    .content {
+      height: 100%;
+      overflow-y: auto;
+      padding: 55px 22px 30px;
+      scrollbar-width: none;
+    }
+
+    .content::-webkit-scrollbar {
+      display: none;
+    }
+
+    .logo {
+      text-align: center;
+      margin: 10px 0 5px;
+      font-size: 13px;
+      letter-spacing: 4px;
+      color: #ff75b5;
+    }
+
+    h1 {
+      text-align: center;
+      margin: 0;
+      font-size: 30px;
+      letter-spacing: 2px;
+      text-shadow: 0 0 20px rgba(255, 50, 140, .5);
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #aaa;
+      font-size: 12px;
+      margin: 8px 0 25px;
+    }
+
+    .progress {
+      height: 5px;
+      border-radius: 10px;
+      background: #29212a;
+      overflow: hidden;
+      margin-bottom: 25px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 20%;
+      background: linear-gradient(90deg, #ff247d, #ff75b5);
+      transition: .4s;
+      box-shadow: 0 0 12px #ff247d;
+    }
+
+    .question-number {
+      color: #ff5ca5;
+      font-size: 12px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .question {
+      font-size: 19px;
+      font-weight: bold;
+      line-height: 1.6;
+      margin-bottom: 22px;
+    }
+
+    .answers {
+      display: grid;
+      gap: 12px;
+    }
+
+    .answer {
+      border: 1px solid #392635;
+      background: rgba(255,255,255,.045);
+      color: #eee;
+      padding: 16px;
+      border-radius: 15px;
+      text-align: left;
+      font-size: 14px;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .answer:hover {
+      border-color: #ff408f;
+      background: rgba(255, 45, 130, .12);
+      transform: translateY(-2px);
+    }
+
+    .answer:active {
+      transform: scale(.98);
+    }
+
+    .result {
+      display: none;
+      text-align: center;
+    }
+
+    .result-icon {
+      width: 90px;
+      height: 90px;
+      margin: 20px auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      background: rgba(255, 40, 130, .1);
+      border: 1px solid #ff408f;
+      font-size: 40px;
+      box-shadow: 0 0 30px rgba(255,40,130,.25);
+    }
+
+    .result h2 {
+      font-size: 24px;
+      color: #ff6bab;
+    }
+
+    .score {
+      font-size: 48px;
+      font-weight: 900;
+      color: #fff;
+      text-shadow: 0 0 25px #ff247d;
+      margin: 10px;
+    }
+
+    .message {
+      color: #bbb;
+      line-height: 1.8;
+      font-size: 13px;
+      margin: 20px 5px;
+    }
+
+    .restart {
+      border: 0;
+      border-radius: 30px;
+      padding: 14px 28px;
+      color: white;
+      background: linear-gradient(90deg, #ff247d, #d72bff);
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(255, 36, 125, .25);
+    }
+
+    .warning {
+      margin-top: 25px;
+      font-size: 10px;
+      color: #666;
+      text-align: center;
+    }
+
+    @media (max-height: 760px) {
+      .phone {
+        transform: scale(.9);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="phone">
+    <div class="screen">
+      <div class="notch"></div>
+
+      <main class="content">
+
+        <section id="quiz">
+
+          <div class="logo">♡ DARK PSYCHOLOGY TEST ♡</div>
+          <h1>サイコパス診断</h1>
+          <p class="subtitle">
+            あなたの「裏の顔」をチェックします。
+          </p>
+
+          <div class="progress">
+            <div class="progress-bar" id="progress"></div>
+          </div>
+
+          <div class="question-number" id="questionNumber">
+            QUESTION 01 / 05
+          </div>
+
+          <div class="question" id="question"></div>
+
+          <div class="answers" id="answers"></div>
+
+        </section>
+
+        <section class="result" id="result">
+
+          <div class="logo">DIAGNOSIS COMPLETE</div>
+
+          <div class="result-icon">🖤</div>
+
+          <h2 id="resultTitle"></h2>
+
+          <div class="score">
+            <span id="score">0</span>%
+          </div>
+
+          <p class="message" id="resultMessage"></p>
+
+          <button class="restart" onclick="restart()">
+            もう一度診断する ♡
+          </button>
+
+          <p class="warning">
+            ※これは娯楽目的の架空の診断です。医学的な診断ではありません。
+          </p>
+
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+
+<script>
+
+  const questions = [
+    {
+      text: "道端に財布が落ちています。あなたならどうする？",
+      answers: [
+        ["警察に届ける", 0],
+        ["持ち主を探す", 1],
+        ["中身だけ確認する", 3],
+        ["そのまま持ち帰る", 5]
+      ]
+    },
+    {
+      text: "友達が泣いています。あなたは？",
+      answers: [
+        ["話を聞いてあげる", 0],
+        ["理由を聞く", 1],
+        ["少し面倒だと思う", 3],
+        ["どうでもいいと思う", 5]
+      ]
+    },
+    {
+      text: "誰かに嫌われたと知ったら？",
+      answers: [
+        ["悲しくなる", 0],
+        ["理由が気になる", 1],
+        ["別に気にしない", 3],
+        ["逆に利用できないか考える", 5]
+      ]
+    },
+    {
+      text: "あなたが絶対にバレない秘密を持っていたら？",
+      answers: [
+        ["誰にも言わない", 0],
+        ["親しい人には話すかも", 1],
+        ["状況次第で利用する", 3],
+        ["秘密そのものを楽しむ", 5]
+      ]
+    },
+    {
+      text: "大切な人があなたのために嘘をついていました。",
+      answers: [
+        ["許す", 0],
+        ["理由を聞く", 1],
+        ["距離を置く", 3],
+        ["同じように嘘を返す", 5]
+      ]
+    }
+  ];
+
+  let current = 0;
+  let total = 0;
+
+  const question = document.getElementById("question");
+  const answers = document.getElementById("answers");
+  const questionNumber = document.getElementById("questionNumber");
+  const progress = document.getElementById("progress");
+
+  function showQuestion() {
+
+    const q = questions[current];
+
+    questionNumber.textContent =
+      `QUESTION ${String(current + 1).padStart(2, "0")} / ${questions.length}`;
+
+    question.textContent = q.text;
+
+    progress.style.width =
+      `${((current + 1) / questions.length) * 100}%`;
+
+    answers.innerHTML = "";
+
+    q.answers.forEach(([text, score]) => {
+
+      const button = document.createElement("button");
+
+      button.className = "answer";
+      button.textContent = text;
+
+      button.onclick = () => {
+
+        total += score;
+        current++;
+
+        if (current < questions.length) {
+          showQuestion();
+        } else {
+          showResult();
+        }
+
+      };
+
+      answers.appendChild(button);
+
+    });
+  }
+
+
+  function showResult() {
+
+    document.getElementById("quiz").style.display = "none";
+    document.getElementById("result").style.display = "block";
+
+    const percentage =
+      Math.round((total / (questions.length * 5)) * 100);
+
+    document.getElementById("score").textContent = percentage;
+
+    let title;
+    let message;
+
+    if (percentage < 25) {
+
+      title = "かなり優しいタイプ";
+      message =
+        "他人への共感やルールを大切にする傾向があります。あなたの心は比較的ピュアかも";
+
+    } else if (percentage < 50) {
+
+      title = "ちょっぴり冷静タイプ";
+      message =
+        "感情だけで動かず、状況を冷静に判断できるタイプ。意外とドライな一面も？";
+
+    } else if (percentage < 75) {
+
+      title = "要注意タイプ";
+      message =
+        "自分の目的のためなら、多少の駆け引きも気にしない傾向がありそう。あなたの裏の顔が少し見えています…";
+
+    } else {
+
+      title = "かなりダークタイプ";
+      message =
+        "感情より合理性を優先する傾向が強め。とはいえ、これはあくまでゲーム感覚の診断です。怖がらなくてOK";
+
+    }
+
+    document.getElementById("resultTitle").textContent = title;
+    document.getElementById("resultMessage").textContent = message;
+  }
+
+
+  function restart() {
+
+    current = 0;
+    total = 0;
+
+    document.getElementById("quiz").style.display = "block";
+    document.getElementById("result").style.display = "none";
+
+    showQuestion();
+  }
+
+
+  showQuestion();
+
+</script>
+
+</body>
+</html>
