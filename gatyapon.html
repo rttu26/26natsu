@@ -1,11 +1,301 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>推しガチャ</title>
 
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #222;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: "Arial", "Hiragino Kaku Gothic ProN", sans-serif;
+    }
 
+    /* スマホ画面 */
+    .phone {
+      width: 390px;
+      height: 844px;
+      max-width: 100vw;
+      max-height: 100vh;
+      background: linear-gradient(180deg, #fff4fb, #f0eaff);
+      border-radius: 35px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 0 40px rgba(0,0,0,.5);
+      border: 8px solid #111;
+    }
 
-<!DOCTYPE html> <html lang="ja"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>ユーチューバーガチャポン！</title> <style> * { box-sizing: border-box; } body { margin: 0; font-family: "Arial", "Hiragino Kaku Gothic ProN", sans-serif; background: linear-gradient(135deg, #ffe5f3, #e5f4ff); color: #333; text-align: center; min-height: 100vh; } h1 { margin: 0; padding-top: 30px; font-size: 42px; color: #ff4fa3; text-shadow: 3px 3px white; } .subtitle { font-size: 18px; margin-bottom: 20px; } /* ガチャマシン */ .gacha-machine { width: 310px; height: 420px; margin: 20px auto; position: relative; } .top { width: 270px; height: 220px; margin: auto; background: #ff5ca8; border: 8px solid #d93685; border-radius: 140px 140px 25px 25px; position: relative; overflow: hidden; box-shadow: 0 10px 0 #c92878; } .glass { width: 220px; height: 170px; background: rgba(255,255,255,0.55); border: 7px solid white; border-radius: 50%; position: absolute; left: 18px; top: 25px; overflow: hidden; } .capsule { width: 55px; height: 55px; border-radius: 50%; position: absolute; border: 4px solid rgba(0,0,0,.15); animation: bounce 1.2s infinite alternate; } .c1 { background: #75d9ff; left: 25px; top: 90px; } .c2 { background: #ffe66d; left: 85px; top: 45px; animation-delay: .2s; } .c3 { background: #ff8ac4; left: 135px; top: 100px; animation-delay: .4s; } @keyframes bounce { to { transform: translateY(-12px) rotate(20deg); } } .body { width: 230px; height: 190px; background: #ff6db2; border: 8px solid #d93685; margin: -5px auto 0; border-radius: 20px; position: relative; box-shadow: 0 10px 0 #c92878; } .slot { width: 120px; height: 45px; background: #444; border-radius: 10px; margin: 25px auto 15px; border: 6px solid #222; } .knob { width: 70px; height: 70px; background: white; border: 8px solid #ccc; border-radius: 50%; margin: auto; cursor: pointer; transition: .2s; box-shadow: 0 5px 0 #aaa; } .knob:hover { transform: scale(1.08); } .knob:active { transform: rotate(180deg) scale(.9); } .knob::after { content: "↻"; font-size: 42px; color: #ff4fa3; line-height: 55px; } /* 結果 */ #result { width: 330px; min-height: 150px; margin: 25px auto; padding: 20px; background: white; border-radius: 25px; box-shadow: 0 8px 25px rgba(0,0,0,.15); display: none; } .result-title { font-size: 16px; color: #999; } .member { font-size: 32px; font-weight: bold; color: #ff4fa3; margin: 8px; } .group { display: inline-block; padding: 6px 15px; border-radius: 20px; background: #eef2ff; color: #5865f2; font-weight: bold; } .rarity { margin-top: 10px; font-weight: bold; color: #ffb000; } button { border: none; border-radius: 30px; padding: 14px 35px; font-size: 20px; font-weight: bold; color: white; background: linear-gradient(90deg, #ff4fa3, #ff8ac4); box-shadow: 0 5px 0 #d93685; cursor: pointer; } button:active { transform: translateY(4px); box-shadow: none; } .shake { animation: shake .5s; } @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-10px) rotate(-3deg); } 50% { transform: translateX(10px) rotate(3deg); } 75% { transform: translateX(-7px); } 100% { transform: translateX(0); } } .footer { margin: 30px 0; color: #888; font-size: 13px; } </style> </head> <body> <h1>🎀 ユーチューバーガチャポン！ 🎀</h1> <div class="subtitle"> STPR × ミリプロ<br> <b>だれが出るかな！？</b> </div> <div class="gacha-machine" id="machine"> <div class="top"> <div class="glass"> <div class="capsule c1"></div> <div class="capsule c2"></div> <div class="capsule c3"></div> </div> </div> <div class="body"> <div class="slot"></div>
-<div class="knob" onclick="gacha()"></div>
+    /* 上部 */
+    .header {
+      padding: 22px 20px 12px;
+      text-align: center;
+    }
 
-</div> </div>
-<button onclick="gacha()">🎰 ガチャを回す！</button>
+    .header h1 {
+      margin: 0;
+      color: #ff4f9a;
+      font-size: 27px;
+    }
 
-<div id="result"> <div class="result-title">✨ ガチャ結果 ✨</div> <div class="member" id="memberName"></div> <div class="group" id="groupName"></div> <div class="rarity" id="rarity"></div> </div> <div class="footer"> ※ファンメイドのガチャゲームです </div> <script> const members = [ // STPR { name: "莉犬", group: "すとぷり", rarity: "⭐ SSR" }, { name: "るぅと", group: "すとぷり", rarity: "⭐ SSR" }, { name: "ころん", group: "すとぷり", rarity: "⭐ SSR" }, { name: "さとみ", group: "すとぷり", rarity: "⭐ SSR" }, { name: "ジェル", group: "すとぷり", rarity: "⭐ SSR" }, { name: "ななもり。", group: "すとぷり", rarity: "🌈 LEGEND" }, { name: "あっきぃ", group: "AMPTAKxCOLORS", rarity: "✨ SR" }, { name: "まぜ太", group: "AMPTAKxCOLORS", rarity: "✨ SR" }, { name: "ぷりっつ", group: "AMPTAKxCOLORS", rarity: "✨ SR" }, { name: "ちぐさくん", group: "AMPTAKxCOLORS", rarity: "✨ SR" }, { name: "あっと", group: "AMPTAKxCOLORS", rarity: "✨ SR" }, { name: "けちゃ", group: "AMPTAKxCOLORS", rarity: "✨ SR" }, { name: "そあら", group: "とぅるりぷ", rarity: "💎 R" }, { name: "ものくろ", group: "とぅるりぷ", rarity: "💎 R" }, { name: "パルオ", group: "とぅるりぷ", rarity: "💎 R" }, { name: "つきしろやしろ。", group: "とぅるりぷ", rarity: "💎 R" }, { name: "はりま", group: "とぅるりぷ", rarity: "💎 R" }, { name: "まひろまる。", group: "とぅるりぷ", rarity: "💎 R" }, // ミリプロ { name: "甘狼このみ", group: "ミリプロ", rarity: "🌟 SSR" }, { name: "音ノ乃のの", group: "ミリプロ", rarity: "🌟 SSR" } ]; function gacha() { const machine = document.getElementById("machine"); const result = document.getElementById("result"); machine.classList.remove("shake"); // アニメーションをリセット void machine.offsetWidth; machine.classList.add("shake"); // いったん結果を隠す result.style.display = "none"; setTimeout(() => { const random = members[Math.floor(Math.random() * members.length)]; document.getElementById("memberName").textContent = random.name; document.getElementById("groupName").textContent = random.group; document.getElementById("rarity").textContent = random.rarity; result.style.display = "block"; }, 600); } </script> </body> </html>
+    .header p {
+      margin: 6px 0;
+      color: #777;
+      font-size: 13px;
+    }
+
+    /* ガチャ本体 */
+    .gacha {
+      width: 280px;
+      height: 330px;
+      margin: 30px auto 10px;
+      position: relative;
+    }
+
+    .machine {
+      width: 240px;
+      height: 210px;
+      background: linear-gradient(135deg, #ff72ae, #9c72ff);
+      border-radius: 35px 35px 20px 20px;
+      position: absolute;
+      left: 20px;
+      top: 60px;
+      box-shadow: inset 0 -10px 0 rgba(0,0,0,.12);
+    }
+
+    .globe {
+      width: 155px;
+      height: 155px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #fff, #ffd9ec 35%, #ff91bd);
+      position: absolute;
+      left: 42px;
+      top: -65px;
+      border: 8px solid #fff;
+      box-shadow: 0 5px 15px rgba(0,0,0,.2);
+      overflow: hidden;
+    }
+
+    .ball {
+      position: absolute;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: #ffe45e;
+      box-shadow: inset -5px -5px 0 rgba(0,0,0,.1);
+    }
+
+    .ball:nth-child(1) {
+      left: 25px;
+      top: 30px;
+    }
+
+    .ball:nth-child(2) {
+      left: 85px;
+      top: 45px;
+      background: #74d9ff;
+    }
+
+    .ball:nth-child(3) {
+      left: 50px;
+      top: 90px;
+      background: #b78cff;
+    }
+
+    .slot {
+      position: absolute;
+      width: 70px;
+      height: 38px;
+      background: #333;
+      border-radius: 20px;
+      left: 85px;
+      bottom: 35px;
+    }
+
+    .knob {
+      position: absolute;
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      background: #ffe45e;
+      border: 7px solid #fff;
+      right: -25px;
+      bottom: 35px;
+      cursor: pointer;
+      transition: transform .15s;
+    }
+
+    .knob:active {
+      transform: rotate(45deg) scale(.9);
+    }
+
+    /* 結果 */
+    .result {
+      width: 300px;
+      min-height: 150px;
+      margin: 5px auto 15px;
+      background: rgba(255,255,255,.85);
+      border-radius: 25px;
+      padding: 18px;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(100,50,150,.12);
+    }
+
+    .result .icon {
+      width: 65px;
+      height: 65px;
+      margin: 0 auto 8px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      background: linear-gradient(135deg,#ff9dcc,#9d8aff);
+    }
+
+    .result .name {
+      font-size: 21px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .result .group {
+      font-size: 13px;
+      color: #888;
+      margin-top: 3px;
+    }
+
+    /* ガチャボタン */
+    button {
+      display: block;
+      margin: 0 auto;
+      width: 250px;
+      padding: 15px;
+      border: none;
+      border-radius: 30px;
+      background: linear-gradient(90deg,#ff4f9a,#9b70ff);
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 7px 15px rgba(150,70,180,.25);
+    }
+
+    button:active {
+      transform: scale(.96);
+    }
+
+    .message {
+      text-align: center;
+      color: #999;
+      font-size: 11px;
+      margin-top: 12px;
+    }
+
+    /* ガチャ演出 */
+    .shake {
+      animation: shake .5s ease;
+    }
+
+    @keyframes shake {
+      0%   { transform: translateX(0) rotate(0); }
+      20%  { transform: translateX(-12px) rotate(-4deg); }
+      40%  { transform: translateX(12px) rotate(4deg); }
+      60%  { transform: translateX(-8px) rotate(-3deg); }
+      80%  { transform: translateX(8px) rotate(3deg); }
+      100% { transform: translateX(0) rotate(0); }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="phone">
+
+    <div class="header">
+      <h1>✨ 推しガチャ ✨</h1>
+      <p>STPR × ミリプロ RANDOM GACHA</p>
+    </div>
+
+    <div class="gacha" id="gacha">
+      <div class="globe">
+        <div class="ball"></div>
+        <div class="ball"></div>
+        <div class="ball"></div>
+      </div>
+
+      <div class="machine">
+        <div class="slot"></div>
+        <div class="knob"></div>
+      </div>
+    </div>
+
+    <div class="result">
+      <div class="icon" id="icon">❓</div>
+      <div class="name" id="name">？？？</div>
+      <div class="group" id="group">
+        ボタンを押してガチャ！
+      </div>
+    </div>
+
+    <button onclick="gacha()">🎰 ガチャを回す！</button>
+
+    <div class="message">
+      ※このページはファン向けの非公式デモです
+    </div>
+
+  </div>
+
+  <script>
+    // メンバー一覧
+    const members = [
+      // STPR
+      { name: "莉犬", group: "STPR", icon: "🐶" },
+      { name: "るぅと", group: "STPR", icon: "🐹" },
+      { name: "ころん", group: "STPR", icon: "🐐" },
+      { name: "さとみ", group: "STPR", icon: "🐱" },
+      { name: "ななもり。", group: "STPR", icon: "💜" },
+      { name: "ジェル", group: "STPR", icon: "🧡" },
+
+      // ミリプロ
+      { name: "甘狼このみ", group: "ミリプロ", icon: "🐺" },
+      { name: "音ノ乃のの", group: "ミリプロ", icon: "🎵" },
+      { name: "ゆらぎゆら", group: "ミリプロ", icon: "🫧" },
+      { name: "あくび・でもんすぺーど", group: "ミリプロ", icon: "😈" }
+    ];
+
+    function gacha() {
+      const machine = document.getElementById("gacha");
+
+      // 演出
+      machine.classList.remove("shake");
+      void machine.offsetWidth;
+      machine.classList.add("shake");
+
+      // 少し待ってから結果表示
+      setTimeout(() => {
+
+        const randomIndex =
+          Math.floor(Math.random() * members.length);
+
+        const member = members[randomIndex];
+
+        document.getElementById("icon").textContent = member.icon;
+        document.getElementById("name").textContent = member.name;
+        document.getElementById("group").textContent =
+          "所属：" + member.group;
+
+      }, 500);
+    }
+  </script>
+
+</body>
+</html>
