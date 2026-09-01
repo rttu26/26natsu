@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -378,8 +376,6 @@ h1 {
   line-height: 1.4;
 }
 
-/* 12時間制限 */
-
 .cooldown {
   margin-top: 5px;
   color: #999;
@@ -696,7 +692,9 @@ h1 {
   background: #333;
 }
 
-/* パスコード */
+/* ================================
+   パスコード画面
+================================ */
 
 .lock-screen {
   position: absolute;
@@ -709,7 +707,7 @@ h1 {
   flex-direction: column;
   align-items: center;
 
-  padding-top: 65px;
+  padding-top: 55px;
 
   background:
     linear-gradient(
@@ -741,19 +739,25 @@ h1 {
   margin-bottom: 20px;
 }
 
+/* 12個のドット */
+
 .pass-dots {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
 
-  gap: 12px;
+  gap: 8px;
 
-  height: 18px;
+  width: 150px;
+  min-height: 30px;
 
-  margin-bottom: 25px;
+  margin-bottom: 20px;
 }
 
 .pass-dot {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
 
   border-radius: 50%;
 
@@ -763,6 +767,8 @@ h1 {
 .pass-dot.filled {
   background: white;
 }
+
+/* キーパッド */
 
 .keypad {
   display: grid;
@@ -817,15 +823,15 @@ h1 {
 }
 
 .lock-error {
-  position: absolute;
-
-  top: 405px;
+  margin-top: 12px;
 
   color: #ff5252;
 
   font-size: 10px;
 
-  opacity: 0;
+  min-height: 14px;
+
+  text-align: center;
 }
 
 .lock-error.show {
@@ -1052,6 +1058,96 @@ h1 {
 
   cursor: pointer;
 }
+
+/* ================================
+   パスコード24時間ロック画面
+================================ */
+
+.password-lock-screen {
+  position: absolute;
+
+  z-index: 700;
+
+  inset: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+  align-items: center;
+
+  padding: 30px;
+
+  text-align: center;
+
+  background:
+    linear-gradient(
+      145deg,
+      #100000,
+      #050505
+    );
+
+  color: white;
+
+  opacity: 0;
+  pointer-events: none;
+
+  transition: opacity .25s;
+}
+
+.password-lock-screen.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.password-lock-icon {
+  font-size: 55px;
+  margin-bottom: 15px;
+}
+
+.password-lock-title {
+  color: #ff5252;
+
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.password-lock-text {
+  margin-top: 12px;
+
+  color: #bbb;
+
+  font-size: 11px;
+
+  line-height: 1.8;
+}
+
+.password-lock-time {
+  margin-top: 15px;
+
+  color: #ff7777;
+
+  font-size: 14px;
+
+  font-weight: bold;
+}
+
+.password-lock-close {
+  margin-top: 25px;
+
+  padding: 10px 30px;
+
+  border: 0;
+
+  border-radius: 30px;
+
+  background: #555;
+
+  color: white;
+
+  cursor: pointer;
+}
+
 </style>
 </head>
 
@@ -1103,8 +1199,7 @@ onclick="changeMode('color')">
 
 <div class="cards">
 
-<!-- 16枚 -->
-
+<!-- 1 -->
 <div class="card" onclick="selectCard(event)">
 <div class="card-inner">
 <div class="card-back"></div>
@@ -1115,6 +1210,7 @@ onclick="changeMode('color')">
 </div>
 </div>
 
+<!-- 2 -->
 <div class="card" onclick="selectCard(event)">
 <div class="card-inner">
 <div class="card-back"></div>
@@ -1125,6 +1221,7 @@ onclick="changeMode('color')">
 </div>
 </div>
 
+<!-- 3 -->
 <div class="card" onclick="selectCard(event)">
 <div class="card-inner">
 <div class="card-back"></div>
@@ -1135,6 +1232,7 @@ onclick="changeMode('color')">
 </div>
 </div>
 
+<!-- 4 -->
 <div class="card" onclick="selectCard(event)">
 <div class="card-inner">
 <div class="card-back"></div>
@@ -1145,6 +1243,7 @@ onclick="changeMode('color')">
 </div>
 </div>
 
+<!-- 5 -->
 <div class="card" onclick="selectCard(event)">
 <div class="card-inner">
 <div class="card-back"></div>
@@ -1155,6 +1254,7 @@ onclick="changeMode('color')">
 </div>
 </div>
 
+<!-- 6 -->
 <div class="card" onclick="selectCard(event)">
 <div class="card-inner">
 <div class="card-back"></div>
@@ -1165,6 +1265,7 @@ onclick="changeMode('color')">
 </div>
 </div>
 
+<!-- 7 -->
 <div class="card" onclick="selectCard(event)">
 <div class="card-inner">
 <div class="card-back"></div>
@@ -1175,6 +1276,7 @@ onclick="changeMode('color')">
 </div>
 </div>
 
+<!-- 8 -->
 <div class="card" onclick="selectCard(event)">
 <div class="card-inner">
 <div class="card-back"></div>
@@ -1185,6 +1287,7 @@ onclick="changeMode('color')">
 </div>
 </div>
 
+<!-- 9 -->
 <div class="card" onclick="selectCard(event)">
 <div class="card-inner">
 <div class="card-back"></div>
@@ -1195,6 +1298,7 @@ onclick="changeMode('color')">
 </div>
 </div>
 
+<!-- 10 -->
 <div class="card" onclick="selectCard(event)">
 <div class="card-inner">
 <div class="card-back"></div>
@@ -1205,6 +1309,7 @@ onclick="changeMode('color')">
 </div>
 </div>
 
+<!-- 11 -->
 <div class="card" onclick="selectCard(event)">
 <div class="card-inner">
 <div class="card-back"></div>
@@ -1215,6 +1320,7 @@ onclick="changeMode('color')">
 </div>
 </div>
 
+<!-- 12 -->
 <div class="card" onclick="selectCard(event)">
 <div class="card-inner">
 <div class="card-back"></div>
@@ -1225,6 +1331,7 @@ onclick="changeMode('color')">
 </div>
 </div>
 
+<!-- 13 -->
 <div class="card" onclick="selectCard(event)">
 <div class="card-inner">
 <div class="card-back"></div>
@@ -1235,6 +1342,7 @@ onclick="changeMode('color')">
 </div>
 </div>
 
+<!-- 14 -->
 <div class="card" onclick="selectCard(event)">
 <div class="card-inner">
 <div class="card-back"></div>
@@ -1245,6 +1353,7 @@ onclick="changeMode('color')">
 </div>
 </div>
 
+<!-- 15 -->
 <div class="card" onclick="selectCard(event)">
 <div class="card-inner">
 <div class="card-back"></div>
@@ -1255,6 +1364,7 @@ onclick="changeMode('color')">
 </div>
 </div>
 
+<!-- 16 -->
 <div class="card" onclick="selectCard(event)">
 <div class="card-inner">
 <div class="card-back"></div>
@@ -1364,7 +1474,9 @@ onclick="closeCooldown()">
 </div>
 
 
-<!-- パスコード -->
+<!-- ================================
+     パスコード入力画面
+================================ -->
 
 <div
 class="lock-screen"
@@ -1378,10 +1490,20 @@ id="lockScreen">
 パスコードを入力してください
 </div>
 
+<!-- 12桁 -->
+
 <div
 class="pass-dots"
 id="passDots">
 
+<div class="pass-dot"></div>
+<div class="pass-dot"></div>
+<div class="pass-dot"></div>
+<div class="pass-dot"></div>
+<div class="pass-dot"></div>
+<div class="pass-dot"></div>
+<div class="pass-dot"></div>
+<div class="pass-dot"></div>
 <div class="pass-dot"></div>
 <div class="pass-dot"></div>
 <div class="pass-dot"></div>
@@ -1412,7 +1534,6 @@ id="passDots">
 <div
 class="lock-error"
 id="lockError">
-パスコードが違います
 </div>
 
 <button
@@ -1424,7 +1545,44 @@ onclick="closeLock()">
 </div>
 
 
-<!-- 製作者ページ -->
+<!-- ================================
+     パスコード24時間ロック画面
+================================ -->
+
+<div
+class="password-lock-screen"
+id="passwordLockScreen">
+
+<div class="password-lock-icon">
+🔒
+</div>
+
+<div class="password-lock-title">
+24時間ロックされています
+</div>
+
+<div class="password-lock-text">
+パスコードを4回間違えたため、<br>
+製作者ページへのアクセスを一時停止しています。
+</div>
+
+<div
+class="password-lock-time"
+id="passwordLockTime">
+</div>
+
+<button
+class="password-lock-close"
+onclick="closePasswordLock()">
+閉じる
+</button>
+
+</div>
+
+
+<!-- ================================
+     製作者ページ
+================================ -->
 
 <div
 class="creator-page"
@@ -1526,18 +1684,6 @@ onclick="closeCreatorPage()">
    占いデータ
 ========================================================= */
 
-/*
- 大吉の確率を低くするため、
- 通常の結果とは別に「大吉」を抽選しています。
-
- 通常時：
- 大吉 約5%
- その他 約95%
-
- スペースキーを押しながら引く：
- 大吉確定
-*/
-
 const normalFortunes = [
 
 ["中吉","いいことが起こりそう。笑顔を大切に。"],
@@ -1605,10 +1751,30 @@ const colorFortunes = [
    設定
 ========================================================= */
 
-const creatorPassword = "0831";
+/* 製作者ページのパスコード */
+
+const creatorPassword =
+"083108310831";
+
+/* おみくじの12時間制限 */
 
 const COOLDOWN_TIME =
 12 * 60 * 60 * 1000;
+
+/* パスコードの4回間違いロック */
+
+const PASSWORD_MAX_ATTEMPTS = 4;
+
+const PASSWORD_LOCK_TIME =
+24 * 60 * 60 * 1000;
+
+/* localStorageのキー */
+
+const passwordAttemptsKey =
+"omikujiCreatorPasswordAttempts";
+
+const passwordLockKey =
+"omikujiCreatorPasswordLock";
 
 let currentMode = "normal";
 
@@ -1623,11 +1789,14 @@ let enteredPassword = "";
 
 const cooldownKeys = {
 
-normal: "omikujiCooldown_normal",
+normal:
+"omikujiCooldown_normal",
 
-love: "omikujiCooldown_love",
+love:
+"omikujiCooldown_love",
 
-color: "omikujiCooldown_color"
+color:
+"omikujiCooldown_color"
 
 };
 
@@ -1851,9 +2020,7 @@ function selectCard(event) {
 if(selected) return;
 
 
-/*
- すでに12時間制限中なら引けない
-*/
+/* 12時間制限 */
 
 if(isCooldown(currentMode)) {
 
@@ -1897,13 +2064,6 @@ list = normalFortunes;
 
 let fortune;
 
-
-/*
- スペースキーを押しながらクリック
- → おみくじなら大吉確定
- → 恋みくじなら大恋愛確定
-*/
-
 if(window.spacePressed) {
 
 if(currentMode === "normal") {
@@ -1946,10 +2106,6 @@ colorFortunes.length
 else {
 
 if(currentMode === "normal") {
-
-/*
- 大吉 約5%
-*/
 
 if(Math.random() < 0.05) {
 
@@ -2022,9 +2178,7 @@ selectedCard
 fortune[1];
 
 
-/*
- 結果を保存
-*/
+/* 結果 */
 
 document
 .getElementById("fortune")
@@ -2037,16 +2191,12 @@ document
 fortune[1];
 
 
-/*
- 12時間スタート
-*/
+/* 12時間スタート */
 
 startCooldown(currentMode);
 
 
-/*
- 結果画面
-*/
+/* 結果画面 */
 
 setTimeout(() => {
 
@@ -2422,10 +2572,182 @@ window.spacePressed = false;
 
 
 /* =========================================================
-   パスコード
+   パスコード24時間ロック
+========================================================= */
+
+function getPasswordLockEnd() {
+
+return Number(
+localStorage.getItem(
+passwordLockKey
+)
+) || 0;
+
+}
+
+
+function isPasswordLocked() {
+
+const lockEnd =
+getPasswordLockEnd();
+
+if(lockEnd <= Date.now()) {
+
+localStorage.removeItem(
+passwordLockKey
+);
+
+localStorage.removeItem(
+passwordAttemptsKey
+);
+
+return false;
+
+}
+
+return true;
+
+}
+
+
+/* =========================================================
+   パスコードロック残り時間
+========================================================= */
+
+function getPasswordLockRemainingText() {
+
+const lockEnd =
+getPasswordLockEnd();
+
+if(lockEnd <= Date.now()) {
+
+return "ロック解除済み";
+
+}
+
+const remaining =
+lockEnd - Date.now();
+
+const hours =
+Math.floor(
+remaining /
+(1000 * 60 * 60)
+);
+
+const minutes =
+Math.floor(
+(remaining %
+(1000 * 60 * 60)) /
+(1000 * 60)
+);
+
+const seconds =
+Math.floor(
+(remaining %
+(1000 * 60)) /
+1000
+);
+
+return (
+"解除まであと " +
+hours +
+"時間 " +
+minutes +
+"分 " +
+seconds +
+"秒"
+);
+
+}
+
+
+/* =========================================================
+   24時間ロック画面を表示
+========================================================= */
+
+function showPasswordLock() {
+
+if(!isPasswordLocked()) {
+
+return;
+
+}
+
+document
+.getElementById("lockScreen")
+.classList.remove("show");
+
+document
+.getElementById("passwordLockScreen")
+.classList.add("show");
+
+updatePasswordLockTime();
+
+}
+
+
+/* =========================================================
+   ロック画面の時間更新
+========================================================= */
+
+function updatePasswordLockTime() {
+
+const element =
+document.getElementById(
+"passwordLockTime"
+);
+
+if(isPasswordLocked()) {
+
+element.textContent =
+getPasswordLockRemainingText();
+
+}
+
+else {
+
+element.textContent =
+"ロック解除されました";
+
+document
+.getElementById(
+"passwordLockScreen"
+)
+.classList.remove("show");
+
+}
+
+}
+
+
+/* =========================================================
+   ロック画面を閉じる
+========================================================= */
+
+function closePasswordLock() {
+
+document
+.getElementById(
+"passwordLockScreen"
+)
+.classList.remove("show");
+
+}
+
+
+/* =========================================================
+   パスコード入力画面
 ========================================================= */
 
 function openLock() {
+
+if(isPasswordLocked()) {
+
+showPasswordLock();
+
+return;
+
+}
 
 enteredPassword = "";
 
@@ -2436,13 +2758,34 @@ document
 .classList.remove("show");
 
 document
+.getElementById("lockError")
+.textContent = "";
+
+document
 .getElementById("lockScreen")
 .classList.add("show");
 
 }
 
 
+/* =========================================================
+   数字入力
+========================================================= */
+
 function pressKey(number) {
+
+if(isPasswordLocked()) {
+
+showPasswordLock();
+
+return;
+
+}
+
+
+/*
+ 12桁以上入力できない
+*/
 
 if(
 enteredPassword.length >=
@@ -2456,6 +2799,11 @@ return;
 enteredPassword += number;
 
 updateDots();
+
+
+/*
+ 12桁入力したら自動チェック
+*/
 
 if(
 enteredPassword.length ===
@@ -2472,7 +2820,17 @@ checkPassword,
 }
 
 
+/* =========================================================
+   1文字削除
+========================================================= */
+
 function deleteKey() {
+
+if(isPasswordLocked()) {
+
+return;
+
+}
 
 enteredPassword =
 enteredPassword.slice(0,-1);
@@ -2481,6 +2839,10 @@ updateDots();
 
 }
 
+
+/* =========================================================
+   ドット更新
+========================================================= */
 
 function updateDots() {
 
@@ -2503,12 +2865,44 @@ enteredPassword.length
 }
 
 
+/* =========================================================
+   パスコード確認
+========================================================= */
+
 function checkPassword() {
+
+if(isPasswordLocked()) {
+
+showPasswordLock();
+
+enteredPassword = "";
+
+updateDots();
+
+return;
+
+}
+
+
+/* 正解 */
 
 if(
 enteredPassword ===
 creatorPassword
 ){
+
+/*
+ 正解したら
+ 間違い回数をリセット
+*/
+
+localStorage.removeItem(
+passwordAttemptsKey
+);
+
+localStorage.removeItem(
+passwordLockKey
+);
 
 document
 .getElementById("lockScreen")
@@ -2524,10 +2918,40 @@ openCreatorPage();
 
 else {
 
+/*
+ 間違い回数を1増やす
+*/
+
+let attempts =
+Number(
+localStorage.getItem(
+passwordAttemptsKey
+)
+) || 0;
+
+attempts++;
+
+localStorage.setItem(
+passwordAttemptsKey,
+String(attempts)
+);
+
+
+/*
+ エラー表示
+*/
+
 const error =
 document.getElementById(
 "lockError"
 );
+
+error.textContent =
+"パスコードが違います（" +
+attempts +
+"/" +
+PASSWORD_MAX_ATTEMPTS +
+"回）";
 
 error.classList.remove("show");
 
@@ -2535,20 +2959,73 @@ void error.offsetWidth;
 
 error.classList.add("show");
 
+
 enteredPassword = "";
 
 updateDots();
 
+
+/*
+ 4回間違えた
+*/
+
+if(
+attempts >=
+PASSWORD_MAX_ATTEMPTS
+){
+
+/*
+ 24時間後の時刻を保存
+*/
+
+const lockEnd =
+Date.now() +
+PASSWORD_LOCK_TIME;
+
+localStorage.setItem(
+passwordLockKey,
+String(lockEnd)
+);
+
+/*
+ 間違い回数はリセット
+*/
+
+localStorage.removeItem(
+passwordAttemptsKey
+);
+
+/*
+ 少し待ってから
+ ロック画面を表示
+*/
+
+setTimeout(function(){
+
+showPasswordLock();
+
+},500);
+
+}
+
 }
 
 }
 
+
+/* =========================================================
+   パスコード画面を閉じる
+========================================================= */
 
 function closeLock() {
 
 document
 .getElementById("lockScreen")
 .classList.remove("show");
+
+enteredPassword = "";
+
+updateDots();
 
 }
 
@@ -2681,6 +3158,8 @@ function(){
 
 updateCooldownText();
 
+updatePasswordLockTime();
+
 if(
 document
 .getElementById(
@@ -2703,4 +3182,4 @@ updateCreatorStatus();
 </script>
 
 </body>
-</html>
+</html
