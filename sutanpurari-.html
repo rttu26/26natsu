@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>わくわくスタンプラリー</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  margin: 0;
+  background: #dfe8f5;
+  font-family:
+    -apple-system, BlinkMacSystemFont,
+    "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  color: #333;
+}
+
+/* スマホ本体 */
+.phone {
+  width: min(100%, 430px);
+  min-height: 100vh;
+  margin: auto;
+  background: #f7f9fc;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 30px rgba(0,0,0,.15);
+}
+
+/* 上部 */
+.header {
+  background: linear-gradient(135deg, #6c63ff, #8f7cff);
+  color: white;
+  padding: 48px 20px 20px;
+  border-radius: 0 0 28px 28px;
+  position: relative;
+}
+
+.header .mini-title {
+  font-size: 12px;
+  opacity: .8;
+}
+
+.header h1 {
+  margin: 4px 0 0;
+  font-size: 25px;
+}
+
+.week {
+  margin-top: 14px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  opacity: .9;
+}
+
+.content {
+  padding: 18px 16px 100px;
+}
+
+/* ページ */
+.page {
+  display: none;
+}
+
+.page.active {
+  display: block;
+}
+
+/* カード */
+.card {
+  background: white;
+  border-radius: 20px;
+  padding: 18px;
+  margin-bottom: 16px;
+  box-shadow: 0 5px 18px rgba(40,60,100,.08);
+}
+
+.card-title {
+  font-weight: bold;
+  font-size: 17px;
+  margin-bottom: 4px;
+}
+
+.sub {
+  color: #8992a3;
+  font-size: 12px;
+}
+
+/* スタンプ */
+.stamps {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 9px;
+  margin-top: 17px;
+}
+
+.stamp {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 3px dashed #d8ddea;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #b8becb;
+  font-weight: bold;
+  font-size: 12px;
+  position: relative;
+}
+
+.stamp.filled {
+  background: linear-gradient(135deg, #ffca5c, #ff8c69);
+  border: none;
+  color: white;
+  box-shadow: 0 5px 12px rgba(255,150,80,.35);
+  animation: stampIn .45s ease;
+}
+
+.stamp.filled::after {
+  content: "★";
+  font-size: 25px;
+  position: absolute;
+}
+
+.stamp.filled span {
+  display: none;
+}
+
+@keyframes stampIn {
+  0% { transform: scale(0); }
+  70% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+/* チャレンジ */
+.challenge {
+  background: linear-gradient(135deg, #fff3c4, #ffe1a7);
+  border: 2px solid #ffc857;
+}
+
+.challenge .stamps {
+  grid-template-columns: repeat(2, 1fr);
+  max-width: 170px;
+}
+
+.challenge .stamp {
+  background: rgba(255,255,255,.65);
+}
+
+/* ボタン */
+button {
+  border: none;
+  cursor: pointer;
+  font: inherit;
+}
+
+.main-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #6c63ff, #8f7cff);
+  color: white;
+  border-radius: 15px;
+  padding: 14px;
+  font-weight: bold;
+  margin-top: 15px;
+  box-shadow: 0 6px 15px rgba(108,99,255,.25);
+}
+
+.main-btn:active {
+  transform: scale(.97);
+}
+
+.main-btn.disabled {
+  background: #cbd0da;
+  box-shadow: none;
+}
+
+.secondary-btn {
+  width: 100%;
+  background: #eef0f7;
+  color: #555;
+  border-radius: 13px;
+  padding: 12px;
+  margin-top: 10px;
+}
+
+/* 今日のミッション */
+.mission {
+  background: linear-gradient(135deg, #fff, #f0efff);
+}
+
+.mission-icon {
+  font-size: 42px;
+  margin-bottom: 6px;
+}
+
+.mission h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.mission p {
+  font-size: 13px;
+  color: #777;
+}
+
+/* ナビ */
+.nav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(100%, 430px);
+  height: 72px;
+  background: rgba(255,255,255,.95);
+  backdrop-filter: blur(12px);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid #eee;
+  z-index: 20;
+}
+
+.nav button {
+  background: transparent;
+  color: #9ca3b0;
+  font-size: 11px;
+}
+
+.nav button .icon {
+  display: block;
+  font-size: 23px;
+  margin-bottom: 2px;
+}
+
+.nav button.active {
+  color: #6c63ff;
+  font-weight: bold;
+}
+
+/* モーダル */
+.modal-bg {
+  position: fixed;
+  inset: 0;
+  background: rgba(20,25,40,.55);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 50;
+}
+
+.modal-bg.show {
+  display: flex;
+}
+
+.modal {
+  width: min(100%, 390px);
+  max-height: 90vh;
+  overflow-y: auto;
+  background: white;
+  border-radius: 25px;
+  padding: 22px;
+  animation: modalIn .25s ease;
+}
+
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.game-icon {
+  text-align: center;
+  font-size: 52px;
+}
+
+.game-title {
+  text-align: center;
+  font-size: 21px;
+  font-weight: bold;
+  margin: 5px 0 18px;
+}
+
+.question {
+  background: #f4f5fa;
+  border-radius: 15px;
+  padding: 18px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.answers {
+  display: grid;
+  gap: 10px;
+}
+
+.answer {
+  width: 100%;
+  padding: 13px;
+  border: 2px solid #e4e6ef;
+  background: white;
+  border-radius: 13px;
+  font-weight: bold;
+}
+
+.answer:hover {
+  border-color: #6c63ff;
+}
+
+.answer.correct {
+  background: #dff8e8;
+  border-color: #42c77a;
+}
+
+.answer.wrong {
+  background: #ffe2e2;
+  border-color: #ef6b6b;
+}
+
+.close-btn {
+  width: 100%;
+  margin-top: 15px;
+  padding: 12px;
+  background: #eeeef4;
+  border-radius: 12px;
+}
+
+/* ルール */
+.rule {
+  padding: 14px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.rule:last-child {
+  border: none;
+}
+
+.rule strong {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.rule p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #666;
+}
+
+/* 完了画面 */
+.success {
+  text-align: center;
+}
+
+.success-star {
+  font-size: 75px;
+  animation: pop .5s ease;
+}
+
+@keyframes pop {
+  0% { transform: scale(.2) rotate(-20deg); }
+  70% { transform: scale(1.2) rotate(10deg); }
+  100% { transform: scale(1); }
+}
+
+.success h2 {
+  color: #6c63ff;
+}
+
+/* トースト */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 90px;
+  transform: translateX(-50%) translateY(20px);
+  background: #333;
+  color: white;
+  padding: 11px 18px;
+  border-radius: 30px;
+  font-size: 13px;
+  opacity: 0;
+  pointer-events: none;
+  transition: .3s;
+  z-index: 100;
+  white-space: nowrap;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+</style>
+</head>
+
+<body>
+
+<div class="phone">
+
+  <header class="header">
+    <div class="mini-title">DAILY MINI GAME</div>
+    <h1>🌈 わくわくスタンプラリー</h1>
+    <div class="week">
+      <span id="weekText">今週のスタンプカード</span>
+      <span id="daysText"></span>
+    </div>
+  </header>
+
+  <main class="content">
+
+    <!-- HOME -->
+    <section id="home" class="page active">
+
+      <div class="card mission">
+        <div class="mission-icon">🎮</div>
+        <h2>今日のミッション</h2>
+        <p id="missionText">
+          ミニゲームに挑戦して、今日のスタンプをゲット！
+        </p>
+
+        <button id="gameButton" class="main-btn" onclick="startGame()">
+          ミニゲームに挑戦！
+        </button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">⭐ スタンプカード</div>
+        <div class="sub">5個集めるとチャレンジカードが解放されます</div>
+
+        <div id="normalStamps" class="stamps"></div>
+
+        <button class="secondary-btn" onclick="showPage('card')">
+          スタンプカードを見る
+        </button>
+      </div>
+
+      <div id="challengeHome" class="card challenge" style="display:none;">
+        <div class="card-title">🏆 チャレンジカード</div>
+        <div class="sub">特別な2個のスタンプを集めよう！</div>
+
+        <div id="challengeStamps" class="stamps"></div>
+      </div>
+
+    </section>
+
+
+    <!-- CARD -->
+    <section id="card" class="page">
+
+      <div class="card">
+        <div class="card-title">⭐ スタンプカード</div>
+        <div class="sub">
+          今週はあと <span id="remaining">5</span> 個！
+        </div>
+
+        <div id="normalStamps2" class="stamps"></div>
+
+        <div style="margin-top:18px; font-size:13px; color:#777;">
+          毎日ひとつずつスタンプを集められます。
+          5個すべて埋まるとチャレンジカードに挑戦できます。
+        </div>
+      </div>
+
+      <div id="challengeCard" class="card challenge" style="display:none;">
+
+        <div class="card-title">🏆 チャレンジカード</div>
+        <div class="sub">5個達成おめでとう！あと2個でコンプリート！</div>
+
+        <div id="challengeStamps2" class="stamps"></div>
+
+        <button id="challengeButton"
+                class="main-btn"
+                onclick="startGame(true)">
+          チャレンジに挑戦！
+        </button>
+      </div>
+
+    </section>
+
+
+    <!-- RULE -->
+    <section id="rules" class="page">
+
+      <div class="card">
+
+        <div class="card-title">📖 スタンプラリーのルール</div>
+
+        <div class="rule">
+          <strong>① 1日1回チャレンジ</strong>
+          <p>
+            1日に挑戦できるミニゲームは1回だけ！
+            ゲームに成功すると、その日のスタンプを1個ゲットできます。
+          </p>
+        </div>
+
+        <div class="rule">
+          <strong>② ミニゲームは毎回ランダム</strong>
+          <p>
+            ミニゲームは全部で6種類。
+            どのゲームが出てくるかは毎回のお楽しみです。
+            同じ種類のゲームでも、問題や答えは毎回変わります。
+          </p>
+        </div>
+
+        <div class="rule">
+          <strong>③ スタンプは5個</strong>
+          <p>
+            通常のスタンプカードには5個のスタンプを押せます。
+            5個すべて集めると、チャレンジカードが解放されます。
+          </p>
+        </div>
+
+        <div class="rule">
+          <strong>④ チャレンジカード</strong>
+          <p>
+            通常カードをコンプリートすると、
+            特別なチャレンジカードが登場します。
+            チャレンジカードには2個のスタンプを押せます。
+          </p>
+        </div>
+
+        <div class="rule">
+          <strong>⑤ 1週間でリセット</strong>
+          <p>
+            スタンプカードは1週間ごとにリセットされます。
+            チャレンジカードも同じタイミングでリセットされます。
+            新しい週になったら、またゼロからスタートです！
+          </p>
+        </div>
+
+        <div class="rule">
+          <strong>⑥ 楽しく遊ぼう！</strong>
+          <p>
+            正解できなくても大丈夫。
+            次の日にはまた新しいゲームに挑戦できます。
+            毎日コツコツ集めてコンプリートを目指そう！
+          </p>
+        </div>
+
+      </div>
+
+      <div class="card" style="text-align:center;">
+        <div style="font-size:40px;">🌟</div>
+        <strong>今週もコンプリートを目指そう！</strong>
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- 下部ナビ -->
+  <nav class="nav">
+    <button id="navHome" class="active" onclick="showPage('home')">
+      <span class="icon">🏠</span>
+      ホーム
+    </button>
+
+    <button id="navCard" onclick="showPage('card')">
+      <span class="icon">🎫</span>
+      カード
+    </button>
+
+    <button id="navRules" onclick="showPage('rules')">
+      <span class="icon">📖</span>
+      ルール
+    </button>
+  </nav>
+
+</div>
+
+
+<!-- ゲームモーダル -->
+<div id="gameModal" class="modal-bg">
+
+  <div class="modal">
+
+    <div id="gameArea"></div>
+
+  </div>
+
+</div>
+
+
+<!-- トースト -->
+<div id="toast" class="toast"></div>
+
+
+<script>
+
+/* =========================================
+   データ
+========================================= */
+
+const GAME_TYPES = [
+  "math",
+  "choice",
+  "memory",
+  "word",
+  "number",
+  "truefalse"
+];
+
+let data = {
+  weekStart: getWeekStart(),
+  normal: 0,
+  challenge: 0,
+  today: null,
+  challengeUnlocked: false
+};
+
+
+/* =========================================
+   初期化
+========================================= */
+
+function loadData() {
+
+  const saved = localStorage.getItem("stampRallyData");
+
+  if (saved) {
+    try {
+      data = JSON.parse(saved);
+    } catch(e) {}
+  }
+
+  const currentWeek = getWeekStart();
+
+  if (data.weekStart !== currentWeek) {
+
+    data.weekStart = currentWeek;
+    data.normal = 0;
+    data.challenge = 0;
+    data.today = null;
+    data.challengeUnlocked = false;
+
+    saveData();
+
+    showToast("新しい週がスタートしました！🌈");
+  }
+
+  if (data.normal >= 5) {
+    data.challengeUnlocked = true;
+  }
+
+  updateUI();
+}
+
+
+function saveData() {
+  localStorage.setItem("stampRallyData", JSON.stringify(data));
+}
+
+
+/* =========================================
+   日付処理
+========================================= */
+
+function getDateKey() {
+
+  const d = new Date();
+
+  return d.getFullYear() + "-" +
+         String(d.getMonth()+1).padStart(2,"0") + "-" +
+         String(d.getDate()).padStart(2,"0");
+}
+
+
+function getWeekStart() {
+
+  const d = new Date();
+
+  // 月曜日始まり
+  const day = d.getDay();
+  const diff = day === 0 ? -6 : 1 - day;
+
+  d.setDate(d.getDate() + diff);
+  d.setHours(0,0,0,0);
+
+  return d.getFullYear() + "-" +
+         String(d.getMonth()+1).padStart(2,"0") + "-" +
+         String(d.getDate()).padStart(2,"0");
+}
+
+
+function getDaysLeft() {
+
+  const now = new Date();
+
+  const start = new Date(data.weekStart);
+  start.setDate(start.getDate() + 7);
+
+  const diff = Math.ceil((start - now) / 86400000);
+
+  return Math.max(1, diff);
+}
+
+
+/* =========================================
+   UI
+========================================= */
+
+function updateUI() {
+
+  // スタンプ
+  renderStamps("normalStamps", data.normal, 5);
+  renderStamps("normalStamps2", data.normal, 5);
+
+  renderStamps("challengeStamps", data.challenge, 2);
+  renderStamps("challengeStamps2", data.challenge, 2);
+
+  document.getElementById("remaining").textContent =
+    Math.max(0, 5 - data.normal);
+
+  document.getElementById("daysText").textContent =
+    "あと " + getDaysLeft() + " 日";
+
+  // 今日の状態
+  const today = getDateKey();
+
+  const playedToday = data.today === today;
+
+  const button = document.getElementById("gameButton");
+
+  if (playedToday) {
+
+    button.textContent = "今日はスタンプ獲得済み ✓";
+    button.classList.add("disabled");
+    button.disabled = true;
+
+    document.getElementById("missionText").textContent =
+      "今日のミッションはクリア済み！また明日挑戦できます。";
+
+  } else {
+
+    button.textContent = "ミニゲームに挑戦！";
+    button.classList.remove("disabled");
+    button.disabled = false;
+
+    document.getElementById("missionText").textContent =
+      "ミニゲームに挑戦して、今日のスタンプをゲット！";
+  }
+
+
+  // チャレンジ表示
+  const unlocked = data.normal >= 5;
+
+  document.getElementById("challengeHome").style.display =
+    unlocked ? "block" : "none";
+
+  document.getElementById("challengeCard").style.display =
+    unlocked ? "block" : "none";
+
+
+  const cb = document.getElementById("challengeButton");
+
+  if (cb) {
+
+    if (data.challenge >= 2) {
+
+      cb.textContent = "チャレンジコンプリート！ 🎉";
+      cb.disabled = true;
+      cb.classList.add("disabled");
+
+    } else if (playedToday) {
+
+      cb.textContent = "今日はもう挑戦済み";
+      cb.disabled = true;
+      cb.classList.add("disabled");
+
+    } else {
+
+      cb.textContent = "チャレンジに挑戦！";
+      cb.disabled = false;
+      cb.classList.remove("disabled");
+    }
+  }
+}
+
+
+function renderStamps(id, count, max) {
+
+  const el = document.getElementById(id);
+
+  if (!el) return;
+
+  el.innerHTML = "";
+
+  for (let i = 0; i < max; i++) {
+
+    const div = document.createElement("div");
+
+    div.className = "stamp" +
+      (i < count ? " filled" : "");
+
+    div.innerHTML = `<span>${i+1}</span>`;
+
+    el.appendChild(div);
+  }
+}
+
+
+/* =========================================
+   ページ切り替え
+========================================= */
+
+function showPage(page) {
+
+  document.querySelectorAll(".page").forEach(p => {
+    p.classList.remove("active");
+  });
+
+  document.getElementById(page).classList.add("active");
+
+  document.querySelectorAll(".nav button").forEach(b => {
+    b.classList.remove("active");
+  });
+
+  if (page === "home") {
+    document.getElementById("navHome").classList.add("active");
+  }
+
+  if (page === "card") {
+    document.getElementById("navCard").classList.add("active");
+  }
+
+  if (page === "rules") {
+    document.getElementById("navRules").classList.add("active");
+  }
+
+  window.scrollTo(0,0);
+}
+
+
+/* =========================================
+   ミニゲーム
+========================================= */
+
+let currentGame = null;
+let currentAnswer = null;
+let currentIsChallenge = false;
+
+
+function startGame(isChallenge = false) {
+
+  const today = getDateKey();
+
+  if (data.today === today) {
+
+    showToast("今日はもうスタンプをゲットしています！");
+    return;
+  }
+
+  if (isChallenge && data.normal < 5) {
+    showToast("まず通常カードを5個集めよう！");
+    return;
+  }
+
+  if (isChallenge && data.challenge >= 2) {
+    showToast("チャレンジカードはコンプリート済み！");
+    return;
+  }
+
+  currentIsChallenge = isChallenge;
+
+  currentGame =
+    GAME_TYPES[Math.floor(Math.random() * GAME_TYPES.length)];
+
+  createGame();
+
+  document.getElementById("gameModal").classList.add("show");
+}
+
+
+function createGame() {
+
+  const area = document.getElementById("gameArea");
+
+  switch(currentGame) {
+
+    case "math":
+      createMathGame(area);
+      break;
+
+    case "choice":
+      createChoiceGame(area);
+      break;
+
+    case "memory":
+      createMemoryGame(area);
+      break;
+
+    case "word":
+      createWordGame(area);
+      break;
+
+    case "number":
+      createNumberGame(area);
+      break;
+
+    case "truefalse":
+      createTrueFalseGame(area);
+      break;
+  }
+}
+
+
+/* =========================================
+   ゲーム1：計算
+========================================= */
+
+function createMathGame(area) {
+
+  const a = random(2,15);
+  const b = random(2,15);
+
+  const operators = ["+", "-", "×"];
+  const op = operators[random(0,2)];
+
+  let answer;
+
+  if (op === "+") answer = a+b;
+  if (op === "-") answer = a-b;
+  if (op === "×") answer = a*b;
+
+  currentAnswer = answer;
+
+  const options = makeOptions(answer, 4);
+
+  area.innerHTML = `
+    <div class="game-icon">🧮</div>
+    <div class="game-title">計算チャレンジ</div>
+
+    <div class="question">
+      ${a} ${op} ${b} = ?
+    </div>
+
+    <div class="answers">
+      ${options.map(x =>
+        `<button class="answer" onclick="answerGame(${x},this)">${x}</button>`
+      ).join("")}
+    </div>
+  `;
+}
+
+
+/* =========================================
+   ゲーム2：どっち？
+========================================= */
+
+function createChoiceGame(area) {
+
+  const pairs = [
+    ["🐱", "ねこ"],
+    ["🐶", "いぬ"],
+    ["🍎", "りんご"],
+    ["🌸", "さくら"],
+    ["🚗", "くるま"],
+    ["🐟", "さかな"],
+    ["☀️", "たいよう"],
+    ["🍌", "バナナ"]
+  ];
+
+  const item = pairs[random(0,pairs.length-1)];
+
+  const correct = item[1];
+
+  currentAnswer = correct;
+
+  const wrong = pairs
+    .filter(x => x[1] !== correct)
+    [random(0, pairs.length-2)][1];
+
+  const options = Math.random() > .5
+    ? [correct, wrong]
+    : [wrong, correct];
+
+  area.innerHTML = `
+    <div class="game-icon">${item[0]}</div>
+    <div class="game-title">これはなに？</div>
+
+    <div class="question">
+      この絵は何を表している？
+    </div>
+
+    <div class="answers">
+      ${options.map(x =>
+        `<button class="answer"
+          onclick="answerText('${x}',this)">
+          ${x}
+        </button>`
+      ).join("")}
+    </div>
+  `;
+}
+
+
+/* =========================================
+   ゲーム3：記憶
+========================================= */
+
+function createMemoryGame(area) {
+
+  const nums = [
+    random(1,9),
+    random(1,9),
+    random(1,9)
+  ];
+
+  const answer = nums[2];
+
+  currentAnswer = answer;
+
+  area.innerHTML = `
+    <div class="game-icon">🧠</div>
+    <div class="game-title">記憶力チャレンジ</div>
+
+    <div class="question" id="memoryQuestion">
+      ${nums.join("　")}
+    </div>
+
+    <p style="text-align:center;color:#777;">
+      3秒後に数字が消えます！
+    </p>
+
+    <div id="memoryAnswers"></div>
+  `;
+
+  setTimeout(() => {
+
+    document.getElementById("memoryQuestion").innerHTML =
+      "？　？　？";
+
+    const options = makeOptions(answer,4);
+
+    document.getElementById("memoryAnswers").innerHTML =
+      `<div class="answers">
+        ${options.map(x =>
+          `<button class="answer"
+            onclick="answerGame(${x},this)">${x}</button>`
+        ).join("")}
+      </div>`;
+
+  },3000);
+}
+
+
+/* =========================================
+   ゲーム4：文字
+========================================= */
+
+function createWordGame(area) {
+
+  const words = [
+    ["さくら","春"],
+    ["ひまわり","夏"],
+    ["もみじ","秋"],
+    ["ゆきだるま","冬"],
+    ["すいか","夏"],
+    ["こたつ","冬"]
+  ];
+
+  const item = words[random(0,words.length-1)];
+
+  currentAnswer = item[1];
+
+  const seasons = ["春","夏","秋","冬"];
+
+  area.innerHTML = `
+    <div class="game-icon">🔤</div>
+    <div class="game-title">季節クイズ</div>
+
+    <div class="question">
+      「${item[0]}」といえば何の季節？
+    </div>
+
+    <div class="answers">
+      ${seasons.map(x =>
+        `<button class="answer"
+          onclick="answerText('${x}',this)">
+          ${x}
+        </button>`
+      ).join("")}
+    </div>
+  `;
+}
+
+
+/* =========================================
+   ゲーム5：数字当て
+========================================= */
+
+function createNumberGame(area) {
+
+  const answer = random(1,5);
+
+  currentAnswer = answer;
+
+  area.innerHTML = `
+    <div class="game-icon">🔢</div>
+    <div class="game-title">数字当て</div>
+
+    <div class="question">
+      1〜5の数字から<br>
+      好きな数字を1つ選ぼう！
+    </div>
+
+    <div class="answers">
+      ${[1,2,3,4,5].map(x =>
+        `<button class="answer"
+          onclick="answerGame(${x},this)">
+          ${x}
+        </button>`
+      ).join("")}
+    </div>
+
+    <p style="font-size:11px;text-align:center;color:#aaa;">
+      ※今回は運試し！
+    </p>
+  `;
+}
+
+
+/* =========================================
+   ゲーム6：○×
+========================================= */
+
+function createTrueFalseGame(area) {
+
+  const questions = [
+    ["日本の首都は東京である。", true],
+    ["1週間は8日間である。", false],
+    ["ペンギンは鳥の仲間である。", true],
+    ["太陽は地球の衛星である。", false],
+    ["富士山は日本で一番高い山である。", true],
+    ["イルカは魚である。", false]
+  ];
+
+  const q = questions[random(0,questions.length-1)];
+
+  currentAnswer = q[1];
+
+  area.innerHTML = `
+    <div class="game-icon">⭕</div>
+    <div class="game-title">○×クイズ</div>
+
+    <div class="question">
+      ${q[0]}
+    </div>
+
+    <div class="answers">
+      <button class="answer" onclick="answerGame(true,this)">
+        ⭕ ○
+      </button>
+
+      <button class="answer" onclick="answerGame(false,this)">
+        ❌ ×
+      </button>
+    </div>
+  `;
+}
+
+
+/* =========================================
+   回答処理
+========================================= */
+
+function answerGame(value, button) {
+
+  if (value === currentAnswer) {
+
+    button.classList.add("correct");
+
+    setTimeout(() => {
+      completeGame();
+    }, 450);
+
+  } else {
+
+    button.classList.add("wrong");
+
+    showToast("ざんねん！もう一度選んでみよう");
+
+    setTimeout(() => {
+      button.classList.remove("wrong");
+    }, 500);
+  }
+}
+
+
+function answerText(value, button) {
+
+  if (value === currentAnswer) {
+
+    button.classList.add("correct");
+
+    setTimeout(() => {
+      completeGame();
+    },450);
+
+  } else {
+
+    button.classList.add("wrong");
+
+    showToast("ざんねん！もう一度！");
+  }
+}
+
+
+/* =========================================
+   クリア
+========================================= */
+
+function completeGame() {
+
+  const today = getDateKey();
+
+  data.today = today;
+
+  if (currentIsChallenge) {
+
+    data.challenge++;
+
+    if (data.challenge > 2) {
+      data.challenge = 2;
+    }
+
+  } else {
+
+    data.normal++;
+
+    if (data.normal > 5) {
+      data.normal = 5;
+    }
+
+    if (data.normal >= 5) {
+      data.challengeUnlocked = true;
+    }
+  }
+
+  saveData();
+
+  showSuccess();
+
+  updateUI();
+}
+
+
+function showSuccess() {
+
+  const message =
+    currentIsChallenge
+      ? "チャレンジスタンプをゲット！"
+      : "今日のスタンプをゲット！";
+
+  document.getElementById("gameArea").innerHTML = `
+
+    <div class="success">
+
+      <div class="success-star">🌟</div>
+
+      <h2>正解！</h2>
+
+      <p>${message}</p>
+
+      <div style="
+        background:#fff5d7;
+        border-radius:15px;
+        padding:15px;
+        margin-top:15px;
+      ">
+        🎉 スタンプカードに<br>
+        スタンプが追加されました！
+      </div>
+
+      <button class="main-btn"
+        onclick="closeGame()">
+        カードを見る
+      </button>
+
+    </div>
+  `;
+}
+
+
+/* =========================================
+   モーダルを閉じる
+========================================= */
+
+function closeGame() {
+
+  document.getElementById("gameModal").classList.remove("show");
+
+  showPage("card");
+
+  updateUI();
+}
+
+
+/* =========================================
+   ユーティリティ
+========================================= */
+
+function random(min,max) {
+
+  return Math.floor(
+    Math.random() * (max-min+1)
+  ) + min;
+}
+
+
+function makeOptions(answer,count) {
+
+  const options = new Set();
+
+  options.add(answer);
+
+  while(options.size < count) {
+
+    const diff = random(-5,5);
+
+    if(diff !== 0) {
+      options.add(answer + diff);
+    }
+  }
+
+  return [...options].sort(() => Math.random() - .5);
+}
+
+
+function showToast(text) {
+
+  const toast = document.getElementById("toast");
+
+  toast.textContent = text;
+  toast.classList.add("show");
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+  },2200);
+}
+
+
+/* =========================================
+   起動
+========================================= */
+
+loadData();
+
+</script>
+
+</body>
+</html>
