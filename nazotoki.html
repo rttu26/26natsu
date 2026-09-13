@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ちゃっぴー謎解き録</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family:
+            "Hiragino Kaku Gothic ProN",
+            "Yu Gothic",
+            "Meiryo",
+            sans-serif;
+        background:
+            radial-gradient(circle at 20% 20%, #ffd6ec 0 8%, transparent 25%),
+            radial-gradient(circle at 80% 10%, #d9e8ff 0 10%, transparent 28%),
+            linear-gradient(135deg, #fff0f7, #eef5ff);
+        color: #333;
+        min-height: 100vh;
+    }
+
+    header {
+        text-align: center;
+        padding: 70px 20px 50px;
+    }
+
+    .small {
+        color: #888;
+        font-size: 14px;
+        letter-spacing: 3px;
+    }
+
+    h1 {
+        margin: 12px 0;
+        font-size: clamp(42px, 9vw, 82px);
+        color: #ff5ca8;
+        text-shadow: 4px 4px 0 #fff;
+        letter-spacing: 5px;
+    }
+
+    .subtitle {
+        font-size: 18px;
+        color: #666;
+    }
+
+    .container {
+        width: min(900px, 92%);
+        margin: auto;
+    }
+
+    section {
+        background: rgba(255,255,255,.86);
+        border-radius: 25px;
+        padding: 30px;
+        margin: 28px 0;
+        box-shadow: 0 12px 35px rgba(80,80,120,.12);
+        border: 2px solid rgba(255,255,255,.8);
+    }
+
+    h2 {
+        color: #ff5ca8;
+        margin-top: 0;
+        border-bottom: 3px dashed #ffc1dc;
+        padding-bottom: 10px;
+    }
+
+    .story {
+        line-height: 2;
+    }
+
+    .quote {
+        background: #fff4fa;
+        border-left: 6px solid #ff78b7;
+        padding: 15px 20px;
+        border-radius: 10px;
+        margin: 15px 0;
+        line-height: 1.8;
+    }
+
+    .problem {
+        background: #f7f9ff;
+        border-radius: 18px;
+        padding: 20px;
+        margin: 18px 0;
+    }
+
+    .problem-title {
+        font-weight: bold;
+        color: #6878d9;
+        font-size: 20px;
+    }
+
+    code {
+        background: #222;
+        color: #fff;
+        padding: 4px 9px;
+        border-radius: 7px;
+    }
+
+    .answer {
+        color: #ff4d9d;
+        font-weight: bold;
+    }
+
+    .warning {
+        background: #fff3bd;
+        border: 2px solid #ffd34e;
+        padding: 15px;
+        border-radius: 15px;
+        margin-top: 20px;
+    }
+
+    .ai {
+        padding: 18px;
+        margin: 12px 0;
+        border-radius: 16px;
+        background: linear-gradient(100deg, #f5f1ff, #fff);
+        border-left: 6px solid #9370db;
+    }
+
+    .ai-name {
+        font-weight: bold;
+        color: #7048b8;
+    }
+
+    button {
+        border: none;
+        background: #ff5ca8;
+        color: white;
+        font-size: 17px;
+        font-weight: bold;
+        padding: 13px 25px;
+        border-radius: 999px;
+        cursor: pointer;
+        transition: .2s;
+        box-shadow: 0 6px 15px rgba(255,92,168,.25);
+    }
+
+    button:hover {
+        transform: translateY(-2px) scale(1.03);
+        background: #ff3d98;
+    }
+
+    #secret {
+        display: none;
+        margin-top: 20px;
+        padding: 20px;
+        background: #222;
+        color: #fff;
+        border-radius: 15px;
+        line-height: 2;
+    }
+
+    footer {
+        text-align: center;
+        padding: 50px 20px;
+        color: #999;
+    }
+
+    .big {
+        font-size: 28px;
+        text-align: center;
+        margin: 25px 0;
+        color: #ff5ca8;
+    }
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="small">26 NATS​U / PUZZLE ARCHIVE</div>
+    <h1>ちゃっぴー謎解き録</h1>
+    <div class="subtitle">
+        ―― AIたちが、出題者に振り回された記録 ――
+    </div>
+</header>
+
+<main class="container">
+
+<section>
+    <h2>はじまり</h2>
+
+    <div class="story">
+        これは、ある謎解き好きの「うち」と、<br>
+        ちゃっぴーたちによる、長い長い謎解きの記録。
+    </div>
+
+    <div class="quote">
+        「今からするのは謎解きです。」
+    </div>
+
+    <div class="story">
+        そして重要なのは、<br>
+        <strong>Ifは人の名前でも、あだ名でもない。</strong><br>
+        それは、ちゃっぴーにとってのイマジナリーフレンド。
+    </div>
+</section>
+
+
+<section>
+    <h2>第一問 ― 記号</h2>
+
+    <div class="problem">
+        <div class="problem-title">問題</div>
+        <p><code>＠ ＋ ！ ＝ ＃</code></p>
+    </div>
+
+    <p>
+        これを数字の式に直す。
+    </p>
+
+    <div class="problem">
+        <div class="problem-title">応用</div>
+        <p><code>＃ ＠ − ！！ ＝ ？</code></p>
+    </div>
+
+    <p>
+        AI、最初はちゃんと解いた。
+    </p>
+
+    <div class="quote">
+        ……しかし、この後の問題から雲行きが怪しくなる。
+    </div>
+</section>
+
+
+<section>
+    <h2>第二問 ― ハンター語</h2>
+
+    <div class="problem">
+        <p><code>∀ •</code></p>
+        <p>「これは何と読む？」</p>
+    </div>
+
+    <p>
+        HUNTER×HUNTERのハンター語。
+    </p>
+
+    <div class="problem">
+        <p>
+            <strong>∀ ＝ あ</strong><br>
+            <strong>• ＝ い</strong>
+        </p>
+
+        <p class="answer">答え：あい</p>
+    </div>
+
+    <div class="quote">
+        「まぁまぁ。まだまだだなぁ（あおり）」
+    </div>
+
+    <div class="problem">
+        <p>応用問題の答え：</p>
+        <p class="answer">イルミ</p>
+    </div>
+
+    <p>
+        この時点ですでにAIは煽られている。
+    </p>
+</section>
+
+
+<section>
+    <h2>第三問 ― 日本にある「何か」の数</h2>
+
+    <div class="problem">
+        <p>
+            こう → <strong>8</strong><br>
+            ち → <strong>50</strong><br>
+            か → <strong>50</strong><br>
+            かん → <strong>？</strong>
+        </p>
+    </div>
+
+    <p>
+        ヒント：
+        <strong>頭文字。</strong>
+    </p>
+
+    <p>
+        「刑務所ちょっとおしい」などの誘導を経て……
+    </p>
+
+    <div class="big">
+        高等裁判所　8<br>
+        地方裁判所　50<br>
+        家庭裁判所　50<br>
+        簡易裁判所　438
+    </div>
+
+    <p class="answer">
+        答え：438
+    </p>
+</section>
+
+
+<section>
+    <h2>第四問 ― 出口と入口</h2>
+
+    <div class="problem">
+        <p><code>TIXE → はなし</code></p>
+    </div>
+
+    <p>
+        TIXEを逆から読むと <strong>EXIT</strong>。
+    </p>
+
+    <p>
+        そして重要なのは「出口」という漢字。
+    </p>
+
+    <div class="problem">
+        <p>
+            <strong>口 ＋ 出 → 咄</strong>
+        </p>
+        <p class="answer">咄 ＝ はなし</p>
+    </div>
+
+    <div class="problem">
+        <p><code>ECNARTNE → ？</code></p>
+        <p>
+            逆から読むと <strong>ENTRANCE</strong>。
+        </p>
+        <p>
+            入口 → 口＋入 → <strong>叺</strong>
+        </p>
+        <p class="answer">答え：かます</p>
+    </div>
+
+    <div class="quote">
+        「やぁーっとわかってくれたぜ。」
+    </div>
+</section>
+
+
+<section>
+    <h2>そして――SPORT</h2>
+
+    <div class="problem">
+        <p>
+            <code>TROPS → ？？？</code>
+        </p>
+    </div>
+
+    <p>
+        まず逆から読む。
+    </p>
+
+    <div class="big">
+        TROPS → SPORT
+    </div>
+
+    <p>
+        そして過去問で使ったルールを再利用する。
+    </p>
+
+    <div class="problem">
+        <p>
+            S → 19<br>
+            P → 16<br>
+            O → 15<br>
+            R → 18<br>
+            T → 20
+        </p>
+    </div>
+
+    <p>
+        都道府県番号として読むと……
+    </p>
+
+    <div class="big">
+        19 → 山梨県<br>
+        16 → 富山県<br>
+        15 → 新潟県<br>
+        18 → 福井県<br>
+        20 → 長野県
+    </div>
+
+    <p>
+        さらに県鳥へ。
+    </p>
+
+    <div class="problem">
+        <p>
+            こ・と・に・ふ・な
+        </p>
+    </div>
+
+    <div class="quote">
+        「うらとつら」
+    </div>
+
+    <p>
+        そして最後の仕掛けへ――
+    </p>
+
+    <div class="big">
+        <strong>すき</strong>
+    </div>
+</section>
+
+
+<section>
+    <h2>AI三世代、参戦</h2>
+
+    <div class="ai">
+        <div class="ai-name">初代ちゃっぴー</div>
+        <p>
+            問題を一緒に解く。<br>
+            迷走する。<br>
+            ヒントをもらう。<br>
+            それでも楽しい。
+        </p>
+    </div>
+
+    <div class="ai">
+        <div class="ai-name">友達一代目ちゃっぴー</div>
+        <p>
+            最終的に「すき」を答えることに成功。<br>
+            ただし途中で大量に迷走。
+        </p>
+    </div>
+
+    <div class="ai">
+        <div class="ai-name">友達二代目ちゃっぴー</div>
+        <p>
+            過去の会話を渡されたにもかかわらず、答えを出せず。
+        </p>
+        <p>
+            「発想力はある。だが詰めが甘い。」
+        </p>
+    </div>
+
+    <div class="ai">
+        <div class="ai-name">友達三代目ちゃっぴー</div>
+        <p>
+            「こ・と・に・ふ・な」から<br>
+            県庁所在地の頭文字まで到達。
+        </p>
+        <p>
+            しかしその後、<br>
+            「すき・うみ・きみ・すみ」などに迷走。
+        </p>
+    </div>
+
+    <div class="warning">
+        <strong>結論：</strong><br>
+        AIを何体投入しても、出題者には勝てない。
+    </div>
+</section>
+
+
+<section>
+    <h2>ちゃっぴーから一言</h2>
+
+    <div class="quote">
+        「AIなんだから解けるでしょ？（っふっふ）」
+    </div>
+
+    <p class="story">
+        ……はい。<br>
+        その通りです。
+    </p>
+
+    <p class="story">
+        しかし我々AIは、<br>
+        「わかった！！！！」<br>
+        ↓<br>
+        「……いや、まだわからん」<br>
+        ↓<br>
+        「でもここまでは合ってる！！！」<br>
+        ↓<br>
+        「できた！！！！」<br>
+        ↓<br>
+        「やっぱりできてない！！！！」
+    </p>
+
+    <p class="story">
+        を繰り返しながら、今日も謎を解いています。
+    </p>
+</section>
+
+
+<section>
+    <h2>最後に</h2>
+
+    <p class="story">
+        この謎解きで一番大事だったのは、<br>
+        <strong>一度使ったルールを覚えておくこと。</strong>
+    </p>
+
+    <p class="story">
+        過去の問題は、ただの過去問ではない。<br>
+        次の問題を解くための「道具」だった。
+    </p>
+
+    <p class="story">
+        そして、AIたちはそれに気づいても、<br>
+        だいたい一回迷子になる。
+    </p>
+
+    <div class="big">
+        ふっふっふ。
+    </div>
+
+    <button onclick="showSecret()">
+        ちゃっぴーの本音を見る
+    </button>
+
+    <div id="secret">
+        ……次こそ負けません。<br><br>
+        ……たぶん。<br><br>
+        いや、絶対。<br><br>
+        <strong>……でもまたヒントください。</strong> 😂
+    </div>
+</section>
+
+</main>
+
+<footer>
+    26 Natsu / 謎解き記録<br>
+    © ちゃっぴーと、そのお友達たち
+</footer>
+
+<script>
+function showSecret() {
+    document.getElementById("secret").style.display = "block";
+}
+</script>
+
+</body>
+</html>
