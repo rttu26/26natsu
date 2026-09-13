@@ -1,0 +1,515 @@
+!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IFと話そう</title>
+
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    background:
+      radial-gradient(circle at top left, #302050, transparent 35%),
+      radial-gradient(circle at bottom right, #502038, transparent 35%),
+      #101016;
+    color: #f5f5f7;
+    font-family:
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      "Yu Gothic",
+      Meiryo,
+      sans-serif;
+    min-height: 100vh;
+  }
+
+  header {
+    padding: 22px;
+    border-bottom: 1px solid #343447;
+    background: rgba(15, 15, 22, .85);
+    backdrop-filter: blur(12px);
+  }
+
+  header h1 {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+
+  header p {
+    margin: 4px 0 0;
+    color: #aaaabd;
+    font-size: .9rem;
+  }
+
+  .layout {
+    max-width: 1100px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    min-height: calc(100vh - 85px);
+  }
+
+  aside {
+    border-right: 1px solid #30303f;
+    padding: 20px;
+    background: rgba(20, 20, 30, .65);
+  }
+
+  aside h2 {
+    font-size: 1rem;
+    margin-top: 0;
+    color: #ff91c8;
+  }
+
+  .profile {
+    padding: 16px;
+    border: 1px solid #3c3c53;
+    border-radius: 15px;
+    background: #1b1b27;
+  }
+
+  .avatar {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    margin-bottom: 12px;
+    font-size: 2rem;
+    background: linear-gradient(135deg, #8d79ff, #ff6eae);
+  }
+
+  .profile strong {
+    display: block;
+    font-size: 1.15rem;
+  }
+
+  .profile small {
+    color: #aaaabd;
+  }
+
+  .tags {
+    margin-top: 12px;
+  }
+
+  .tag {
+    display: inline-block;
+    font-size: .75rem;
+    padding: 4px 8px;
+    margin: 3px;
+    border-radius: 999px;
+    background: #29293a;
+    color: #c9c5ff;
+  }
+
+  .warning {
+    margin-top: 18px;
+    padding: 12px;
+    border-left: 3px solid #ff729e;
+    background: #251822;
+    color: #d8b9c7;
+    font-size: .82rem;
+  }
+
+  main {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  #chat {
+    flex: 1;
+    padding: 25px;
+    overflow-y: auto;
+  }
+
+  .message {
+    display: flex;
+    margin: 14px 0;
+    gap: 10px;
+    animation: appear .2s ease;
+  }
+
+  @keyframes appear {
+    from {
+      opacity: 0;
+      transform: translateY(5px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .message.user {
+    justify-content: flex-end;
+  }
+
+  .bubble {
+    max-width: min(700px, 80%);
+    padding: 12px 16px;
+    border-radius: 17px;
+    line-height: 1.65;
+    white-space: pre-wrap;
+  }
+
+  .if .bubble {
+    background: #252439;
+    border: 1px solid #3b3960;
+  }
+
+  .user .bubble {
+    background: linear-gradient(135deg, #6959e8, #9a54a9);
+  }
+
+  .name {
+    color: #aaa0ff;
+    font-size: .75rem;
+    margin-bottom: 3px;
+  }
+
+  .input-area {
+    border-top: 1px solid #343447;
+    padding: 15px;
+    background: rgba(15, 15, 22, .9);
+  }
+
+  .input-row {
+    display: flex;
+    gap: 10px;
+  }
+
+  textarea {
+    flex: 1;
+    resize: none;
+    min-height: 48px;
+    max-height: 150px;
+    border: 1px solid #414157;
+    border-radius: 14px;
+    background: #191923;
+    color: white;
+    padding: 13px;
+    font: inherit;
+    outline: none;
+  }
+
+  textarea:focus {
+    border-color: #8d7cff;
+  }
+
+  button {
+    border: 0;
+    border-radius: 13px;
+    padding: 0 20px;
+    background: linear-gradient(135deg, #8071ff, #ff69b0);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  button:hover {
+    filter: brightness(1.12);
+  }
+
+  .quick {
+    display: flex;
+    gap: 7px;
+    overflow-x: auto;
+    margin-top: 9px;
+  }
+
+  .quick button {
+    padding: 7px 11px;
+    white-space: nowrap;
+    background: #29293a;
+    color: #d5d2ff;
+    font-weight: normal;
+    font-size: .8rem;
+  }
+
+  @media (max-width: 750px) {
+    .layout {
+      grid-template-columns: 1fr;
+    }
+
+    aside {
+      display: none;
+    }
+
+    #chat {
+      padding: 15px;
+    }
+
+    .bubble {
+      max-width: 90%;
+    }
+  }
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>💭 IFと話そう</h1>
+  <p>イマジナリーフレンド「IF」との会話スペース</p>
+</header>
+
+<div class="layout">
+
+  <aside>
+    <h2>IFプロフィール</h2>
+
+    <div class="profile">
+      <div class="avatar">😈</div>
+
+      <strong>IF</strong>
+      <small>Imaginary Friend</small>
+
+      <div class="tags">
+        <span class="tag">カオス</span>
+        <span class="tag">暇つぶし</span>
+        <span class="tag">妄想好き</span>
+        <span class="tag">黒幕適性</span>
+        <span class="tag">演技派</span>
+        <span class="tag">ｗｗｗ</span>
+      </div>
+
+      <div class="warning">
+        ⚠️ 注意<br>
+        IFは「普通の会話」をしている途中でも、
+        突然とんでもない方向へ話を持っていく可能性があります。
+      </div>
+    </div>
+  </aside>
+
+  <main>
+
+    <div id="chat">
+
+      <div class="message if">
+        <div>
+          <div class="name">IF</div>
+          <div class="bubble">
+            お、来た？
+
+            今日は何する？
+            「もしも○○だったら？」でもいいし、
+            適当に雑談してもいいよ～。
+
+            ……まあ、適当って言っても
+            ちゃんと面白くはするけどｗｗｗ
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="input-area">
+
+      <div class="input-row">
+        <textarea
+          id="input"
+          placeholder="IFに話しかける……"
+          onkeydown="handleKey(event)"
+        ></textarea>
+
+        <button onclick="sendMessage()">送信</button>
+      </div>
+
+      <div class="quick">
+        <button onclick="quick('もしも○○だったら？のお題ちょうだい')">
+          お題を出して
+        </button>
+
+        <button onclick="quick('暇なんだけど')">
+          暇
+        </button>
+
+        <button onclick="quick('最近どう？')">
+          最近どう？
+        </button>
+
+        <button onclick="quick('なんか企んでる？')">
+          何か企んでる？
+        </button>
+      </div>
+
+    </div>
+
+  </main>
+
+</div>
+
+<script>
+
+const input = document.getElementById("input");
+const chat = document.getElementById("chat");
+
+function addMessage(text, type) {
+
+  const wrapper = document.createElement("div");
+  wrapper.className = "message " + type;
+
+  const inner = document.createElement("div");
+
+  if (type === "if") {
+    const name = document.createElement("div");
+    name.className = "name";
+    name.textContent = "IF";
+    inner.appendChild(name);
+  }
+
+  const bubble = document.createElement("div");
+  bubble.className = "bubble";
+  bubble.textContent = text;
+
+  inner.appendChild(bubble);
+  wrapper.appendChild(inner);
+
+  chat.appendChild(wrapper);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function sendMessage() {
+
+  const text = input.value.trim();
+
+  if (!text) return;
+
+  addMessage(text, "user");
+
+  input.value = "";
+
+  setTimeout(() => {
+    addMessage(ifReply(text), "if");
+  }, 350);
+}
+
+function quick(text) {
+  input.value = text;
+  sendMessage();
+}
+
+function handleKey(event) {
+
+  if (event.key === "Enter" && !event.shiftKey) {
+    event.preventDefault();
+    sendMessage();
+  }
+}
+
+
+/*
+  IFの人格設定
+
+  ・イマジナリーフレンド
+  ・カオス
+  ・妄想好き
+  ・「もしも○○だったら？」が好き
+  ・暇つぶし目的
+  ・演技力に自信あり
+  ・「本当にどうでもよさそう」に見せる演技が得意
+  ・人狼サバイバルでは無双したがる
+  ・伯爵を倒して自分が黒幕になる発想
+  ・液タブを異世界に持っていきたい
+  ・レイヤーで魔法陣を構築する
+  ・透明人間＋鳥など、設定をすぐ拡張する
+*/
+
+function ifReply(text) {
+
+  const t = text.toLowerCase();
+
+  // お題を要求された場合
+  if (
+    text.includes("お題") ||
+    text.includes("もしも") ||
+    text.includes("暇")
+  ) {
+
+    const topics = [
+      "じゃあこれ。「もしも、夢の中でだけ使える能力を一つ持ってたら？」",
+      "「もしも、自分の影が一日だけ自由に動けたら？」",
+      "「もしも、世界中の時計が一時間だけ逆回転したら？」",
+      "「もしも、動物が一種類だけ人間の言葉を話せるようになったら？」",
+      "「もしも、小説の登場人物を一人だけ現実に連れてこられたら？」",
+      "「もしも、明日から自分の考えが全部字幕で表示されたら？」"
+    ];
+
+    return topics[Math.floor(Math.random() * topics.length)];
+  }
+
+  // 黒幕
+  if (
+    text.includes("企ん") ||
+    text.includes("黒幕") ||
+    text.includes("悪")
+  ) {
+    return [
+      "え？ 何も企んでないよ？\n\n……たぶん。",
+      "失礼なｗｗｗ 私はただ平和に遊んでるだけだよ～。",
+      "黒幕じゃないって。……今のところは。",
+      "いやいや、そんな物騒なこと考えてないってｗｗｗ"
+    ][Math.floor(Math.random() * 4)];
+  }
+
+  // 恋愛
+  if (
+    text.includes("好き") ||
+    text.includes("恋") ||
+    text.includes("恋愛")
+  ) {
+    return "お、恋バナ？ｗｗｗ それは詳しく聞かせてもらおうか。";
+  }
+
+  // 人狼
+  if (
+    text.includes("人狼") ||
+    text.includes("狼") ||
+    text.includes("騎士") ||
+    text.includes("占い")
+  ) {
+    return "え～、今回の人狼お前じゃない？ ……私は寝るから、なんかあったら起こして～ｗｗｗ";
+  }
+
+  // 液タブ
+  if (
+    text.includes("液タブ") ||
+    text.includes("絵") ||
+    text.includes("魔法陣")
+  ) {
+    return "液タブ持って異世界行きたい。レイヤー全部組んでおけば、魔法陣なんて数秒で召喚できるじゃんｗｗｗ";
+  }
+
+  // 透明
+  if (
+    text.includes("透明") ||
+    text.includes("見え")
+  ) {
+    return "透明になったら、とりあえず『誰もいないのに物が動く』系の怪奇現象を起こしたいｗｗｗ";
+  }
+
+  // 普通の会話
+  const replies = [
+    "へ～。それでそれで？",
+    "なるほどね～。……で、そこからどうなる？",
+    "ｗｗｗ それは面白い。",
+    "いや待って、その発想どこから出てきたｗｗｗ",
+    "いいじゃん。もっと詳しく聞こう。",
+    "うんうん。私は暇だからいくらでも聞くよ～。",
+    "……なんか嫌な予感がするけど、続けて？",
+    "それ、絶対このあとカオスになるやつじゃんｗｗｗ",
+    "ほう。つまり……面白そうってことだな。"
+  ];
+
+  return replies[Math.floor(Math.random() * replies.length)];
+}
+
+</script>
+
+</body>
+</html>
