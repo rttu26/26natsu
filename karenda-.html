@@ -2,715 +2,1612 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>2026年カレンダー</title>
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0,
+               maximum-scale=1.0, user-scalable=no">
+
+<title>My Calendar</title>
 
 <style>
-    * {
-        box-sizing: border-box;
-    }
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+:root {
+    --pink: #ff8fbd;
+    --pink2: #ffb6d4;
+    --light-pink: #fff0f7;
+    --deep-pink: #ec609b;
+    --purple: #b99bea;
+    --text: #60495b;
+    --white: #fffaff;
+}
+
+html,
+body {
+    margin: 0;
+    min-height: 100%;
+}
+
+body {
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Hiragino Kaku Gothic ProN",
+        "Yu Gothic",
+        sans-serif;
+
+    background:
+        radial-gradient(circle at 10% 15%, #ffd6e9 0 45px, transparent 46px),
+        radial-gradient(circle at 90% 12%, #d9c7ff 0 55px, transparent 56px),
+        radial-gradient(circle at 15% 88%, #ffe5a9 0 35px, transparent 36px),
+        radial-gradient(circle at 92% 83%, #ffc9df 0 48px, transparent 49px),
+        linear-gradient(135deg, #fff1f8, #f4ecff);
+
+    color: var(--text);
+    overflow-x: hidden;
+}
+
+
+/* ===================================
+   背景のぷっくりパーツ
+=================================== */
+
+.decoration {
+    position: fixed;
+    z-index: 0;
+    pointer-events: none;
+    user-select: none;
+}
+
+.heart {
+    width: 55px;
+    height: 50px;
+    background: linear-gradient(145deg, #ffb6d4, #f878aa);
+    transform: rotate(-45deg);
+    border-radius: 14px 0 14px 14px;
+
+    box-shadow:
+        inset 7px 6px 10px rgba(255,255,255,.65),
+        inset -7px -7px 10px rgba(190,55,110,.18),
+        0 12px 25px rgba(222,100,150,.2);
+}
+
+.heart::before,
+.heart::after {
+    content: "";
+    position: absolute;
+    width: 55px;
+    height: 55px;
+    background: inherit;
+    border-radius: 50%;
+}
+
+.heart::before {
+    top: -27px;
+    left: 0;
+}
+
+.heart::after {
+    top: 0;
+    left: 27px;
+}
+
+.heart.one {
+    top: 105px;
+    left: 5%;
+    transform: rotate(-45deg) scale(.65);
+}
+
+.heart.two {
+    top: 470px;
+    right: 2%;
+    transform: rotate(-45deg) scale(.85);
+}
+
+.heart.three {
+    bottom: 80px;
+    left: 4%;
+    transform: rotate(-45deg) scale(.45);
+    background: linear-gradient(145deg,#cbb8ff,#a486e7);
+}
+
+.star {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(145deg,#fff8a8,#ffd96b);
+    clip-path: polygon(
+        50% 0%,
+        61% 37%,
+        100% 50%,
+        61% 63%,
+        50% 100%,
+        39% 63%,
+        0% 50%,
+        39% 37%
+    );
+
+    filter:
+        drop-shadow(0 7px 8px rgba(220,170,50,.2));
+}
+
+.star.one {
+    top: 70px;
+    right: 12%;
+    transform: scale(.8);
+}
+
+.star.two {
+    top: 340px;
+    left: 2%;
+    transform: scale(.5);
+}
+
+.star.three {
+    bottom: 150px;
+    right: 7%;
+    transform: scale(.65);
+}
+
+.bubble {
+    border-radius: 50%;
+    background: linear-gradient(145deg,#ffffff,#ffd3e5);
+    box-shadow:
+        inset 5px 5px 10px rgba(255,255,255,.9),
+        inset -5px -5px 10px rgba(215,100,145,.13),
+        0 10px 20px rgba(190,110,150,.12);
+}
+
+.bubble.one {
+    width: 24px;
+    height: 24px;
+    top: 210px;
+    right: 7%;
+}
+
+.bubble.two {
+    width: 15px;
+    height: 15px;
+    bottom: 280px;
+    left: 8%;
+}
+
+.bubble.three {
+    width: 35px;
+    height: 35px;
+    bottom: 45px;
+    right: 12%;
+}
+
+
+/* ===================================
+   スマホ本体
+=================================== */
+
+.phone {
+    position: relative;
+    z-index: 2;
+
+    width: min(430px, 100%);
+    min-height: 100vh;
+
+    margin: 0 auto;
+
+    background:
+        linear-gradient(
+            160deg,
+            #fffafd 0%,
+            #fff5fa 55%,
+            #f8efff 100%
+        );
+
+    box-shadow:
+        0 0 0 1px rgba(255,255,255,.8),
+        0 25px 70px rgba(139,91,126,.22);
+
+    overflow: hidden;
+}
+
+
+/* PCではスマホっぽく */
+@media (min-width: 600px) {
 
     body {
-        margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN",
-                     "Yu Gothic", sans-serif;
-        background: #f5f7fb;
-        color: #333;
+        padding: 25px 0;
     }
 
-    header {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        color: white;
-        padding: 22px 15px;
-        text-align: center;
-    }
+    .phone {
+        min-height: calc(100vh - 50px);
+        border-radius: 42px;
 
-    header h1 {
-        margin: 0;
-        font-size: 24px;
-    }
+        box-shadow:
+            0 0 0 8px #28242a,
+            0 0 0 10px #55505a,
+            0 30px 80px rgba(80,45,75,.3);
 
-    header p {
-        margin: 6px 0 0;
-        opacity: 0.9;
-        font-size: 14px;
+        overflow: hidden;
     }
+}
 
-    .container {
-        max-width: 900px;
-        margin: 25px auto;
-        padding: 0 15px;
-    }
 
-    .calendar-box {
-        background: white;
-        border-radius: 18px;
-        padding: 18px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-    }
+/* ===================================
+   上部
+=================================== */
 
-    .month-control {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 18px;
-    }
+.top {
+    position: relative;
+    padding: 38px 24px 28px;
 
-    .month-control button {
-        border: none;
-        background: #667eea;
-        color: white;
-        border-radius: 10px;
-        padding: 9px 14px;
-        cursor: pointer;
-        font-size: 15px;
-    }
+    background:
+        radial-gradient(
+            circle at 90% 20%,
+            rgba(255,255,255,.8),
+            transparent 80px
+        ),
+        linear-gradient(
+            145deg,
+            #ffafd0,
+            #ff8fbd 55%,
+            #c4a5f1
+        );
 
-    .month-title {
-        font-size: 22px;
-        font-weight: bold;
-    }
+    color: white;
 
-    .weekdays,
-    .calendar {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-    }
+    border-radius:
+        0 0 36px 36px;
 
-    .weekday {
-        text-align: center;
-        font-weight: bold;
-        padding: 10px 2px;
-        color: #666;
-        font-size: 13px;
-    }
+    box-shadow:
+        0 10px 30px rgba(221,105,153,.25);
+}
 
-    .weekday:first-child {
-        color: #e74c3c;
-    }
 
-    .weekday:last-child {
-        color: #3498db;
+/* 上部の光沢 */
+.top::after {
+    content: "";
+    position: absolute;
+
+    width: 170px;
+    height: 50px;
+
+    top: 18px;
+    left: -40px;
+
+    background: rgba(255,255,255,.18);
+
+    transform: rotate(-20deg);
+    border-radius: 50%;
+
+    filter: blur(2px);
+}
+
+
+.logo {
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    opacity: .9;
+}
+
+.title {
+    margin-top: 7px;
+    font-size: 27px;
+    font-weight: 900;
+    letter-spacing: .5px;
+
+    text-shadow:
+        0 3px 0 rgba(185,74,123,.18);
+}
+
+.subtitle {
+    margin-top: 4px;
+    font-size: 12px;
+    opacity: .9;
+}
+
+
+/* ===================================
+   リボン
+=================================== */
+
+.ribbon {
+    position: absolute;
+    right: 22px;
+    top: 25px;
+
+    width: 64px;
+    height: 44px;
+
+    background: linear-gradient(
+        145deg,
+        #bdefff,
+        #72d6f1
+    );
+
+    border-radius: 14px;
+
+    box-shadow:
+        inset 5px 5px 8px rgba(255,255,255,.7),
+        inset -5px -5px 8px rgba(50,150,180,.2),
+        0 8px 14px rgba(70,120,160,.2);
+
+    transform: rotate(4deg);
+}
+
+.ribbon::before,
+.ribbon::after {
+    content: "";
+    position: absolute;
+    top: 4px;
+
+    width: 38px;
+    height: 35px;
+
+    background: inherit;
+    border-radius: 13px;
+}
+
+.ribbon::before {
+    left: -26px;
+    transform: rotate(-22deg);
+}
+
+.ribbon::after {
+    right: -26px;
+    transform: rotate(22deg);
+}
+
+.ribbon-center {
+    position: absolute;
+    z-index: 3;
+
+    width: 20px;
+    height: 28px;
+
+    left: 22px;
+    top: 8px;
+
+    border-radius: 9px;
+
+    background: #8bdff4;
+
+    box-shadow:
+        inset 3px 3px 5px rgba(255,255,255,.65);
+}
+
+
+/* ===================================
+   メイン
+=================================== */
+
+.content {
+    padding: 20px 15px 35px;
+}
+
+
+/* ===================================
+   月切り替え
+=================================== */
+
+.month-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 15px;
+}
+
+.month-name {
+    font-size: 21px;
+    font-weight: 900;
+    color: #6d5366;
+}
+
+.arrow {
+    width: 40px;
+    height: 40px;
+
+    border: none;
+    border-radius: 50%;
+
+    color: white;
+    font-size: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffb4d2,
+            #ef78ad
+        );
+
+    box-shadow:
+        inset 3px 3px 5px rgba(255,255,255,.6),
+        0 6px 12px rgba(220,100,150,.2);
+
+    cursor: pointer;
+}
+
+.arrow:active {
+    transform: scale(.92);
+}
+
+
+/* ===================================
+   カレンダー
+=================================== */
+
+.calendar-card {
+    padding: 10px;
+
+    background: rgba(255,255,255,.7);
+
+    border-radius: 25px;
+
+    box-shadow:
+        inset 2px 2px 8px rgba(255,255,255,.9),
+        0 12px 30px rgba(160,100,145,.12);
+}
+
+
+/* 曜日 */
+
+.weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+
+    margin-bottom: 5px;
+}
+
+.weekday {
+    text-align: center;
+
+    padding: 7px 0;
+
+    font-size: 11px;
+    font-weight: 900;
+
+    color: #a37b91;
+}
+
+.weekday:first-child {
+    color: #ed779d;
+}
+
+.weekday:last-child {
+    color: #8e88c8;
+}
+
+
+/* 日付 */
+
+.calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.day {
+    position: relative;
+
+    min-height: 72px;
+
+    padding: 7px 5px;
+
+    border-radius: 13px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #fff,
+            #fff5fa
+        );
+
+    box-shadow:
+        inset 2px 2px 5px rgba(255,255,255,.95),
+        inset -2px -2px 5px rgba(220,150,185,.08),
+        0 3px 7px rgba(170,100,145,.08);
+
+    cursor: pointer;
+
+    transition: .15s;
+}
+
+.day:active {
+    transform: scale(.95);
+}
+
+.day.disabled {
+    opacity: .3;
+    box-shadow: none;
+    background: #f7f4f6;
+}
+
+.day-number {
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.sunday .day-number {
+    color: #ee719a;
+}
+
+.saturday .day-number {
+    color: #8c86c8;
+}
+
+
+/* スタート */
+
+.start-day {
+    background:
+        linear-gradient(
+            145deg,
+            #fff6a9,
+            #ffdca2
+        );
+
+    box-shadow:
+        inset 3px 3px 7px rgba(255,255,255,.8),
+        0 5px 12px rgba(235,174,82,.18);
+}
+
+.start-label {
+    display: block;
+
+    margin-top: 3px;
+
+    font-size: 8px;
+    font-weight: 900;
+
+    color: #db8c3e;
+}
+
+
+/* イベント */
+
+.event {
+    margin-top: 5px;
+
+    padding: 4px 5px;
+
+    border-radius: 8px;
+
+    color: #9b5275;
+
+    font-size: 9px;
+    font-weight: 700;
+    line-height: 1.35;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffd8e8,
+            #ffb5d2
+        );
+
+    box-shadow:
+        inset 2px 2px 4px rgba(255,255,255,.7),
+        0 3px 5px rgba(210,100,145,.12);
+
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+
+/* ===================================
+   製作者ボタン
+=================================== */
+
+.creator-button {
+    width: 100%;
+
+    margin-top: 18px;
+
+    padding: 14px;
+
+    border: none;
+    border-radius: 18px;
+
+    color: white;
+
+    font-size: 14px;
+    font-weight: 900;
+
+    background:
+        linear-gradient(
+            145deg,
+            #bca4ef,
+            #9678db
+        );
+
+    box-shadow:
+        inset 3px 3px 6px rgba(255,255,255,.45),
+        0 8px 15px rgba(130,100,190,.2);
+
+    cursor: pointer;
+}
+
+.creator-button:active {
+    transform: translateY(2px);
+}
+
+
+/* ===================================
+   製作者ページ
+=================================== */
+
+.creator-page {
+    display: none;
+}
+
+.creator-card {
+    padding: 20px;
+
+    border-radius: 25px;
+
+    background: rgba(255,255,255,.75);
+
+    box-shadow:
+        inset 2px 2px 8px rgba(255,255,255,.9),
+        0 12px 30px rgba(160,100,145,.12);
+}
+
+.creator-card h2 {
+    margin: 0 0 10px;
+
+    font-size: 22px;
+}
+
+.notice {
+    padding: 11px 13px;
+    margin-bottom: 18px;
+
+    border-radius: 13px;
+
+    background: #fff3b8;
+    color: #977438;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+label {
+    display: block;
+
+    margin-top: 14px;
+    margin-bottom: 6px;
+
+    font-size: 12px;
+    font-weight: 900;
+}
+
+input,
+textarea {
+    width: 100%;
+
+    border: none;
+    outline: none;
+
+    padding: 13px;
+
+    border-radius: 15px;
+
+    background: #fff;
+
+    color: var(--text);
+
+    font-family: inherit;
+    font-size: 15px;
+
+    box-shadow:
+        inset 2px 2px 6px rgba(170,100,140,.1),
+        inset -2px -2px 6px rgba(255,255,255,.9);
+}
+
+textarea {
+    min-height: 140px;
+    resize: vertical;
+}
+
+.creator-buttons {
+    display: flex;
+    gap: 9px;
+    margin-top: 15px;
+}
+
+.save-button,
+.delete-button,
+.back-button {
+    border: none;
+    border-radius: 15px;
+    padding: 13px;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+.save-button {
+    flex: 1;
+    color: white;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffafd0,
+            #ed71a7
+        );
+
+    box-shadow:
+        inset 2px 2px 5px rgba(255,255,255,.5),
+        0 5px 12px rgba(220,100,150,.18);
+}
+
+.delete-button {
+    flex: .6;
+    color: #9b6c7e;
+    background: #ffe8f1;
+}
+
+.back-button {
+    width: 100%;
+    margin-bottom: 14px;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            145deg,
+            #bba1ed,
+            #9274d7
+        );
+}
+
+
+/* ===================================
+   パスワードモーダル
+=================================== */
+
+.modal {
+    display: none;
+
+    position: fixed;
+    z-index: 1000;
+
+    inset: 0;
+
+    padding: 25px;
+
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(80,50,75,.38);
+
+    backdrop-filter: blur(5px);
+}
+
+.modal-box {
+    width: min(350px, 100%);
+
+    padding: 25px;
+
+    border-radius: 28px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #fff,
+            #fff3f9
+        );
+
+    box-shadow:
+        0 25px 70px rgba(70,40,65,.25);
+}
+
+.modal-box h2 {
+    margin-top: 0;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.modal-buttons button {
+    flex: 1;
+
+    border: none;
+    border-radius: 14px;
+
+    padding: 12px;
+
+    font-weight: 900;
+    cursor: pointer;
+}
+
+.password-ok {
+    color: white;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffafd0,
+            #eb72a6
+        );
+}
+
+.password-cancel {
+    background: #f0e8ed;
+    color: #755d69;
+}
+
+
+/* ===================================
+   下部の小さい装飾
+=================================== */
+
+.footer {
+    text-align: center;
+
+    margin-top: 18px;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    color: #b18d9f;
+}
+
+
+/* ===================================
+   小さいスマホ
+=================================== */
+
+@media (max-width: 360px) {
+
+    .content {
+        padding-left: 10px;
+        padding-right: 10px;
     }
 
     .day {
-        min-height: 100px;
-        border: 1px solid #eee;
-        padding: 7px;
-        position: relative;
-        background: white;
-        cursor: pointer;
-        transition: 0.15s;
-    }
-
-    .day:hover {
-        background: #f3f5ff;
-    }
-
-    .day-number {
-        font-size: 14px;
-        font-weight: bold;
-    }
-
-    .sunday .day-number {
-        color: #e74c3c;
-    }
-
-    .saturday .day-number {
-        color: #3498db;
+        min-height: 65px;
+        padding: 5px 4px;
     }
 
     .event {
-        margin-top: 6px;
-        padding: 5px;
-        background: #eeeaff;
-        color: #5742a8;
-        border-radius: 6px;
-        font-size: 12px;
-        line-height: 1.4;
-        white-space: pre-wrap;
-        word-break: break-word;
+        font-size: 8px;
     }
 
-    .disabled {
-        background: #f8f8f8;
-        color: #ccc;
-        cursor: default;
+    .title {
+        font-size: 24px;
     }
+}
 
-    .start-day {
-        background: #fff4d8;
-    }
-
-    .start-label {
-        display: block;
-        font-size: 10px;
-        color: #e67e22;
-        margin-top: 2px;
-    }
-
-    .creator-button {
-        display: block;
-        margin: 20px auto 0;
-        border: none;
-        background: #333;
-        color: white;
-        padding: 12px 22px;
-        border-radius: 10px;
-        cursor: pointer;
-        font-size: 14px;
-    }
-
-    /* モーダル */
-    .modal {
-        display: none;
-        position: fixed;
-        inset: 0;
-        background: rgba(0,0,0,0.55);
-        justify-content: center;
-        align-items: center;
-        padding: 20px;
-        z-index: 100;
-    }
-
-    .modal-box {
-        width: 100%;
-        max-width: 420px;
-        background: white;
-        border-radius: 18px;
-        padding: 25px;
-    }
-
-    .modal-box h2 {
-        margin-top: 0;
-    }
-
-    input,
-    textarea {
-        width: 100%;
-        padding: 12px;
-        border: 1px solid #ddd;
-        border-radius: 9px;
-        font-size: 16px;
-        margin: 8px 0 15px;
-        font-family: inherit;
-    }
-
-    textarea {
-        min-height: 130px;
-        resize: vertical;
-    }
-
-    .modal-buttons {
-        display: flex;
-        gap: 10px;
-    }
-
-    .modal-buttons button {
-        flex: 1;
-        padding: 11px;
-        border: none;
-        border-radius: 9px;
-        cursor: pointer;
-    }
-
-    .save {
-        background: #667eea;
-        color: white;
-    }
-
-    .cancel {
-        background: #eee;
-    }
-
-    .creator-page {
-        display: none;
-    }
-
-    .back-button {
-        background: #555;
-        color: white;
-        border: none;
-        padding: 10px 16px;
-        border-radius: 9px;
-        cursor: pointer;
-        margin-bottom: 15px;
-    }
-
-    .creator-card {
-        background: white;
-        padding: 20px;
-        border-radius: 16px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-    }
-
-    .creator-card h2 {
-        margin-top: 0;
-    }
-
-    .notice {
-        background: #fff7df;
-        border-left: 4px solid #f0b429;
-        padding: 10px;
-        font-size: 13px;
-        margin-bottom: 15px;
-    }
-
-    @media (max-width: 600px) {
-        .day {
-            min-height: 75px;
-            padding: 5px;
-        }
-
-        .event {
-            font-size: 10px;
-            padding: 3px;
-        }
-
-        .month-title {
-            font-size: 18px;
-        }
-    }
 </style>
 </head>
 
+
 <body>
 
-<header>
-    <h1>📅 2026年カレンダー</h1>
-    <p>2026年7月11日スタート</p>
-</header>
+<!-- 背景装飾 -->
+<div class="decoration heart one"></div>
+<div class="decoration heart two"></div>
+<div class="decoration heart three"></div>
 
-<div class="container">
+<div class="decoration star one"></div>
+<div class="decoration star two"></div>
+<div class="decoration star three"></div>
 
-    <!-- 通常カレンダー -->
+<div class="decoration bubble one"></div>
+<div class="decoration bubble two"></div>
+<div class="decoration bubble three"></div>
+
+
+<!-- スマホ -->
+<div class="phone">
+
+    <!-- =========================
+         カレンダーページ
+    ========================== -->
+
     <div id="calendarPage">
-        <div class="calendar-box">
 
-            <div class="month-control">
-                <button onclick="changeMonth(-1)">← 前月</button>
-                <div class="month-title" id="monthTitle"></div>
-                <button onclick="changeMonth(1)">次月 →</button>
+        <header class="top">
+
+            <div class="logo">
+                MY SPECIAL CALENDAR
             </div>
 
-            <div class="weekdays">
-                <div class="weekday">日</div>
-                <div class="weekday">月</div>
-                <div class="weekday">火</div>
-                <div class="weekday">水</div>
-                <div class="weekday">木</div>
-                <div class="weekday">金</div>
-                <div class="weekday">土</div>
+            <div class="title">
+                2026 CALENDAR
             </div>
 
-            <div class="calendar" id="calendar"></div>
+            <div class="subtitle">
+                7月11日からはじまるカレンダー ♡
+            </div>
 
-        </div>
+            <div class="ribbon">
+                <div class="ribbon-center"></div>
+            </div>
 
-        <button class="creator-button" onclick="openCreator()">
-            🔐 製作者ページ
-        </button>
+        </header>
+
+
+        <main class="content">
+
+            <div class="month-bar">
+
+                <button
+                    class="arrow"
+                    onclick="changeMonth(-1)">
+                    ‹
+                </button>
+
+                <div
+                    class="month-name"
+                    id="monthTitle">
+                </div>
+
+                <button
+                    class="arrow"
+                    onclick="changeMonth(1)">
+                    ›
+                </button>
+
+            </div>
+
+
+            <div class="calendar-card">
+
+                <div class="weekdays">
+                    <div class="weekday">SUN</div>
+                    <div class="weekday">MON</div>
+                    <div class="weekday">TUE</div>
+                    <div class="weekday">WED</div>
+                    <div class="weekday">THU</div>
+                    <div class="weekday">FRI</div>
+                    <div class="weekday">SAT</div>
+                </div>
+
+                <div
+                    class="calendar"
+                    id="calendar">
+                </div>
+
+            </div>
+
+
+            <button
+                class="creator-button"
+                onclick="openCreator()">
+
+                🔐　製作者ページ
+
+            </button>
+
+
+            <div class="footer">
+                made with ♡
+            </div>
+
+        </main>
+
     </div>
 
 
-    <!-- 製作者ページ -->
-    <div id="creatorPage" class="creator-page">
+    <!-- =========================
+         製作者ページ
+    ========================== -->
 
-        <button class="back-button" onclick="backToCalendar()">
-            ← カレンダーに戻る
-        </button>
+    <div
+        id="creatorPage"
+        class="creator-page">
 
-        <div class="creator-card">
-            <h2>🔐 製作者ページ</h2>
+        <header class="top">
 
-            <div class="notice">
-                日付を選択して、その日に表示する内容を書き込めます。
+            <div class="logo">
+                CREATOR MODE
             </div>
 
-            <label>日付</label>
-            <input type="date" id="creatorDate">
-
-            <label>内容</label>
-            <textarea
-                id="creatorText"
-                placeholder="この日に表示する内容を書いてください"
-            ></textarea>
-
-            <div class="modal-buttons">
-                <button class="save" onclick="saveEvent()">保存する</button>
-                <button class="cancel" onclick="deleteEvent()">削除する</button>
+            <div class="title">
+                製作者ページ
             </div>
-        </div>
+
+            <div class="subtitle">
+                カレンダーの内容を編集できます ♡
+            </div>
+
+        </header>
+
+
+        <main class="content">
+
+            <button
+                class="back-button"
+                onclick="backToCalendar()">
+
+                ← カレンダーに戻る
+
+            </button>
+
+
+            <div class="creator-card">
+
+                <h2>
+                    ✏️ カレンダー編集
+                </h2>
+
+                <div class="notice">
+                    日付を選んで、その日に表示する内容を書いてください。
+                </div>
+
+
+                <label>
+                    📅 日付
+                </label>
+
+                <input
+                    type="date"
+                    id="creatorDate"
+                    min="2026-07-11">
+
+
+                <label>
+                    💌 内容
+                </label>
+
+                <textarea
+                    id="creatorText"
+                    placeholder="例：今日は○○の日♡&#10;18:00から予定あり！">
+                </textarea>
+
+
+                <div class="creator-buttons">
+
+                    <button
+                        class="save-button"
+                        onclick="saveEvent()">
+
+                        ♡ 保存する
+
+                    </button>
+
+                    <button
+                        class="delete-button"
+                        onclick="deleteEvent()">
+
+                        削除
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </main>
 
     </div>
 
 </div>
 
 
-<!-- パスワード画面 -->
-<div class="modal" id="passwordModal">
+<!-- =========================
+     パスワード
+========================== -->
+
+<div
+    class="modal"
+    id="passwordModal">
+
     <div class="modal-box">
-        <h2>🔒 製作者ページ</h2>
-        <p>パスワードを入力してください。</p>
+
+        <h2>
+            🔐 製作者ページ
+        </h2>
+
+        <p>
+            パスワードを入力してください。
+        </p>
 
         <input
             type="password"
             id="passwordInput"
-            placeholder="パスワード"
-            onkeydown="if(event.key==='Enter') checkPassword()"
-        >
+            placeholder="Password"
+            onkeydown="
+                if(event.key === 'Enter')
+                    checkPassword()
+            ">
 
         <div class="modal-buttons">
-            <button class="save" onclick="checkPassword()">入る</button>
-            <button class="cancel" onclick="closePassword()">キャンセル</button>
+
+            <button
+                class="password-ok"
+                onclick="checkPassword()">
+
+                入る
+
+            </button>
+
+            <button
+                class="password-cancel"
+                onclick="closePassword()">
+
+                キャンセル
+
+            </button>
+
         </div>
+
     </div>
+
 </div>
 
 
 <script>
 
-    /* =========================
-       設定
-    ========================= */
+/* =====================================
+   基本設定
+===================================== */
 
-    const PASSWORD = "01300831";
+const PASSWORD = "01300831";
 
-    // カレンダー開始日
-    const START_DATE = new Date(2026, 6, 11);
+const START_DATE =
+    new Date(2026, 6, 11);
 
-    // 最初に表示する月
-    let currentYear = 2026;
-    let currentMonth = 6; // 7月
+let currentYear = 2026;
+let currentMonth = 6;
 
 
-    /* =========================
-       カレンダー表示
-    ========================= */
+/* =====================================
+   日付を YYYY-MM-DD にする
+===================================== */
 
-    function renderCalendar() {
+function formatDate(date) {
 
-        const calendar = document.getElementById("calendar");
-        const title = document.getElementById("monthTitle");
+    const y =
+        date.getFullYear();
 
-        calendar.innerHTML = "";
+    const m =
+        String(
+            date.getMonth() + 1
+        ).padStart(2, "0");
 
-        title.textContent =
-            `${currentYear}年${currentMonth + 1}月`;
+    const d =
+        String(
+            date.getDate()
+        ).padStart(2, "0");
 
-        const firstDay =
-            new Date(currentYear, currentMonth, 1).getDay();
+    return `${y}-${m}-${d}`;
+}
 
-        const daysInMonth =
-            new Date(currentYear, currentMonth + 1, 0).getDate();
 
-        // 月初までの空白
-        for (let i = 0; i < firstDay; i++) {
-            const empty = document.createElement("div");
-            empty.className = "day disabled";
-            calendar.appendChild(empty);
-        }
+/* =====================================
+   カレンダー描画
+===================================== */
 
-        // 日付
-        for (let day = 1; day <= daysInMonth; day++) {
+function renderCalendar() {
 
-            const date = new Date(
+    const calendar =
+        document.getElementById("calendar");
+
+    const title =
+        document.getElementById("monthTitle");
+
+    calendar.innerHTML = "";
+
+    title.textContent =
+        `${currentYear}年 ${currentMonth + 1}月`;
+
+
+    const firstDay =
+        new Date(
+            currentYear,
+            currentMonth,
+            1
+        ).getDay();
+
+
+    const daysInMonth =
+        new Date(
+            currentYear,
+            currentMonth + 1,
+            0
+        ).getDate();
+
+
+    const events =
+        JSON.parse(
+            localStorage.getItem(
+                "calendarEvents"
+            ) || "{}"
+        );
+
+
+    /* 空白 */
+
+    for (
+        let i = 0;
+        i < firstDay;
+        i++
+    ) {
+
+        const empty =
+            document.createElement("div");
+
+        empty.className =
+            "day disabled";
+
+        calendar.appendChild(empty);
+    }
+
+
+    /* 日付 */
+
+    for (
+        let day = 1;
+        day <= daysInMonth;
+        day++
+    ) {
+
+        const date =
+            new Date(
                 currentYear,
                 currentMonth,
                 day
             );
 
-            const dateString = formatDate(date);
-
-            const cell = document.createElement("div");
-            cell.className = "day";
-
-            // 開始日前
-            if (date < START_DATE) {
-                cell.classList.add("disabled");
-            }
-
-            // 曜日
-            if (date.getDay() === 0) {
-                cell.classList.add("sunday");
-            }
-
-            if (date.getDay() === 6) {
-                cell.classList.add("saturday");
-            }
-
-            // 7月11日
-            if (
-                date.getFullYear() === 2026 &&
-                date.getMonth() === 6 &&
-                date.getDate() === 11
-            ) {
-                cell.classList.add("start-day");
-            }
-
-            const number = document.createElement("div");
-            number.className = "day-number";
-            number.textContent = day;
-
-            cell.appendChild(number);
-
-            if (
-                date.getFullYear() === 2026 &&
-                date.getMonth() === 6 &&
-                date.getDate() === 11
-            ) {
-                const label = document.createElement("span");
-                label.className = "start-label";
-                label.textContent = "スタート";
-                cell.appendChild(label);
-            }
-
-            // 保存済み内容
-            const events =
-                JSON.parse(localStorage.getItem("calendarEvents") || "{}");
-
-            if (events[dateString]) {
-
-                const event = document.createElement("div");
-                event.className = "event";
-                event.textContent = events[dateString];
-
-                cell.appendChild(event);
-            }
-
-            calendar.appendChild(cell);
-        }
-    }
+        const dateString =
+            formatDate(date);
 
 
-    /* =========================
-       日付フォーマット
-    ========================= */
+        const cell =
+            document.createElement("div");
 
-    function formatDate(date) {
-
-        const y = date.getFullYear();
-
-        const m = String(
-            date.getMonth() + 1
-        ).padStart(2, "0");
-
-        const d = String(
-            date.getDate()
-        ).padStart(2, "0");
-
-        return `${y}-${m}-${d}`;
-    }
+        cell.className = "day";
 
 
-    /* =========================
-       月変更
-    ========================= */
+        /* 開始日前 */
 
-    function changeMonth(amount) {
+        if (date < START_DATE) {
 
-        currentMonth += amount;
-
-        if (currentMonth < 0) {
-            currentMonth = 11;
-            currentYear--;
+            cell.classList.add(
+                "disabled"
+            );
         }
 
-        if (currentMonth > 11) {
-            currentMonth = 0;
-            currentYear++;
+
+        /* 曜日 */
+
+        if (date.getDay() === 0) {
+
+            cell.classList.add(
+                "sunday"
+            );
         }
 
-        renderCalendar();
+        if (date.getDay() === 6) {
+
+            cell.classList.add(
+                "saturday"
+            );
+        }
+
+
+        /* 7月11日 */
+
+        if (
+            currentYear === 2026 &&
+            currentMonth === 6 &&
+            day === 11
+        ) {
+
+            cell.classList.add(
+                "start-day"
+            );
+        }
+
+
+        const number =
+            document.createElement("div");
+
+        number.className =
+            "day-number";
+
+        number.textContent =
+            day;
+
+        cell.appendChild(number);
+
+
+        /* START */
+
+        if (
+            currentYear === 2026 &&
+            currentMonth === 6 &&
+            day === 11
+        ) {
+
+            const label =
+                document.createElement("span");
+
+            label.className =
+                "start-label";
+
+            label.textContent =
+                "START ♡";
+
+            cell.appendChild(label);
+        }
+
+
+        /* イベント */
+
+        if (events[dateString]) {
+
+            const event =
+                document.createElement("div");
+
+            event.className =
+                "event";
+
+            event.textContent =
+                events[dateString];
+
+            cell.appendChild(event);
+        }
+
+
+        calendar.appendChild(cell);
+    }
+}
+
+
+/* =====================================
+   月移動
+===================================== */
+
+function changeMonth(amount) {
+
+    currentMonth += amount;
+
+    if (currentMonth < 0) {
+
+        currentMonth = 11;
+        currentYear--;
     }
 
+    if (currentMonth > 11) {
 
-    /* =========================
-       製作者ページ
-    ========================= */
+        currentMonth = 0;
+        currentYear++;
+    }
 
-    function openCreator() {
+    renderCalendar();
+}
 
-        document.getElementById(
-            "passwordModal"
-        ).style.display = "flex";
+
+/* =====================================
+   製作者ページ
+===================================== */
+
+function openCreator() {
+
+    document.getElementById(
+        "passwordModal"
+    ).style.display = "flex";
+
+    document.getElementById(
+        "passwordInput"
+    ).value = "";
+
+    setTimeout(() => {
 
         document.getElementById(
             "passwordInput"
-        ).value = "";
+        ).focus();
 
-        setTimeout(() => {
-            document.getElementById(
-                "passwordInput"
-            ).focus();
-        }, 100);
-    }
+    }, 100);
+}
 
 
-    function closePassword() {
+function closePassword() {
 
+    document.getElementById(
+        "passwordModal"
+    ).style.display = "none";
+}
+
+
+function checkPassword() {
+
+    const password =
         document.getElementById(
-            "passwordModal"
-        ).style.display = "none";
-    }
+            "passwordInput"
+        ).value;
 
 
-    function checkPassword() {
+    if (password === PASSWORD) {
 
-        const password =
-            document.getElementById(
-                "passwordInput"
-            ).value;
-
-        if (password === PASSWORD) {
-
-            closePassword();
-
-            document.getElementById(
-                "calendarPage"
-            ).style.display = "none";
-
-            document.getElementById(
-                "creatorPage"
-            ).style.display = "block";
-
-            // 今日ではなく開始日を初期選択
-            document.getElementById(
-                "creatorDate"
-            ).value = "2026-07-11";
-
-            loadCreatorEvent();
-
-        } else {
-
-            alert("パスワードが違います。");
-        }
-    }
-
-
-    function backToCalendar() {
-
-        document.getElementById(
-            "creatorPage"
-        ).style.display = "none";
+        closePassword();
 
         document.getElementById(
             "calendarPage"
-        ).style.display = "block";
-
-        renderCalendar();
-    }
-
-
-    /* =========================
-       製作者ページの内容読み込み
-    ========================= */
-
-    document.getElementById(
-        "creatorDate"
-    ).addEventListener(
-        "change",
-        loadCreatorEvent
-    );
-
-
-    function loadCreatorEvent() {
-
-        const date =
-            document.getElementById(
-                "creatorDate"
-            ).value;
-
-        const events =
-            JSON.parse(
-                localStorage.getItem(
-                    "calendarEvents"
-                ) || "{}"
-            );
+        ).style.display = "none";
 
         document.getElementById(
-            "creatorText"
-        ).value = events[date] || "";
+            "creatorPage"
+        ).style.display = "block";
+
+
+        document.getElementById(
+            "creatorDate"
+        ).value =
+            "2026-07-11";
+
+
+        loadCreatorEvent();
+
+    } else {
+
+        alert(
+            "パスワードが違います。"
+        );
     }
+}
 
 
-    /* =========================
-       保存
-    ========================= */
+function backToCalendar() {
 
-    function saveEvent() {
+    document.getElementById(
+        "creatorPage"
+    ).style.display = "none";
 
-        const date =
-            document.getElementById(
-                "creatorDate"
-            ).value;
+    document.getElementById(
+        "calendarPage"
+    ).style.display = "block";
 
-        const text =
-            document.getElementById(
-                "creatorText"
-            ).value;
+    renderCalendar();
+}
 
-        if (!date) {
-            alert("日付を選択してください。");
-            return;
-        }
 
-        const events =
-            JSON.parse(
-                localStorage.getItem(
-                    "calendarEvents"
-                ) || "{}"
-            );
+/* =====================================
+   編集内容読み込み
+===================================== */
 
-        events[date] = text;
+document.getElementById(
+    "creatorDate"
+).addEventListener(
+    "change",
+    loadCreatorEvent
+);
 
-        localStorage.setItem(
-            "calendarEvents",
-            JSON.stringify(events)
+
+function loadCreatorEvent() {
+
+    const date =
+        document.getElementById(
+            "creatorDate"
+        ).value;
+
+
+    const events =
+        JSON.parse(
+            localStorage.getItem(
+                "calendarEvents"
+            ) || "{}"
         );
 
-        alert("保存しました！");
+
+    document.getElementById(
+        "creatorText"
+    ).value =
+        events[date] || "";
+}
+
+
+/* =====================================
+   保存
+===================================== */
+
+function saveEvent() {
+
+    const date =
+        document.getElementById(
+            "creatorDate"
+        ).value;
+
+    const text =
+        document.getElementById(
+            "creatorText"
+        ).value;
+
+
+    if (!date) {
+
+        alert(
+            "日付を選択してください。"
+        );
+
+        return;
     }
 
 
-    /* =========================
-       削除
-    ========================= */
+    const events =
+        JSON.parse(
+            localStorage.getItem(
+                "calendarEvents"
+            ) || "{}"
+        );
 
-    function deleteEvent() {
 
-        const date =
-            document.getElementById(
-                "creatorDate"
-            ).value;
-
-        const events =
-            JSON.parse(
-                localStorage.getItem(
-                    "calendarEvents"
-                ) || "{}"
-            );
+    if (text.trim() === "") {
 
         delete events[date];
 
-        localStorage.setItem(
-            "calendarEvents",
-            JSON.stringify(events)
-        );
+    } else {
 
-        document.getElementById(
-            "creatorText"
-        ).value = "";
-
-        alert("削除しました。");
+        events[date] = text;
     }
 
 
-    /* =========================
-       初期表示
-    ========================= */
+    localStorage.setItem(
+        "calendarEvents",
+        JSON.stringify(events)
+    );
 
-    renderCalendar();
+
+    alert(
+        "保存しました ♡"
+    );
+}
+
+
+/* =====================================
+   削除
+===================================== */
+
+function deleteEvent() {
+
+    const date =
+        document.getElementById(
+            "creatorDate"
+        ).value;
+
+
+    if (!date) return;
+
+
+    const events =
+        JSON.parse(
+            localStorage.getItem(
+                "calendarEvents"
+            ) || "{}"
+        );
+
+
+    delete events[date];
+
+
+    localStorage.setItem(
+        "calendarEvents",
+        JSON.stringify(events)
+    );
+
+
+    document.getElementById(
+        "creatorText"
+    ).value = "";
+
+
+    alert(
+        "削除しました。"
+    );
+}
+
+
+/* =====================================
+   起動
+===================================== */
+
+renderCalendar();
 
 </script>
 
