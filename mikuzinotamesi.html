@@ -1,0 +1,396 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>おみくじ・恋みくじ・ラッキーカラー</title>
+<style>
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  font-family:"Yu Gothic",Meiryo,sans-serif;
+  background:linear-gradient(135deg,#fff0f5,#f5e9ff,#e8f7ff);
+  color:#55445d;
+  text-align:center;
+  min-height:100vh;
+}
+header { padding:30px 12px 10px; }
+h1 { color:#d66c9d; font-size:30px; }
+h2 { color:#c46b9d; }
+.subtitle { color:#927c9d; }
+.container {
+  max-width:650px;
+  margin:15px auto;
+  padding:20px;
+}
+.card {
+  background:#ffffffdf;
+  border-radius:22px;
+  padding:22px;
+  margin:18px 0;
+  box-shadow:0 5px 18px #b99ab533;
+}
+button {
+  border:0;
+  border-radius:30px;
+  padding:13px 25px;
+  margin:7px;
+  background:#e994bb;
+  color:white;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+  transition:.2s;
+}
+button:hover { transform:scale(1.04); filter:brightness(1.04); }
+button:disabled { opacity:.5; cursor:not-allowed; }
+.result {
+  margin:18px auto;
+  padding:20px;
+  min-height:90px;
+  border-radius:16px;
+  background:#fff5fa;
+  white-space:pre-wrap;
+  line-height:1.8;
+}
+.big { font-size:27px; font-weight:bold; color:#d66c9d; }
+.small { font-size:13px; color:#99869d; }
+.hidden { display:none !important; }
+.back { background:#aaa0b9; }
+.warning { background:#fff3e9; }
+.vocaloid { background:#edf7ff; }
+.song { font-size:22px; font-weight:bold; color:#648ebc; }
+footer { padding:30px; font-size:12px; color:#aa91a8; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🎋 おみくじの館 🎋</h1>
+  <p class="subtitle">今日の運勢を占ってみよう！</p>
+</header>
+
+<main class="container" id="mainPage">
+
+  <section class="card">
+    <h2>🌸 今日のおみくじ</h2>
+    <p>16枚のおみくじから、今日の運勢を占おう！</p>
+    <button id="mainDraw" onclick="drawOmikuji()">おみくじを引く！</button>
+    <div class="result" id="mainResult">ここに結果が表示されるよ！</div>
+    <p class="small" id="mainLimit"></p>
+  </section>
+
+  <section class="card">
+    <h2>💕 恋みくじ</h2>
+    <p>今日の恋愛運はどうかな？</p>
+    <button onclick="drawLove()">恋みくじを引く！</button>
+    <div class="result" id="loveResult">恋の運勢を占おう！</div>
+  </section>
+
+  <section class="card">
+    <h2>🎨 ラッキーカラー</h2>
+    <p>今日のあなたのラッキーカラー！</p>
+    <button onclick="drawColor()">色を占う！</button>
+    <div class="result" id="colorResult">何色が出るかな？</div>
+  </section>
+
+  <section class="card warning">
+    <h2>⚠️ 気を付けて！みくじ</h2>
+    <p>今日は何に気を付けたらいい？</p>
+    <button onclick="drawWarning()">注意みくじを引く！</button>
+    <div class="result" id="warningResult">今日の注意ポイントは……？</div>
+  </section>
+
+</main>
+
+<!-- 製作者ページ -->
+<main class="container hidden" id="creatorPage">
+  <section class="card">
+    <h1>🔐 製作者専用ページ</h1>
+    <p>ようこそ！秘密のページへ！</p>
+
+    <h2>⏰ 12時間やり放題</h2>
+    <p>通常のおみくじの12時間制限を解除するよ。</p>
+    <button onclick="enableUnlimited()">12時間やり放題！</button>
+    <div class="result" id="creatorResult">状態：通常モード</div>
+
+    <hr style="border:0;border-top:1px solid #ead8e6;margin:25px 0">
+
+    <h2>🎤 ボカロみくじ</h2>
+    <p>今日聴きたいボカロ曲を占うよ！</p>
+    <button onclick="drawVocaloid()">ボカロみくじを引く！</button>
+    <div class="result vocaloid" id="vocaloidResult">
+      <span class="small">あなたへのおすすめ曲は……？</span>
+    </div>
+
+    <button class="back" onclick="backToMain()">メインページへ戻る</button>
+  </section>
+</main>
+
+<footer>
+  © おみくじの館
+</footer>
+
+<script>
+const LIMIT = 12 * 60 * 60 * 1000;
+
+// おみくじ16種類
+const fortunes = [
+  ["大吉","最高の一日！新しいことに挑戦してみよう！"],
+  ["大吉","願いが叶うかも！積極的に行動しよう！"],
+  ["中吉","努力が実を結ぶ日。焦らず進もう！"],
+  ["中吉","いいことが起こりそう！"],
+  ["中吉","友達との時間を大切に！"],
+  ["小吉","小さな幸せを見つけられる日！"],
+  ["小吉","笑顔を忘れずに！"],
+  ["小吉","ゆっくり進めば大丈夫！"],
+  ["吉","いつも通りが一番！"],
+  ["吉","身近な人に感謝しよう！"],
+  ["吉","新しい発見があるかも！"],
+  ["末吉","これから運気が上がりそう！"],
+  ["末吉","今日は無理せず過ごそう！"],
+  ["末吉","準備を大切にすると吉！"],
+  ["凶","忘れ物やミスに注意！"],
+  ["大凶","今日は慎重に！無理は禁物！"]
+];
+
+const loves = [
+  ["大恋愛","素敵な出会いが待っているかも！"],
+  ["恋愛運最高","思い切って話しかけてみよう！"],
+  ["両想いの予感","相手との距離が縮まりそう！"],
+  ["急接近","何気ない会話を大切に！"],
+  ["片思い運◎","焦らず自分らしく！"],
+  ["恋愛運上昇","笑顔が幸運の鍵！"],
+  ["友達から恋へ？","意外なところにチャンスあり！"],
+  ["恋愛運普通","いつも通りが一番！"],
+  ["恋の休憩","自分磨きに時間を使おう！"],
+  ["恋愛運注意","言葉選びに気を付けて！"]
+];
+
+const colors = [
+  ["🌸 ピンク","優しさと幸運を呼ぶ色！"],
+  ["💙 水色","落ち着いて行動できそう！"],
+  ["💛 黄色","明るい気分になれる色！"],
+  ["💜 紫","直感を大切にしてみよう！"],
+  ["💚 緑","自然体で過ごせる色！"],
+  ["❤️ 赤","勇気を出したい日にぴったり！"],
+  ["🤍 白","新しいスタートにぴったり！"],
+  ["🖤 黒","集中力を高めてくれそう！"],
+  ["🧡 オレンジ","元気いっぱいの一日に！"],
+  ["🩵 ミント","リラックスできそう！"]
+];
+
+const warnings = [
+  "スマホの充電切れに気を付けて！",
+  "忘れ物に気を付けて！",
+  "寝坊に気を付けて！",
+  "階段での転倒に気を付けて！",
+  "言葉のすれ違いに気を付けて！",
+  "宿題や提出物の忘れに気を付けて！",
+  "財布や貴重品の紛失に気を付けて！",
+  "夜更かしに気を付けて！",
+  "食べ過ぎに気を付けて！",
+  "急ぎすぎに気を付けて！",
+  "周りをよく見て行動しよう！",
+  "無理のしすぎに気を付けて！",
+  "うっかりミスに気を付けて！",
+  "雨や天気の変化に気を付けて！",
+  "交通ルールを守ろう！",
+  "大事な連絡の見落としに気を付けて！"
+];
+
+const songs = [
+  ["メルト","ryo"],
+  ["千本桜","黒うさP"],
+  ["ワールドイズマイン","ryo"],
+  ["ロミオとシンデレラ","doriko"],
+  ["マトリョシカ","ハチ"],
+  ["砂の惑星","ハチ"],
+  ["シャルル","バルーン"],
+  ["命に嫌われている。","カンザキイオリ"],
+  ["KING","Kanaria"],
+  ["酔いどれ知らず","Kanaria"],
+  ["フォニイ","ツミキ"],
+  ["グッバイ宣言","Chinozo"],
+  ["少女レイ","みきとP"],
+  ["六兆年と一夜物語","kemu"],
+  ["神っぽいな","ピノキオピー"],
+  ["テオ","Omoi"],
+  ["ロキ","みきとP"],
+  ["ヴァンパイア","DECO*27"],
+  ["ヒバナ","DECO*27"],
+  ["妄想感傷代償連盟","DECO*27"],
+  ["KING","Kanaria"],
+  ["アイドル","YOASOBI"],
+  ["Tell Your World","kz"],
+  ["メズマライザー","サツキ"]
+];
+
+function pick(array) {
+  return array[Math.floor(Math.random() * array.length)];
+}
+
+function drawOmikuji() {
+  const now = Date.now();
+  const unlimited = localStorage.getItem("omikujiUnlimited") === "true";
+  const last = Number(localStorage.getItem("omikujiLast") || 0);
+
+  // 隠しコマンドの進行状況を確認
+  if (secretStage === 0 && spaceHeld) {
+    secretStage = 1;
+    document.getElementById("mainResult").innerHTML =
+      "✨ ステップ1クリア！次の隠しコマンドへ……";
+    return;
+  }
+
+  if (secretStage === 1 && backspaceHeld && backspaceRepeats >= 2) {
+    secretStage = 2;
+    document.getElementById("mainResult").innerHTML =
+      "✨ ステップ2クリア！最後のコマンドへ……";
+    return;
+  }
+
+  if (secretStage === 2 && jHeld && jRepeats >= 2) {
+    secretStage = 0;
+    openCreator();
+    return;
+  }
+
+  if (!unlimited && now - last < LIMIT) {
+    const remaining = LIMIT - (now - last);
+    const hours = Math.floor(remaining / 3600000);
+    const minutes = Math.floor((remaining % 3600000) / 60000);
+    document.getElementById("mainResult").innerHTML =
+      "⏰ まだ次のおみくじは引けないよ！<br>" +
+      hours + "時間" + minutes + "分後にまた来てね！";
+    return;
+  }
+
+  const result = pick(fortunes);
+  document.getElementById("mainResult").innerHTML =
+    '<div class="big">' + result[0] + '</div>' + result[1];
+
+  if (!unlimited) {
+    localStorage.setItem("omikujiLast", now);
+  }
+  updateLimit();
+}
+
+function drawLove() {
+  const result = pick(loves);
+  document.getElementById("loveResult").innerHTML =
+    '<div class="big">' + result[0] + '</div>' + result[1];
+}
+
+function drawColor() {
+  const result = pick(colors);
+  document.getElementById("colorResult").innerHTML =
+    '<div class="big">' + result[0] + '</div>' + result[1];
+}
+
+function drawWarning() {
+  document.getElementById("warningResult").innerHTML =
+    '<div class="big">⚠️ 注意！</div>' + pick(warnings);
+}
+
+function drawVocaloid() {
+  const song = pick(songs);
+  const query = encodeURIComponent(song[0] + " " + song[1]);
+  document.getElementById("vocaloidResult").innerHTML =
+    '<div class="song">🎵 ' + song[0] + '</div>' +
+    '<p>作曲者：' + song[1] + '</p>' +
+    '<p>今日のおすすめボカロ曲！</p>' +
+    '<a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=' +
+    query + '">▶ YouTubeで検索する</a>';
+}
+
+function updateLimit() {
+  const unlimited = localStorage.getItem("omikujiUnlimited") === "true";
+  const last = Number(localStorage.getItem("omikujiLast") || 0);
+  const remaining = LIMIT - (Date.now() - last);
+
+  if (unlimited) {
+    document.getElementById("mainLimit").textContent =
+      "✨ 12時間やり放題モード！";
+    return;
+  }
+
+  if (remaining > 0) {
+    const h = Math.floor(remaining / 3600000);
+    const m = Math.floor((remaining % 3600000) / 60000);
+    document.getElementById("mainLimit").textContent =
+      "次のおみくじまで：" + h + "時間" + m + "分";
+  } else {
+    document.getElementById("mainLimit").textContent =
+      "次のおみくじが引けるよ！";
+  }
+}
+
+// 製作者ページ
+function openCreator() {
+  document.getElementById("mainPage").classList.add("hidden");
+  document.getElementById("creatorPage").classList.remove("hidden");
+  window.scrollTo(0,0);
+}
+
+function backToMain() {
+  document.getElementById("creatorPage").classList.add("hidden");
+  document.getElementById("mainPage").classList.remove("hidden");
+  window.scrollTo(0,0);
+}
+
+function enableUnlimited() {
+  localStorage.setItem("omikujiUnlimited","true");
+  document.getElementById("creatorResult").innerHTML =
+    "🎉 12時間やり放題モードになったよ！";
+  updateLimit();
+}
+
+// 隠しコマンド
+let spaceHeld = false;
+let backspaceHeld = false;
+let jHeld = false;
+let backspaceRepeats = 0;
+let jRepeats = 0;
+let secretStage = 0;
+
+document.addEventListener("keydown", function(e) {
+  if (e.code === "Space") {
+    spaceHeld = true;
+    e.preventDefault();
+  }
+
+  if (e.code === "Backspace") {
+    backspaceHeld = true;
+    if (e.repeat) backspaceRepeats++;
+    e.preventDefault();
+  }
+
+  if (e.code === "KeyJ") {
+    jHeld = true;
+    if (e.repeat) jRepeats++;
+  }
+});
+
+document.addEventListener("keyup", function(e) {
+  if (e.code === "Space") spaceHeld = false;
+
+  if (e.code === "Backspace") {
+    backspaceHeld = false;
+    backspaceRepeats = 0;
+  }
+
+  if (e.code === "KeyJ") {
+    jHeld = false;
+    jRepeats = 0;
+  }
+});
+
+// 初期化
+updateLimit();
+setInterval(updateLimit, 30000);
+</script>
+
+</body>
+</html>
