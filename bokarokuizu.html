@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ボカロサムネクイズ！</title>
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Arial", "Meiryo", sans-serif;
+  background: linear-gradient(135deg, #19152e, #34245c, #172c50);
+  color: white;
+  text-align: center;
+  min-height: 100vh;
+  padding: 25px 15px;
+}
+
+h1 {
+  color: #ffb8ed;
+  font-size: 32px;
+  text-shadow: 0 0 15px #ed68e8;
+}
+
+.container {
+  max-width: 550px;
+  margin: 25px auto;
+  padding: 25px;
+  background: rgba(255,255,255,0.1);
+  border: 2px solid #d78cff;
+  border-radius: 20px;
+  box-shadow: 0 0 25px #9b4dff55;
+}
+
+.info {
+  display: flex;
+  justify-content: space-between;
+  color: #d8caff;
+  margin-bottom: 15px;
+}
+
+.thumbnail {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: contain;
+  background: #171323;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.question {
+  font-size: 21px;
+  margin-bottom: 20px;
+}
+
+.answers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+button {
+  padding: 15px 8px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background: #8053ce;
+  border: 2px solid #c9a0ff;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+button:hover {
+  background: #b05de9;
+  transform: scale(1.03);
+}
+
+button:disabled {
+  cursor: default;
+  opacity: 0.8;
+}
+
+#message {
+  font-size: 22px;
+  font-weight: bold;
+  margin: 20px 0;
+  min-height: 30px;
+}
+
+#next, #restart {
+  background: #e34fb6;
+  border: none;
+  padding: 14px 35px;
+  margin-top: 10px;
+}
+
+.hidden {
+  display: none;
+}
+
+#result {
+  font-size: 26px;
+  color: #ffe18b;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🎧 ボカロサムネクイズ！</h1>
+<p>このサムネイルの曲名は何でしょう？</p>
+
+<div class="container">
+
+  <div id="game">
+    <div class="info">
+      <span id="progress">第1問 / 5問</span>
+      <span id="score">正解：0</span>
+    </div>
+
+    <img id="thumbnail" class="thumbnail" src="" alt="曲のサムネイル">
+
+    <div class="question">この曲のタイトルは？</div>
+
+    <div class="answers" id="answers"></div>
+
+    <div id="message"></div>
+
+    <button id="next" class="hidden" onclick="nextQuestion()">
+      次の問題へ →
+    </button>
+  </div>
+
+  <div id="finish" class="hidden">
+    <h2>🎉 クイズ終了！</h2>
+    <p id="result"></p>
+    <p id="comment"></p>
+    <button id="restart" onclick="restartGame()">
+      もう一度遊ぶ！
+    </button>
+  </div>
+
+</div>
+
+<script>
+
+// 問題データ
+<img src="senbonzakura" alt="千本桜のサムネ">
+
+const questions = [
+  {
+    image: "images/song1.jpg",
+    answer: "千本桜",
+    choices: ["千本桜", "ロキ", "シャルル", "マトリョシカ"]
+  },
+  {
+    image: "images/song2.jpg",
+    answer: "KING",
+    choices: ["神っぽいな", "KING", "ヴァンパイア", "ラヴィ"]
+  },
+  {
+    image: "images/song3.jpg",
+    answer: "ロキ",
+    choices: ["テレキャスタービーボーイ", "エゴロック", "ロキ", "少女レイ"]
+  },
+  {
+    image: "images/song4.jpg",
+    answer: "シャルル",
+    choices: ["命に嫌われている。", "シャルル", "雨とペトラ", "ドラマツルギー"]
+  },
+  {
+    image: "images/song5.jpg",
+    answer: "グッバイ宣言",
+    choices: ["フォニイ", "マーシャル・マキシマイザー", "グッバイ宣言", "KING"]
+  }
+];
+
+let current = 0;
+let score = 0;
+let answered = false;
+
+function showQuestion() {
+  answered = false;
+
+  const q = questions[current];
+
+  document.getElementById("progress").textContent =
+    `第${current + 1}問 / ${questions.length}問`;
+
+  document.getElementById("score").textContent =
+    `正解：${score}`;
+
+  document.getElementById("thumbnail").src = q.image;
+  document.getElementById("message").textContent = "";
+  document.getElementById("next").classList.add("hidden");
+
+  const answers = document.getElementById("answers");
+  answers.innerHTML = "";
+
+  q.choices.forEach(choice => {
+    const button = document.createElement("button");
+    button.textContent = choice;
+
+    button.onclick = () => checkAnswer(choice, button);
+
+    answers.appendChild(button);
+  });
+}
+
+function checkAnswer(choice, button) {
+  if (answered) return;
+
+  answered = true;
+
+  const q = questions[current];
+  const buttons = document.querySelectorAll("#answers button");
+
+  buttons.forEach(btn => {
+    btn.disabled = true;
+
+    if (btn.textContent === q.answer) {
+      btn.style.background = "#20a66a";
+    }
+  });
+
+  if (choice === q.answer) {
+    score++;
+    document.getElementById("message").textContent = "⭕ 正解！！";
+    document.getElementById("message").style.color = "#75ffb0";
+  } else {
+    document.getElementById("message").textContent =
+      `❌ 不正解！正解は「${q.answer}」`;
+    document.getElementById("message").style.color = "#ff8585";
+
+    button.style.background = "#d83e58";
+  }
+
+  document.getElementById("score").textContent =
+    `正解：${score}`;
+
+  document.getElementById("next").classList.remove("hidden");
+
+  if (current === questions.length - 1) {
+    document.getElementById("next").textContent = "結果を見る！";
+  }
+}
+
+function nextQuestion() {
+  current++;
+
+  if (current >= questions.length) {
+    showResult();
+  } else {
+    showQuestion();
+  }
+}
+
+function showResult() {
+  document.getElementById("game").classList.add("hidden");
+  document.getElementById("finish").classList.remove("hidden");
+
+  document.getElementById("result").textContent =
+    `${score} / ${questions.length} 問正解！`;
+
+  let comment = "";
+
+  if (score === questions.length) {
+    comment = "🎊 パーフェクト！ボカロマスター！！";
+  } else if (score >= 3) {
+    comment = "✨ すごい！なかなかのボカロ好き！";
+  } else {
+    comment = "🎵 もっとボカロを聴いてみよう！";
+  }
+
+  document.getElementById("comment").textContent = comment;
+}
+
+function restartGame() {
+  current = 0;
+  score = 0;
+
+  document.getElementById("game").classList.remove("hidden");
+  document.getElementById("finish").classList.add("hidden");
+
+  showQuestion();
+}
+
+showQuestion();
+
+</script>
+
+</body>
+</html>
